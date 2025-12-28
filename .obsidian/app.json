@@ -1,0 +1,13 @@
+{
+  "readableLineLength": false,
+  "livePreview": false,
+  "showLineNumber": true,
+  "autoPairBrackets": false,
+  "autoPairMarkdown": false,
+  "smartIndentList": false,
+  "vimMode": true,
+  "promptDelete": false,
+  "foldHeading": false,
+  "foldIndent": false,
+  "showIndentGuide": false
+}
