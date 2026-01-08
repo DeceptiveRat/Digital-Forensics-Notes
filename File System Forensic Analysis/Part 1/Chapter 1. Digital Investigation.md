@@ -1,17 +1,17 @@
-## Digital Crime Scene Investigation(CSI) Process
+## 1. Digital Crime Scene Investigation(CSI) Process
 ![[Crime Scene Investigation phases.png]]
 - system preservation
 - evidence searching
 - event reconstruction
 
-## system preservation
+## 2. system preservation
 - reduce amount of evidence that may be overwritten
 - techniques:
 	- dead analysis: duplicate all data
 	- live analysis: terminate suspicious processes and disconnect from network, copy important data
 	- calculate cryptographic hash to confirm integrity
 	
-## evidence searching
+## 3. evidence searching
 - survey common locations based on incident type
 - look for evidence to refute hypothesis
 - technique:
@@ -20,10 +20,10 @@
 	- based on temporal data
 	- based on hash
 
-## event reconstruction
+## 4. event reconstruction
 - requires knowledge of application and OS capabilities to form hypothesis
 
-## general guidelines - PICL
+## 5. general guidelines - PICL
 - preservation:
 	- perform analysis on copy
 	- hashes for integrity checks
@@ -40,13 +40,13 @@
 	- helps identify which searches are left
 	- important in live analysis where system can change
 
-## data analysis
+## 6. data analysis
 ![[analysis layers.png]]![[data analysis process.png]]
 - volume: collection of storage locations
 - file system: collection of data structures that allow an app to create/read/write files
 - application analysis: each file has a different structure internally
 
-## essential/nonessential data
+## 7. essential/nonessential data
 - essential data: 
 	- can trust
 	- required to read/write data
