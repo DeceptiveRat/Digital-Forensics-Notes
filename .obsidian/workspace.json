@@ -8,17 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "3f4da765c9d304e1",
+            "id": "457cbd77fdd2cf7c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 1/Chapter 3. Hard Disk Data Acquisition.md",
+                "file": "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 3. Hard Disk Data Acquisition"
+              "title": "Chapter 4. Volume Analysis"
             }
           }
         ]
@@ -180,30 +180,33 @@
       "bases:Create new base": false
     }
   },
-  "active": "3f4da765c9d304e1",
+  "active": "457cbd77fdd2cf7c",
   "lastOpenFiles": [
-    "File System Forensic Analysis/Part 1/Chapter 3. Hard Disk Data Acquisition.md~",
-    "File System Forensic Analysis/Images/image formats.png",
-    "File System Forensic Analysis/Part 1/Chapter 2. Computer Foundations.md",
-    "File System Forensic Analysis/Part 1/Chapter 3. Hard Disk Data Acquisition.md",
-    "File System Forensic Analysis/Part 1/4913",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md~",
+    "NTFS/References.md",
+    "NTFS/Partition Boot Sector.md",
     "File System Forensic Analysis/etc/sector copy data loss.md",
     "File System Forensic Analysis/etc/ATA and SCSI disk size limitations.md",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
+    "File System Forensic Analysis/Part 2. Volume Analysis",
+    "File System Forensic Analysis/Part 1/Chapter 3. Hard Disk Data Acquisition.md~",
+    "File System Forensic Analysis/Images/image formats.png",
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
+    "File System Forensic Analysis/Part 1/4913",
     "File System Forensic Analysis/Part 1/Chapter 2. Computer Foundations.md~",
     "File System Forensic Analysis/etc",
     "File System Forensic Analysis/Images/DCO demo.png",
-    "NTFS/Partition Boot Sector.md",
     "File System Forensic Analysis/Images/HPA.png",
-    "File System Forensic Analysis/Part 1/Chapter 1. Digital Investigation.md",
     "File System Forensic Analysis/Images/harddisk internal.png",
     "File System Forensic Analysis/Images/boot code relationships.png",
     "Pasted image.png",
-    "NTFS/References.md",
     "File System Forensic Analysis/Images/data analysis process.png",
     "File System Forensic Analysis/Images/analysis layers.png",
     "File System Forensic Analysis/Images/Crime Scene Investigation phases.png",
     "File System Forensic Analysis/Images",
-    "File System Forensic Analysis/Part 1",
+    "File System Forensic Analysis/Part 1. Foundations",
     "File System Forensic Analysis",
     "NTFS/Images/NTFS partition boot sector.png",
     "NTFS/Images",

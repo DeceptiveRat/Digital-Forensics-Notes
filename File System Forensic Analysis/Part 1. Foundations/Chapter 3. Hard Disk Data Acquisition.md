@@ -63,3 +63,40 @@
 	- limited by tools that support format
 	- acquisition takes longer
 	- analysis takes longer
+
+## 14. integrity hashes
+- can be used to show acquisition process didn't modify data
+- calculating hashes of smaller chunks can minimize impact of integrity failure 
+
+## 15. dd
+- copies data from one file to another
+- unaware of file systems or disks
+- reads data in block-sized chunks
+- flags:
+	- if: specify input
+	- of: specify output
+	- bs: set block size. **Some values perform better than others**
+
+## 16. dd input 
+- Linux: device can be used as input
+- Windows: use `\\.\[drive]` syntax to reference disk
+- Linux accesses hard disk directly without BIOS
+
+## 17. detecting HPA on Linux
+- **dmesg** displays message
+- **hdparm** -I to obtain number of sectors and compare with disk spec
+- **diskstat** displays max native and user address
+
+## 18. removing HPA on Linux
+- **setmax** sets max number of sectors
+	- nonvolatile change
+	- modifies configuration of drive
+
+## 19. dd output
+- writing output to stdout is useful for calculating hash
+- output can be sent over network 
+
+## 20. dd error handling
+- default action is to stop copying
+- `conv=noerror` flag reports errors and continues; skips bad blocks changing size
+- `conv=sync` flag forces writing in chunks, padding with 0; resulting image has different size
