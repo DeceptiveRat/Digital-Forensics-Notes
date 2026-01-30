@@ -8,17 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "079bdb30b3775e59",
+            "id": "35cc2a04dcb2cccf",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Digital Forensics Concepts/NTFS/References.md",
+                "file": "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "References"
+              "title": "Chapter 6. Server-based Partitions"
             }
           }
         ]
@@ -180,16 +180,19 @@
       "bases:Create new base": false
     }
   },
-  "active": "1bf19fb8e457e453",
+  "active": "35cc2a04dcb2cccf",
   "lastOpenFiles": [
-    "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
-    "Digital Forensics Concepts/Partition System.md",
-    "Digital Forensics Concepts/DOS (MBR) partitioning/Primary Extended Partition.md",
-    "Digital Forensics Concepts/File System.md",
-    "Digital Forensics Concepts/DOS (MBR) partitioning/Extended Boot Record.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md~",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md~",
     "File System Forensic Analysis/Part 2. Volume Analysis/4913",
+    "Digital Forensics Concepts/File System.md",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md~",
+    "Digital Forensics Concepts/DOS (MBR) partitioning/Extended Boot Record.md",
+    "Digital Forensics Concepts/DOS (MBR) partitioning/Primary Extended Partition.md",
+    "Digital Forensics Concepts/Partition System.md",
+    "Digital Forensics Concepts/NTFS/References.md",
+    "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
     "File System Forensic Analysis/Images/extended partition table entry.png",
     "File System Forensic Analysis/Images/EBR partition table second entry.png",
     "File System Forensic Analysis/Images/EBR partition table first entry.png",
@@ -208,13 +211,11 @@
     "File System Forensic Analysis/Images/example partition layout.png",
     "File System Forensic Analysis/Images/mmls output.png",
     "File System Forensic Analysis/Images/partition tables.png",
-    "Digital Forensics Concepts/NTFS/References.md",
     "File System Forensic Analysis/Part 2. Volume Analysis",
     "File System Forensic Analysis/Part 1/Chapter 3. Hard Disk Data Acquisition.md~",
     "File System Forensic Analysis/Images/image formats.png",
     "File System Forensic Analysis/Part 1/4913",
     "File System Forensic Analysis/Part 1/Chapter 2. Computer Foundations.md~",
-    "File System Forensic Analysis/etc",
     "Welcome.md"
   ]
 }

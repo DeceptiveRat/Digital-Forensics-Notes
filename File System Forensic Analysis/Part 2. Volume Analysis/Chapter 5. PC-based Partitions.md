@@ -297,4 +297,11 @@
 - data can be hidden between last entry and end of space allocated to partition map
 
 ## 18. removable media
-- 
+- each floppy disk formatted in FAT12 is treated as a single partition
+- partition table on a ZIP disk will be Apple partition or DOS partition
+- flash cards typically have a FAT file system
+- CD-ROMS have multiple variations:
+	- ISO 9660 format
+	- Joliet format
+	- Apple HFS+ format
+- CD-Rs should be examined with specialized analysis tools
