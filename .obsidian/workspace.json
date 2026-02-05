@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "b186e85e696f90e2",
+        "id": "20e07312d295e337",
         "type": "tabs",
         "children": [
           {
-            "id": "35cc2a04dcb2cccf",
+            "id": "154375fad6cf910b",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
-                "mode": "preview",
-                "source": true
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Chapter 6. Server-based Partitions"
+              "title": "New tab"
             }
           }
         ]
@@ -180,12 +176,24 @@
       "bases:Create new base": false
     }
   },
-  "active": "35cc2a04dcb2cccf",
+  "active": "154375fad6cf910b",
   "lastOpenFiles": [
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md~",
+    "File System Forensic Analysis/Images/metadata structure parsing for file.png",
+    "File System Forensic Analysis/Images/mactime output.png",
+    "File System Forensic Analysis/etc/Data analysis layers.md",
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
+    "File System Forensic Analysis/etc/Disk as layers of abstraction.md",
+    "File System Forensic Analysis/Images/metadata entry sync issues.png",
+    "File System Forensic Analysis/Images/logical file address demo.png",
+    "File System Forensic Analysis/Images/logical file system address demo.png",
+    "File System Forensic Analysis/Images/data category interaction.png",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
+    "File System Forensic Analysis/Part 3. File System Analysis",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md~",
     "File System Forensic Analysis/Part 2. Volume Analysis/4913",
     "Digital Forensics Concepts/File System.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md~",
     "Digital Forensics Concepts/DOS (MBR) partitioning/Extended Boot Record.md",
@@ -199,23 +207,14 @@
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md~",
     "File System Forensic Analysis/Images/DOS partition table entry data structure.png",
-    "File System Forensic Analysis/Images/DOS partition table data structure.png",
-    "File System Forensic Analysis/Images/six file system partition layout.png",
     "File System Forensic Analysis/etc/sector copy data loss.md",
     "File System Forensic Analysis/etc/ATA and SCSI disk size limitations.md",
     "Digital Forensics Concepts/DOS (MBR) partitioning",
     "Digital Forensics Concepts",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
-    "File System Forensic Analysis/Images/example partition layout.png",
-    "File System Forensic Analysis/Images/mmls output.png",
-    "File System Forensic Analysis/Images/partition tables.png",
     "File System Forensic Analysis/Part 2. Volume Analysis",
     "File System Forensic Analysis/Part 1/Chapter 3. Hard Disk Data Acquisition.md~",
-    "File System Forensic Analysis/Images/image formats.png",
-    "File System Forensic Analysis/Part 1/4913",
-    "File System Forensic Analysis/Part 1/Chapter 2. Computer Foundations.md~",
     "Welcome.md"
   ]
 }
