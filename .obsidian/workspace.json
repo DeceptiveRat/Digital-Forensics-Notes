@@ -11,10 +11,14 @@
             "id": "154375fad6cf910b",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
+                "mode": "preview",
+                "source": true
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Chapter 8. File System Analysis"
             }
           }
         ]
@@ -176,10 +180,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "154375fad6cf910b",
+  "active": "1bf19fb8e457e453",
   "lastOpenFiles": [
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md~",
+    "File System Forensic Analysis/etc/journaling data changes.md",
+    "File System Forensic Analysis/etc/data carving with no footer.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
+    "File System Forensic Analysis/Images/further sync issues.png",
+    "File System Forensic Analysis/Images/filename metadata sync issue.png",
     "File System Forensic Analysis/Images/metadata structure parsing for file.png",
     "File System Forensic Analysis/Images/mactime output.png",
     "File System Forensic Analysis/etc/Data analysis layers.md",
@@ -203,10 +211,8 @@
     "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
     "File System Forensic Analysis/Images/extended partition table entry.png",
     "File System Forensic Analysis/Images/EBR partition table second entry.png",
-    "File System Forensic Analysis/Images/EBR partition table first entry.png",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md~",
-    "File System Forensic Analysis/Images/DOS partition table entry data structure.png",
     "File System Forensic Analysis/etc/sector copy data loss.md",
     "File System Forensic Analysis/etc/ATA and SCSI disk size limitations.md",
     "Digital Forensics Concepts/DOS (MBR) partitioning",

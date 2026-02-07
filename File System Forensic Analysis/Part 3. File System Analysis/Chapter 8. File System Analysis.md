@@ -96,19 +96,21 @@
 	- done by verifying each allocated data unit has exactly one allocated metadata entry pointing to it
 	- allocated data units without corresponding metadata structures are called *orphan data units*
 	- done by checking data units listed as damaged; damaged data units should be zero
-- content category wiping techniques:
-	- third party wiping tools rely on OS to behave certain way; may not work as intended
-	- detection of wiping tools is difficult in content category
 
-## 10. metadata category
+## 10. content category wiping techniques
+- theory: write 0s or random data to data units
+- third party wiping tools rely on OS to behave certain way; may not work as intended
+- detection of wiping tools is difficult in content category
+
+## 11. metadata category
 - analysis used to gather details or search for files that meet a criteria
 - has more non-essential data than other categories
 
-## 11. logical file address
+## 12. logical file address
 - *logical file address* is relative to start of file
 ![[logical file address demo.png]]
 
-## 12. slack space
+## 13. slack space
 - *slack space* occurs when file size is not multiple of data unit size; refers to unused bytes in last data unit
 - slack space can contain data from previous files
 - slack space area:
@@ -117,7 +119,7 @@
 - all file systems have slack space
 - important to note slack space is considered allocated
 
-## 13. metadata based file recovery
+## 14. metadata based file recovery
 - works when metadata from deleted file still exists; if wiped or reallocated to new file use application-based method
 - metadata and data units can become out of sync; exercise caution
 - if multiple metadata entries point to same address, the more recent entry has to be determined:
@@ -129,7 +131,7 @@
 	- 2 unallocated entries point to data unit 1000 but it actually belongs to entry 300
 	- no way to know data corresponds to file created after entry was unallocated
 
-## 14. compressed and sparse files
+## 15. compressed and sparse files
 - compression can occur at 3 levels:
 	- highest level: data inside file format is compressed
 		- e.g. JPEG
@@ -141,7 +143,7 @@
 	- don't allocated a physical data unit for all 0s; *sparse file*
 	- *Unix File System(UFS)* implements by writing 0s to address of block
 
-## 15. encrypted files
+## 16. encrypted files
 - encryption methods:
 	- application layer encryption
 	- external application encryption
@@ -150,7 +152,7 @@
 	- volume encryption
 - if only select files/directories are encrypted, unencrypted copies may be found in temporary files or unallocated space
 
-## 16. metedata category analysis techniques
+## 17. metedata category analysis techniques
 - metadata lookup:
 	- view metadata of suspicious file name
 	- procedures are file system dependent
@@ -194,8 +196,63 @@
 	- verify entries for special file types do not have data units allocated to them
 	- verify allocated entry has an allocated name that points to it
 	- checks for non-essential data such as date can be performed, but are not reliable
-- wiping technique:
-	- an intelligent wiping tool could fill values with valid data with no relation to original data
-	- a more extreme version would shift maining entries so there are no unused entries
 
-## 17. file name category
+## 18. metadata category wiping technique
+- theory: remove metadata
+- an intelligent wiping tool could fill values with valid data with no relation to original data
+- a more extreme version would shift remaining entries so there are no unused entries
+
+## 19. file name category
+- important to determine where root directory is
+
+## 20. file name-based file recovery
+- filename and metadata can be out of sync
+![[filename metadata sync issue.png]]
+	- two file names point to same entry
+- sync issues can become complicated easily
+![[further sync issues.png]]
+	- data unit 1000 has 2 entries pointing to it but it is unclear which one it belongs to 
+	- entry 100 has 2 file names pointing to it but it is unclear which one it belongs to
+	- entry 200 has no file names pointing to it
+- **metadata and data units could always be out of sync**
+
+## 21. file name category analysis techniques
+- file name listing:
+	- locate root directory
+	- obtain list of files and metadata addresses
+	- *fls* tool in TSK lists allocated and deleted file names
+- file name searching:
+	- load and process contents of directory
+	- compare entry with pattern
+	- can also search for name of file with a given metadata entry
+	- *ffind* tool in TSK can do this
+- data structure allocation order:
+	- os dependent
+- consistency checks:
+	- verify all allocated names point to allocated metadata structures
+	- some file systems may have multiple file name entries for a single metadata entry
+
+## 22. file name category wiping techniques
+- theory: clear name and metadata address
+- writing over values in file name structure doesn't work for some OS that place new name at end of list
+- reorganizing list of names so existing file name overwrites deleted file name is more complex, but effective
+
+## 23. application category
+- journaling is the most common application category feature
+
+## 24. file system journals
+- entry is made in journal before and after metadata change is made to file system
+- shows recent file system events, helping event reconstruction
+- *jls* and *jcat* tools in TSK list contents of journals
+
+## 25. application level search techniques
+- application-based file recovery (data carving):
+	- search data chunk for known file signatures
+	- results in collection of files that contain one of the signatures
+	- commonly performed on unallocated space
+	- *foremost* and *lazarus* are tools for this task
+- file type sorting:
+	- useful when searching for specific type of data; e.g. executable, picture
+	- *sorter* tool in TSK does this task
+
+## 26. specific file systems
