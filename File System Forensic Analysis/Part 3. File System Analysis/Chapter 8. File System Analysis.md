@@ -256,3 +256,24 @@
 	- *sorter* tool in TSK does this task
 
 ## 26. specific file systems
+- data structures in each category
+
+| | File System | Content | Metadata | File name | Application |
+| --- | --- | --- | --- | --- | --- |
+| ExtX | Superblock, group descriptor | blocks, block bitmap | Inodes, inode bitmap, extended attributes | directory entries | journal |
+| FAT | boot sector, FSINFO | clusters, FAT | directory entries, FAT | directory entries | N/A |
+| NTFS | $Boot, $Volume, $AttrDef | clusters, $Bitmap | $MFT, $MFTMirr, $STANDARD_INFORMATION, $DATA, $ATTRIBUTE_LIST, $SECURITY_DESCRIPTOR | $FILE_NAME, $IDX_ROOT, $IDX_ALLOCATION, $BITMAP | disk quota, journal, change journal |
+| UFS | Superblock, group descriptor | blocks, fragments, block bitmap, fragment bitmap | inodes, inode bitmap, extended attributes | directory entries | N/A |
+
+## 27. summary
+- analysis technique summary
+
+| analysis needs | data category | search technique | 
+| --- | --- | --- |
+| file based on name, extension, directory | file name | file name search, list directory contents |
+| allocated\unallocated file based on time value | file name and metadata | metadata attribute searching | 
+| allocated file based on value in content | file name using metadata and content | logical file search |
+| allocated file based on SHA256 value | file name using metadata and content | logical file search with hashes |
+| allocated\unallocated file based on value in content | file name using metadata and content | logical file search with metadata based file recovery and logical file system search |
+| unallocated file based on application type | application and content | application based file recovery of unallocated data units |
+| unallocated data based on content and not application type | content | logical file system search | 

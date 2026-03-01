@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
+                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 8. File System Analysis"
+              "title": "Chapter 9. FAT Concepts and Analysis"
             }
           }
         ]
@@ -180,19 +180,23 @@
       "bases:Create new base": false
     }
   },
-  "active": "1bf19fb8e457e453",
+  "active": "154375fad6cf910b",
   "lastOpenFiles": [
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md~",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
+    "File System Forensic Analysis/etc/ATA and SCSI disk size limitations.md",
+    "File System Forensic Analysis/etc/Disk as layers of abstraction.md",
+    "File System Forensic Analysis/etc/data carving with no footer.md",
+    "File System Forensic Analysis/etc/Data analysis layers.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
+    "File System Forensic Analysis/Images/directory entry FAT and cluster relationship.png",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md~",
     "File System Forensic Analysis/etc/journaling data changes.md",
-    "File System Forensic Analysis/etc/data carving with no footer.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
     "File System Forensic Analysis/Images/further sync issues.png",
     "File System Forensic Analysis/Images/filename metadata sync issue.png",
     "File System Forensic Analysis/Images/metadata structure parsing for file.png",
     "File System Forensic Analysis/Images/mactime output.png",
-    "File System Forensic Analysis/etc/Data analysis layers.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
-    "File System Forensic Analysis/etc/Disk as layers of abstraction.md",
     "File System Forensic Analysis/Images/metadata entry sync issues.png",
     "File System Forensic Analysis/Images/logical file address demo.png",
     "File System Forensic Analysis/Images/logical file system address demo.png",
@@ -210,17 +214,14 @@
     "Digital Forensics Concepts/NTFS/References.md",
     "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
     "File System Forensic Analysis/Images/extended partition table entry.png",
-    "File System Forensic Analysis/Images/EBR partition table second entry.png",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md~",
     "File System Forensic Analysis/etc/sector copy data loss.md",
-    "File System Forensic Analysis/etc/ATA and SCSI disk size limitations.md",
     "Digital Forensics Concepts/DOS (MBR) partitioning",
     "Digital Forensics Concepts",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
     "File System Forensic Analysis/Part 2. Volume Analysis",
-    "File System Forensic Analysis/Part 1/Chapter 3. Hard Disk Data Acquisition.md~",
     "Welcome.md"
   ]
 }
