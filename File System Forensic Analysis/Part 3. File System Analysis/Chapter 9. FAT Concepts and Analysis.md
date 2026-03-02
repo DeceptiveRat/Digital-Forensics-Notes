@@ -268,3 +268,31 @@ unused sectors = (total number of sectors - sector address of cluster 2)/(number
 		- should identify a file as system file
 	- *archive*:
 		- typically set when a file is created or written to
+
+## 21. cluster chains
+- non-zero entries in FAT contain address of the next cluster in the file, an *end of file(EOF)* marker, or value to show cluster has bad sectors
+
+![[cluster chain.png]]
+- the maximum size of a FAT FS is based on the size of FAT entries
+
+## 22. directories
+- when a new directory is created, a cluster is allocated and wiped with 0s
+- size field should always be 0
+- cluster chain should be used to determine the size
+- the first 2 directory entries are . and .. directories:
+	- written, accessed, and created times seem to reflect the time the directory was created
+
+## 23. directory entry address
+- the first letter of the name is deleted when directory entries are unallocated; potential unique naming conflict
+- when a directory is deleted, there is no pointer to files and directories in the deleted directory; creating files with no addresses, *orphan files*
+
+![[orphan files.png]]
+
+- to find orphan files:
+	- examine first 32-bytes of a sector; if it passes a sanity check, process rest of sector
+	- examine first 32-bytes of a cluster for . and .. entries; only finds first clusters of directories
+- using a different addressing method solves these problems:
+	- root directory has address of 2
+	- each following sector has a numerical address starting with 3
+
+## 24. 
