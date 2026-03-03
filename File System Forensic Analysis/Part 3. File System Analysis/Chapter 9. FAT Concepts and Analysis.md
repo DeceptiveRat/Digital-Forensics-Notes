@@ -237,7 +237,7 @@ unused sectors = (total number of sectors - sector address of cluster 2)/(number
 - DS allocated for every file and directory
 - 32 bytes in size
 - contains:
-	- file name
+	- file name using 8.3 naming convention (8 characters for name and 3 for extension)
 	- file attributes
 	- size
 	- starting cluster
@@ -295,4 +295,198 @@ unused sectors = (total number of sectors - sector address of cluster 2)/(number
 	- root directory has address of 2
 	- each following sector has a numerical address starting with 3
 
-## 24. 
+## 24. FAT example image
+``` sh
+$ istat -f fat fat-4.dd 4
+Directory Entry: 4
+Allocated
+File Attributes: File, Archive
+Size: 8689
+Name: RESUME-1.RTF
+Directory Entry Times:
+Written: Wed Mar 24 06:26:20 2004
+Accessed: Thu Apr 8 00:00:00 2004
+Created: Tue Feb 10 15:49:40 2004
+Sectors:
+1646 1647 1648 1649 1650 1651 1652 1653
+1654 1655 1656 1657 1658 1659 1660 1661
+1662 1663
+```
+
+## 25. metadata category allocation algorithms
+- directory entries need to be allocated for new files and directories:
+	- Windows 98 uses first-available allocation
+	- Windows XP uses next-available allocation
+	- a new cluster is allocated for Windows 98 and XP when no unallocated directory entries are found
+	- when a file is renamed, a new entry is made for the new name, unallocating the old one
+	- for Windows XP, when a file is created from a Windows application, two entries are created; first entry without size and starting cluster which is unallocated for the second entry with both
+	- when a file is deleted, the fist byte of the entry is set to 0xe5; allocated clusters are marked unallocated in the FAT
+- temporal information must be updated:
+	- time values are non-essential and can be false
+	- created time is set when Windows allocates a new directory entry for a new file; no changes for renamed/moved files
+	- copying files changes creation time for copy
+	- written time is set when Windows writes new file content
+	- write time is content-based and not directory entry-based; follows data when copied/moved
+	- changing attributes or name of file does not change write time
+	- last accessed date is updated when file is opened
+	- moving to a different volume changes last accessed date; moving to same volume does not
+	- moving/copying changes access date for both source and destination file
+	- dates for directories are set when creating but not updated much after
+- allocation behavior is OS-depedent
+
+## 26. FAT metadata analysis techniques
+- used to determine more details about a file/directory
+- must locate specific directory entry, process contents, and determine where content is stored
+
+## 27. FAT metadata analysis considerations
+- times are stored without respect to timezone
+- last accessed and created dates are optional by specification and may be 0
+- written date being earlier than created dates are common for copied files
+- next available allocation strategy for new directory entries in Windows XP allows for longer acces to names of deleted files; not necessarily the content
+- DEFRAG utility in Windows compacts directories, removes unused directory entries, and moves file content to make it contiguous; analysis becomes more difficult
+- unused sectors in the last cluster of a file allocated by Windows typically contain deleted data
+- Windows doesn't show data after a directory entry with all zeroes; easy to hide data:
+	- allocated size of directory should be compared to number of allocated files
+	- logical file system search should find any data hidden
+- volume label directory entry:
+	- access and created times are often set to 0, but last written time is often file system creation time
+	- with Windows XP can be used to hide data by manually starting cluster chain
+	- with Windows XP it is possible to many volume label directory entries in any location
+
+## 28. FAT metadata analysis scenarios
+- file system creation date:
+	- view volume label directory entry written time
+- searching for deleted directories:
+	- extract unallocated space 
+	``` sh
+	$ dls -f fat fat-10.dd > fat-10.dls
+	```
+	- search for signature for . directory
+	``` sh
+	$ sigfind –b 512 2e202020 fat-10.dls
+	Block size: 512 Offset: 0
+	Block: 180 (-)
+	Block: 2004 (+1824)
+	Block: 3092 (+1088)
+	Block: 3188 (+96)
+	Block: 19028 (+15840)
+	[REMOVED]
+	```
+	- view sector 180
+	``` sh
+	$ dd if=fat-10.dls skip=180 count=1 | xxd
+	0000000: 2e20 2020 2020 2020 2020 2010 0037 5daf . ..7].
+	0000016: 3c23 3c23 0000 5daf 3c23 4f19 0000 0000 <#<#..].<#0.....
+	0000032: 2e2e 2020 2020 2020 2020 2010 0037 5daf .. ..7].
+	0000048: 3c23 3c23 0000 5daf 3c23 dc0d 0000 0000 <#<#..].<#......
+	0000064: e549 4c45 312e 4441 5420 2020 0000 0000 .ILE1.DAT ....
+	0000080: 7521 7521 0000 0000 7521 5619 00d0 0000 u!u!....u!V.....
+	[REMOVED]
+	```
+	- . entry points to cluster 6,479(0x194f)
+	- .. entry points to cluster 3,548(0x0ddc)
+	- third entry is for file starting in cluster 6,486(0x1956) with a size of 53,248(0xd000) bytes
+
+![[FAT find deleted files.png]]
+
+## 29. FAT file name category
+- typically allows mapping of file name to metadata, but not for FAT
+
+## 30. long file name directory entry
+- if a file name is longer than 8 character or has special name values, a *long file name(LFN)* type of directory entry is added
+- LFN directory entries also have a *shoft file name(SFN)* entry; needed for storing time, size, and starting cluster information
+- LFN entries use a special attribute value; remaining bytes are used to store 13 Unicode characters encoded in UTF-16; additional LFN entries are used if name need more than 13 characters
+- all LFN entries precede SFN entry and contain checksum for correlation with SFN entry; LFN entries are in reverse order with earlier parts closer to SFN entry
+
+![[directory entry with LFN.png]]
+``` sh 
+$ fls -f fat fat-2.dd
+r/r 3: FAT DISK (Volume Label Entry)
+r/r 4: RESUME-1.RTF
+r/r 7: My Long File Name.rtf (MYLONG~1.RTF)
+r/r * 8: _ile6.txt
+```
+- address gap between 4 and 7 due to LFN entries
+
+## 31. FAT file name allocation algorithms
+- allocation algorithms is same as for metadata category; except for LFN entries that must come before SFN entry
+- deletion routine is same as metadata category; 0xe5 overwrites sequence number for LFN entries
+
+## 32. FAT file name analysis techniques
+- analysis used to find specific file name
+- locate root directory:
+	- FAT12/16: starts in sector following FAT area, size given in boot sector
+	- FAT32: starting cluster address given in boot sector, FAT used to determine layout
+- process contents of directory:
+	- step through each 32-byte directory entry
+- find corresponding metadata
+
+## 33. FAT file name analysis considerations
+- scandisk tool for FAT is not exhaustive; small amounts of data can be hidden
+- attacker may hide data at end of directories
+- use Unicode to search for file names
+- file names may not be stored sequentially 
+
+## 34. FAT file name analysis scenarios
+- long file name searching:
+	- each long name entries are broken up into chunks of 5, 6, and 2
+	- search for longest string
+
+## 35. the big picture
+- file allocation example:
+	1. read boot sector from sector 0 of volume 
+	2. locate FAT structures, data area, and root directory
+	3. process each directory entry to find directory for file, dir1
+	4. search directory entries in dir1's starting cluster to find unallocated entry
+	5. set allocation status by writing name, file1.txt, and write size and current time to appropriate fields
+	6. search FAT structure to allocate cluster to file and set entry to EOF
+	7. write address of first cluster to directory entry 
+	8. if more clusters are needed, repeat 6 and update previous cluster entry to contain next cluster address
+
+	![[file allocation summary.png]]
+- file deletion example:
+	1. read boot sector from sector 0 of volume
+	2. locate FAT structures, data area, and root directory
+	3. process each directory entry to find dir 1
+	4. search directory entries in dir1's starting cluster for file1.txt
+	5. use FAT to determine cluster chain
+	6. set FAT entries in chain to 0
+	7. unallocate directory entry for file by setting first byte of file name to 0xe5
+
+	![[file deletion summary.png]]
+
+## 36. other topics
+- file recovery:
+	- (a) blindly read clusters
+	- (b) read only unallocated clusters
+
+	![[file recovery options.png]]
+	- both options will recover correctly for (A)
+	- only (b) will recover correctly for (B)
+	- neither will recover correctly for (C) 
+	- multiple cluster directories are likely to be fragmented
+- determining type:
+	- calculate # of sectors in root directory (0 for FAT32)
+	(root directory size in sectors) = ceil((# of entries) * 32) / (bytes per sector))
+	- calculate # of sectors allocated to clusters
+	(total cluster size in sectors) = (total # of sectors) - (reserved area size in sectors) - ((# of FAT) * (FAT size in sectors)) - (root directory size in sectors)
+	- caluculate # of clusters
+	(# of clusters) = (total cluster size in sectors) / (# of sectors in cluster)
+	- FAT12: ~ 4,084
+	- FAT16: 4,085 ~ 65,524
+	- FAT32: 65,525 ~
+- consistency check:
+	- verify values are in appropriate range for boot sector and other DS in reserved area of FAT FS; also examine unused locations for non-zero values
+	- compare backup and primary DS for inconsistencies
+	- examine sectors marked as bad
+	- space between FAT entry for last cluster and end of FAT sector should be examined
+	- space between end of last cluster and end of file system
+	- examine cluster chains to make sure allocated directory entry points to the starting cluster
+	- examine allocated directory entries to make sure they point to allocated clusters
+	- directory entry marked as volume label should not have a starting cluster
+	- there should only be one directory entry marked as volume label
+	- checksums for allocated LFN entries should be compared with allocated SFN entries
+	- check for directory entries after a null entry
+
+## 37. summary
+- FAT FS have relatively few DS, but present challenges with respect to file recovery and temporal-based auditing
