@@ -8,17 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "2195d1743a207b8a",
+            "id": "446b1f424b462ee3",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
+                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 10. FAT Data Structures"
+              "title": "Chapter 11. NTFS Concepts"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 298.5
+    "width": 295.5
   },
   "right": {
     "id": "1b490e33aebbb892",
@@ -180,28 +180,38 @@
       "bases:Create new base": false
     }
   },
-  "active": "2195d1743a207b8a",
+  "active": "446b1f424b462ee3",
   "lastOpenFiles": [
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md~",
-    "File System Forensic Analysis/Images/directory entry time stamp format.png",
-    "File System Forensic Analysis/Images/directory entry date stamp format.png",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md~",
+    "File System Forensic Analysis/Images/NTFS decryption process.png",
+    "File System Forensic Analysis/Images/NTFS encryption process.png",
     "File System Forensic Analysis/Part 3. File System Analysis/4913",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
-    "File System Forensic Analysis/Images/volume serial number generation.png",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md~",
-    "File System Forensic Analysis/Images/file deletion summary.png",
+    "File System Forensic Analysis/Images/attribute decompression example.png",
+    "File System Forensic Analysis/Images/attribute compression example.png",
+    "File System Forensic Analysis/Images/image formats.png",
+    "File System Forensic Analysis/Images/further sync issues.png",
+    "File System Forensic Analysis/Images/filename metadata sync issue.png",
+    "File System Forensic Analysis/Images/file recovery options.png",
     "File System Forensic Analysis/Images/file allocation summary.png",
-    "File System Forensic Analysis/etc/LFN entry name chunks.md",
-    "File System Forensic Analysis/Images/directory entry with LFN.png",
-    "File System Forensic Analysis/Images/FAT find deleted files.png",
-    "File System Forensic Analysis/Images/orphan files.png",
-    "File System Forensic Analysis/Images/cluster chain.png",
-    "File System Forensic Analysis/Images/FAT content analysis scenario.png",
+    "File System Forensic Analysis/Images/FAT first cluster.png",
+    "Digital Forensics Concepts/DOS (MBR) partitioning/Extended Boot Record.md",
+    "Digital Forensics Concepts/DOS (MBR) partitioning/Primary Extended Partition.md",
+    "Digital Forensics Concepts/Images",
     "Digital Forensics Concepts/File System.md",
+    "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md~",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md~",
+    "File System Forensic Analysis/etc/LFN entry name chunks.md",
     "Digital Forensics Concepts/Partition System.md",
     "File System Forensic Analysis/etc/ATA and SCSI disk size limitations.md",
     "File System Forensic Analysis/etc/Disk as layers of abstraction.md",
@@ -209,21 +219,12 @@
     "File System Forensic Analysis/etc/Data analysis layers.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md~",
     "File System Forensic Analysis/etc/journaling data changes.md",
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
     "File System Forensic Analysis/Part 3. File System Analysis",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md~",
     "File System Forensic Analysis/Part 2. Volume Analysis/4913",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md~",
-    "Digital Forensics Concepts/DOS (MBR) partitioning/Extended Boot Record.md",
-    "Digital Forensics Concepts/DOS (MBR) partitioning/Primary Extended Partition.md",
     "Digital Forensics Concepts/NTFS/References.md",
-    "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md~",
     "File System Forensic Analysis/etc/sector copy data loss.md",
-    "Digital Forensics Concepts/DOS (MBR) partitioning",
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
     "Welcome.md"
   ]
 }
