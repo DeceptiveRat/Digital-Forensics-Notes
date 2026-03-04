@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 298.5
   },
   "right": {
     "id": "1b490e33aebbb892",
@@ -183,13 +183,15 @@
   "active": "2195d1743a207b8a",
   "lastOpenFiles": [
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md~",
-    "File System Forensic Analysis/Images/volume serial number generation.png",
+    "File System Forensic Analysis/Images/directory entry time stamp format.png",
+    "File System Forensic Analysis/Images/directory entry date stamp format.png",
     "File System Forensic Analysis/Part 3. File System Analysis/4913",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
+    "File System Forensic Analysis/Images/volume serial number generation.png",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md~",
     "File System Forensic Analysis/Images/file deletion summary.png",
     "File System Forensic Analysis/Images/file allocation summary.png",
@@ -199,8 +201,6 @@
     "File System Forensic Analysis/Images/orphan files.png",
     "File System Forensic Analysis/Images/cluster chain.png",
     "File System Forensic Analysis/Images/FAT content analysis scenario.png",
-    "File System Forensic Analysis/Images/FAT first cluster.png",
-    "File System Forensic Analysis/Images/FAT boot sector signature matches.png",
     "Digital Forensics Concepts/File System.md",
     "Digital Forensics Concepts/Partition System.md",
     "File System Forensic Analysis/etc/ATA and SCSI disk size limitations.md",
