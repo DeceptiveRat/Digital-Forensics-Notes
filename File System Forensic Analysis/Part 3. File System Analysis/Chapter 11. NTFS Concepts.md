@@ -189,3 +189,93 @@
 5. $DATA is decrypted using FEK
 
 ![[NTFS decryption process.png]]
+
+## 17. index
+- collection of attributes stored in sorted order
+- commonly used in directories to store $FILE_NAME 
+- security information and quota information are also stored in an index
+
+## 18. index B-trees
+- index sorts attributes into a B-tree
+- typically, # of children is based on how many values each node can store
+
+## 19. index B-tree creation
+![[B-tree example.png]]
+1. add jjj.txt
+
+![[B-tree added j.png]]
+
+2. split C
+
+![[B-tree split C.png]]
+
+3. split A
+
+![[B-tree split A.png]]
+
+## 20. index B-tree deletion
+1. delete fff.txt and zzz.txt
+
+![[B-tree delete z and f.png]]
+	- zzz.txt file may still exist in node
+	- B contains bbb.txt in unallocated space
+
+## 21. index entry
+- used to store values in node
+- have same standard header fields
+- has flag to show if it has children nodes; index record addresses are given
+
+## 22. index node
+
+![[NTFS directory index tree node.png]]
+- an empty entry is used to signal end of node list
+- can be stored in 2 types of MFT entry attributes:
+	- $INDEX_ROOT:
+		- always resident
+		- can store only 1 node with few index entries
+	- $INDEX_ALLOCATION:
+		- non-resident
+		- can store as many nodes as needed
+		- attribute content is a large buffer that contains one or more *index records*
+	
+## 23. index record
+- static size, typically 4096 bytes
+- contains list of index entries
+- each given an address starting with 0
+![[MFT entry with index entries.png]]
+	- $INDEX_ROOT has 3 index entries
+	- $INDEX_ALLOCATION allocated to cluster 713
+	- $INDEX_ALLOCATION contains 3 index records
+- $INDEX_ALLOCATION can have allocated space not being used by index records; $BITMAP manages allocation status of index records
+
+## 24. index scenarios
+- entries fit in $INDEX_ROOT
+![[index entries in INDEX_ROOT.png]]
+- entries fit in 1 $INDEX_ALLOCATION index record
+![[index entries in INDEX_ALLOCATION.png]]
+- entries fit in 2 $INDEX_ALLOCATION index record
+![[index entries in both.png]]
+
+## 25. analysis tools
+- *nfi.exe*:
+	- displays MFT contents of a live system; attribute names, cluster addresses
+	- only for live analysis
+	- useful for learning about NTFS
+	- *NTFSInfo* provides similar information
+- TSK:
+	- allows viewing content of any attribute using attribute type and unique identifier
+	- *istat* lists all attributes for a file
+	``` sh
+	[REMOVED]
+	Type: $STANDARD_INFORMATION (16-0) Name: N/A Resident size: 72
+	Type: $FILE_NAME (48-2) Name: N/A Resident size: 84
+	Type: $OBJECT_ID (64-8) Name: N/A Resident size: 16
+	Type: $DATA (128-3) Name: $Data Non-Resident, Encrypted size: 4294
+	94843 94844 94845 94846 94847 94848 102873 102874
+	102875
+	Type: $DATA (128-5) Name: ADS Non-Resident, Encrypted size: 4294
+	102879 102880 102881 102882 102883 102884 102885 102886
+	102887
+	Type: $LOGGED_UTILITY_STREAM (256-7) Name: $EFS Non-Resident size: 552
+	102892 102893
+	```
