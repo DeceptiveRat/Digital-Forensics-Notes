@@ -239,6 +239,7 @@
 		- attribute content is a large buffer that contains one or more *index records*
 	
 ## 23. index record
+- corresponds to index nodes inside $INDEX_ALLOCATION
 - static size, typically 4096 bytes
 - contains list of index entries
 - each given an address starting with 0

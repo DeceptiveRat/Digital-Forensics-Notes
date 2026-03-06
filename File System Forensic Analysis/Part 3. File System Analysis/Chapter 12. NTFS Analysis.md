@@ -567,3 +567,321 @@ C:\> echo "Hello There" > file.txt:foo
 - search for clusters that start with FILE signature if $MFT and $MFTMirr are not located
 
 ## 30. metadata category analysis considerations
+- extra attributes can be used to hide data
+- unused part in MFT entry can be used to hide data
+- ways $DATA can be stored in entry:
+	![[data in MFT entry.png]]
+	- entry 90: $DATA can be recovered before reallocation
+	- entry 91: $DATA can be recovered if cluster isn't reallocated
+	- entry 92, 93: if either entry is reallocated $DATA can't be recovered
+- it is harder to recover files with smaller MFT addresses
+- Windows wipes unused bytes of last sector, but not unused sectors; deleted data can be found at end of file in slack space
+- time values are not updated on delete
+
+## 31. metadata category analysis scenario
+objective: recover files from previous FS in a newly formatted disk
+1. extract unallocated space of FS
+	``` sh
+	$ dls –f ntfs ntfs9.dd > ntfs9.dls
+	```
+2. search for old MFT entries
+	``` sh
+	$ sigfind –o 0 46494c45 ntfs9.dls
+	```
+3. analyze hits
+	``` sh
+	$ dd if=ntfs9.dls skip=412 count=2 | xxd
+	0000000: 4649 4c45 3000 0300 b6e5 1000 0000 0000 FILE0...........
+	0000016: 0100 0100 3800 0100 0003 0000 0004 0000 ....8...........
+	0000032: 0000 0000 0000 0000 0400 0000 4800 0000 ............H...
+	0000048: 0500 6661 0000 0000 1000 0000 6000 0000 ..fa........`...
+	0000064: 0000 0000 0000 0000 4800 0000 1800 0000 ........H.......
+	[REMOVED]
+	0000144: b049 0000 0000 0000 3000 0000 7000 0000 .I......0...p...
+	0000160: 0000 0000 0000 0200 5800 0000 1800 0100 ........X.......
+	0000176: 0500 0000 0000 0500 d064 f7b9 eb69 c401 .........d...i..
+	[REMOVED]
+	0000240: 0b03 6c00 6500 7400 7400 6500 7200 3100 ..l.e.t.t.e.r.1.
+	0000256: 2e00 7400 7800 7400 4000 0000 2800 0000 ..t.x.t.@...(...
+	0000272: 0000 0000 0000 0300 1000 0000 1800 0000 ................
+	0000288: 6dd4 12e6 d9d5 d811 a5c7 00b0 d01d e93f m..............?
+	[REMOVED]
+	0000304: 8000 0000 c801 0000 0000 1800 0000 0100 ................
+	0000320: ae01 0000 1800 0000 4865 6c6c 6f20 4d72 ........Hello Mr
+	0000336: 204a 6f6e 6573 2c0a 5765 2073 6861 6c6c Jones,.We shall
+	[REMOVED]
+	```
+	- bytes 20~21: first attribute starts at offset 56
+	- bytes 22~23: allocated before format
+	- bytes 56~59: type $STANDARD_INFORMATION
+	- bytes 60~63: length is 96 bytes
+	- bytes 152~155: type $FILE_NAME
+	- bytes 156~159: length 112 bytes
+	- bytes 176~181: parent directory MFT entry 5, root
+	- bytes 240~263: name of file: letter1.txt
+	- bytes 264~267: type $OBJECT_ID
+	- bytes 268~271: length 40 bytes
+	- bytes 304~307: type $DATA
+	- bytes 308~311: length 456 bytes
+	- bytes 328~: content of $DATA
+
+![[unallocated MFT entry processing.png]]
+
+## 32. file name category
+
+## 33. directory indexes
+- NTFS directories have a normal MFT entry with special flag in header, $STANDARD_INFORMATION and $FILE_NAME attributes
+- index entries in directory index contain a file reference and $FILE_NAME
+- if Windows is configured to require a DOS space name, multiple $FILE_NAME for same file exist in index
+- $INDEX_ROOT, $INDEX_ALLOCATION, $BITMAP are all assigned name $I30
+- basic directory tree layout:
+![[basic directory tree with 2 levels.png]]
+	- entries in index record 0 have names less than hhh.txt
+	- entries in index record 1 have names greater than hhh.txt
+	- eeeeeeeeeeee.txt is not in DOS name space; there is second entry for it
+- each node in tree has a header value that identifies where last allocated entry is
+
+## 34. root directory
+- always located in MFT entry 5
+- named .
+- has standard $INDEX_ROOT, $INDEX_ALLOCATION, and $BITMAP attributes
+- all FS metadata files are located in this directory; but hidden from most users
+
+## 35. links to files and directories
+- *hard link*:
+	- allows files to have more than one name
+	- doesn't look different from original file name
+	- allocated an entry in its parent directory index that points to same MFT entry as original name
+	- when created, increment link count in MFT entry header; entry not unallocated until link count is zero
+	- MFT entry has one $FILE_NAME for each hard link names
+	- hard links can only be created within same volume
+- *reparse points*:
+	- used to link files, directories, and volumes
+	- special file/directory that contains information about what it links to
+	- can be used to mount volume on directory instead of at drive letter such as E:\
+	- *symbolic link* is reparse point that links 2 files
+	- *junction* is reparse point that links 2 directories
+	- *mount point* is reparse point that links directory with volume
+	- Windows Remote Storage Server feature uses reparse points to describe server location of a file or directory
+	- have flag set in $STANDARD_INFORMATION and $FILE_NAME
+	- $REPARSE_POINT contains information about where target file/directory is
+	- kept track of using an index in \$Extend\$Reparse FS metadata file; sorted by file reference of reparse point
+- NTFS keeps track of mount points in $DATA in root directory, called $MountMgrRemoteDatabase; contains list of target volumes pointed to by mount points
+
+## 36. object identifier
+- another method for addressing file/directory
+- application or OS can assign unique 128-bit object identifier to file
+- used to refer to file even after name change or move to different volume
+- file/directory with object ID assigned has $OBJECT_ID that contains object ID and information about original domain and volume
+- refer to \$Extend\$ObjId index to find file based on object ID; contains every assigned object ID with file reference ID
+
+## 37. file name category allocation algorithms
+- small directory has one node allocated to $INDEX_ROOT
+- OS moves entries to an index record in $INDEX_ALLOCATION when entries no longer fit in $INDEX_ROOT
+- when first index record fills up, a second is allocated and $INDEX_ROOT is used as root node
+- tempora and size values in $FILE_NAME are updated at same rate as values in $STANDARD_INFORMATION of MFT entry
+
+## 38. file name category analysis techniques
+1. locate root directory
+2. examine contents of $INDEX_ROOT and $INDEX_ALLOCATION to process directory
+	- contains index record that correspond to index nodes
+	- index record may also contain unallocated index entries; allocation status determined via $BITMAP
+- file name may correspond to reparse point
+
+## 39. file name category analysis considerations
+- to determine if a file has truly been deleted, all index entries must be examined 
+- file reference contains sequence number; easier to tell if file name matches MFT entry
+- $FILE_NAME exists in index; basic information exists even after MFT entry is overwritten
+- when trying to determine which deleted files exist in directory, check:
+	- unallocated areas of each node in directory index tree
+	- unallocated MFT entries
+
+## 40. file name category analysis scenario
+![[NTFS file name analysis scenario.png]]
+- aaa.txt is shown as deleted:
+	- aaa.txt has an unallocated entry in index
+	- also has allocated entry in index; not deleted
+- wrong time stamp is show for mmm.txt:
+	- mmm.txt has entry 31 and seq 3
+	- current entry 31 has seq 4; time stamp here is for new file
+	- correct time stamp for mmm.txt can be found at $FILE_NAME in index entry
+- www.txt is not shown as deleted:
+	- deleted file name can be overwritten in index
+	- orphan files should be searched for in MFT entries
+
+## 41. application category
+- NTFS supports many application-level features
+- not essential with respect to FS
+- in this section, data are essential if they are required for application-level goals, not for storing data
+
+## 42. disk quota
+- limits amount of space each user allocates
+- can be set up by admin
+- part of quota information is stored as FS data and other data is stored in application-level files such as registry
+- $Quota exists in \$Extend directory and can be in any MFT entry
+- $Quota uses 2 indexes to manage quota information:
+	- $O: correlates SID with owner ID
+	- $Q: correlates owner ID with how many bytes is being used by user and how much is allowed
+
+## 43. disk quota analysis considerations
+- considered non-essential; not needed when using FS
+- quota could be useful when determining which users stored large amounts of data
+- quota system is not turned on be default
+
+## 44. logging (journaling)
+![[LogFile data attribute layout.png]]
+- record information about metadata updates before and after; allows quick recovery
+- log journal file is located in MFT entry 2, named $LogFile
+- $LogFile has no special attributes and log data is stored in $DATA
+- log file has 2 major sections:
+	- restart area:
+	- logging area:
+- example FS transactions:
+	- create file/directory
+	- change content of file/directory
+	- rename file/directory
+	- change data stored in MFT entry of file/directory
+- log file does not contain non-resident data
+
+## 45. restart area
+- contains 2 copies of a DS that help OS determine what transactions need to be examined during cleanup
+- contains pointer to logging area for last transaction that was known to be successful
+
+## 46. logging area
+- contains series of record
+- each record has a *Logical Sequence Number(LSN)*, a unique 64-bit value
+- has a finite size; restarts from beginning after reaching end
+- LSN is assigned based on record creation date, not location
+- update record:
+	- used to describe FS transaction before/after it occurs
+	- 2 major fields created before transaction:
+		- redo field: contains information about what operation is going to do
+		- undo field: shows how to undo operation
+	- commit record: update record created after transaction to show completion
+- checkpoint record:
+	- identifies where in log file OS should start from to verify FS
+	- created every 5 seconds
+	- LSN value stored in restart area of log file
+
+## 47. logging example
+![[transaction logging example.png]]
+1. scan from last checkpoint record
+2. transaction 1 has a commit record
+	- use redo field to ensure disk is in correct state
+3. transaction 2 does not have a commit record
+	- use undo field to ensure no partial changes exist in disk
+
+## 48. logging analysis considerations
+- unknown how log file is organized
+- evidence, even if found, can be difficult to explain
+- LSN value given in MFT entry header of file could be used to reconstruct order in which files were edited
+
+## 49. change journal
+- record when changes are made to file/directory
+- can be used by application to determine which files have changed in a certain time span
+- any appliation can turn journal feature on/off; off by default
+- journal has 64-bit number assigned to it, which is changed every time journal is enabled/disabled; used to determine if journal may have missed changes while disabled
+- when journal is disabled, Windows 2000 and XP purges file
+- stored in \$Extend\$UsrJrnl file
+- not typically allocated one of the reserved MFT entries
+- has 2 $DATA:
+	- $Max: contains basic information about journal
+	- $J: contains journal as list of various size records
+		- each record contains file name, time of change, and type of change
+		- length of a record is based on length of file name
+		- each record has a 64-bit *Update Sequence Number(USN)* used to index record in journal
+		- USN stored in $STANDARD_INFORMATION of modified file
+		- USN corresponds to byte offset in journal; easy to find record given USN
+		- record does not include which data changed
+- max size exists for journal:
+	 - once reached, turns into sparse file
+	 - file looks like it's getting bigger, but occupies same space on disk
+
+## 50. change journal analysis considerations
+- if enabled and trust worthy, could be useful in reconstructing recent events 
+
+## 51. file allocation big picture
+scenario: create file \dir1\file1.dat and assume dir1 already exists in root. File size is 4,000 byets and cluster size is 2,048 bytes
+1. read and process first sector
+	1.  determine cluster size, MFT starting address, size of MFT entry
+2. read and process first entry from MFT
+	1. determine layout of MFT from $DATA
+3. process $BITMAP of $MFT to find unused entry
+	1. first free entry 304 is allocated to new file
+	2. bit in $BITMAP set to 1
+4. clear and initialize MFT entry 304
+	1. $STANDARD_INFORMATION and $FILE_NAME are created
+	2. times are set to current time
+	3. in-use flag set in entry header
+5. allocate clusters for content
+	1. find and allocate clusters with $DATA of $Bitmap in entry 6
+	2. 2 consecutive clusters, 692 and 693 are found and allocated
+	3. corresponding bits are set to 1
+	4. file content is written to clusters
+	5. $DATA of entry 304 is updated with cluster addresses
+	6. entry 304 file modified times are updated
+6. add file name entry
+	1. locate dir1 in root directory
+	2. read $INDEX_ROOT and $INDEX_ALLOCATION and find dir1 index entry and MFT entry address
+	3. update last access time of root directory
+7. process dir1 MFT entry
+	1. process $INDEX_ROOT to find where file.dat should go
+	2. create new index entry and resort tree
+	3. new index entry hsa MFT entry 304 in file reference address and time and flags are set appropriately
+	4. last written, modified, and accessed times are updated for dir1
+8. in each previous step, entries could have been made to:
+	- FS journal in $LogFile
+	- change journal in \$Extend\$UsrJrnl
+	- user quota in \$Extend\$Quota
+
+![[NTFS big picture file creation.png]]
+
+## 52. file deletion big picture
+scenario: delete \dir1\file1.dat
+1. read and process first sector
+	1.  determine cluster size, MFT starting address, size of MFT entry
+2. read and process first entry from MFT
+	1. determine layout of MFT from $DATA
+3. find dir1
+	1. process root directory 
+	2. find dir1 index entry and get MFT entry address
+	3. last accessed time of root directory is updated
+4. search for file1.dat entry
+	1. process $INDEX_ROOT of dir1
+	2. find file1.dat index entry and get MFT entry address
+5. remove file1.dat index entry
+	1. remove entry from index
+	2. last written, modified, and accessed time is updated for dir1
+6. unallocate MFT entry 304
+	1. clean in-use flag in header
+	2. process $DATA of $Bitmap and set bitmap to 0 for this entry
+7. process non-resident atttributes for MFT entry 304 
+	1. corresponding clusters are set to unallocated in \$Bitmap (clusters 692 and 693)
+8. in each previous step, entries could have been made to:
+	- FS journal in $LogFile
+	- change journal in \$Extend\$UsrJrnl
+	- user quota in \$Extend\$Quota
+
+![[NTFS big picture file deletion.png]]
+- link between MFT entry and clusters still exists
+- link between file name and MFT entry would exist if not overwritten
+
+## 53. file recovery
+- easier than other FS
+- if directory index is resorted, file name information can be lost; but unallocated entries can be easily found in MFT
+- MFT entries have $FILE_NAME attribute with file reference address of parent directory; easy to determine full path
+- additional $DATA should be recovered if they exist
+- to recover all deleted files, MFT should be examined for unallocated entries
+- if file had more than 1 MFT entry, they may be required for recovery
+- FS log or change log can be useful for recent deletions
+
+## 54. consistency check
+- used to identify corrupt images or tampering
+- NTFS boot sectors enforces some values should be 0
+- clusters marked as bad should be examined
+- metadata structures reserved and unused are easy places to hide data
+- each allocated cluster must be part of cluster run of a file
+- each allocated MFT entry must have:
+	- inuse flag and $BITMAP bit set
+	- directory index entry for each file name
+- valid value combinations are unknown for flags and options
