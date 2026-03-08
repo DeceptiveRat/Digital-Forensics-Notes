@@ -252,7 +252,7 @@ $LOGGED_UTILITY_STREAM (256) Size: 0-65536 Flags: Non-resident
 7. examine sector 2,056,319
 	- more non-zero values
 	- cluster size of 1,024 bytes
-	- # of sectors 2,056,256
+	- \# of sectors 2,056,256
 	- starting MFT cluster 342,709
 	- scenarios:
 		1. located in first sector of FS

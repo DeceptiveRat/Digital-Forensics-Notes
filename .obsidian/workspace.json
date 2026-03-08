@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 286.5
+    "width": 302.5
   },
   "right": {
     "id": "1b490e33aebbb892",
@@ -182,22 +182,23 @@
   },
   "active": "ff1e17f35d9967c3",
   "lastOpenFiles": [
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md~",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md~",
+    "File System Forensic Analysis/Images/cluster address to bitmap address.png",
     "File System Forensic Analysis/Part 3. File System Analysis/4913",
-    "File System Forensic Analysis/Images/NTFS big picture file deletion.png",
+    "File System Forensic Analysis/Images/INDEXROOT layout with index entries.png",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
+    "File System Forensic Analysis/Images/INDEX ROOT and INDEX ALLOCATION layout.png",
+    "File System Forensic Analysis/Images/INDEXALLOCATION layout.png",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
+    "File System Forensic Analysis/Images/INDEXROOT layout.png",
+    "File System Forensic Analysis/Images/data attribute example layout.png",
+    "File System Forensic Analysis/Images/run list layout.png",
+    "File System Forensic Analysis/Images/fixup value example.png",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md~",
+    "File System Forensic Analysis/Images/NTFS big picture file deletion.png",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
     "File System Forensic Analysis/Images/NTFS big picture file creation.png",
-    "File System Forensic Analysis/Images/transaction logging example.png",
-    "File System Forensic Analysis/Images/LogFile data attribute layout.png",
-    "File System Forensic Analysis/Images/NTFS file name analysis scenario.png",
-    "File System Forensic Analysis/Images/basic directory tree with 2 levels.png",
-    "File System Forensic Analysis/Images/unallocated MFT entry processing.png",
-    "File System Forensic Analysis/Images/data in MFT entry.png",
-    "File System Forensic Analysis/Images/MFT entry for processing.png",
-    "File System Forensic Analysis/Images/data category interaction.png",
     "File System Forensic Analysis/etc/Data analysis layers.md",
     "File System Forensic Analysis/etc/Disk as layers of abstraction.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
@@ -224,9 +225,7 @@
     "File System Forensic Analysis/etc/journaling data changes.md",
     "File System Forensic Analysis/Part 3. File System Analysis",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md~",
-    "File System Forensic Analysis/Part 2. Volume Analysis/4913",
     "Digital Forensics Concepts/NTFS/References.md",
-    "File System Forensic Analysis/etc/sector copy data loss.md",
-    "Welcome.md"
+    "File System Forensic Analysis/etc/sector copy data loss.md"
   ]
 }
