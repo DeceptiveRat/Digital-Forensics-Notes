@@ -734,3 +734,277 @@ rem(cluster address) = (bitmap bit)
 ![[cluster address to bitmap address.png]]
 
 ## 30. $Volume file
+- MFT entry 3
+- 2 unique attributes:
+	- $VOLUME_NAME
+	- $VOLUME_INFORMATION
+
+## 31. $VOLUME_NAME
+- type ID 96
+- allocated only to $Volume
+- contains only name of volume in UTF-16 unicode
+- *icat* output:
+	``` sh
+	$ icat -f ntfs ntfs1.dd 3-96 | xxd
+	0000000: 4e00 5400 4600 5300 2000 4400 6900 7300 N.T.F.S. .D.i.s.
+	0000016: 6b00 2000 3200                          k. .2.
+	```
+
+## 32. $VOLUME_INFORMATION
+- type ID 112
+- contains version of FS
+- fields:
+
+	| Byte Range | Description | Essential | 
+	| --- | --- | --- | 
+	| 0–7 | Unused | No | 
+	| 8–8 | Major version | Yes | 
+	| 9–9 | Minor version | Yes | 
+	| 10–11 | Flags | No | 
+
+- flag values:
+
+	| Flag | Description | 
+	| --- | --- | 
+	| 0x0001 | Dirty | 
+	| 0x0002 | Resize $LogFile(file system journal) | 
+	| 0x0004 | Upgrade volume next time | 
+	| 0x0008 | Mounted in NT | 
+	| 0x0010 | Deleting change journal | 
+	| 0x0020 | Repair object IDs | 
+	| 0x8000 | Modified by chkdsk | 
+- *icat* output:
+	``` sh
+	$ icat -f ntfs ntfs1.dd 3-112 | xxd
+	0000000: 0000 0000 0000 0000 0301 0000 ............
+	```
+
+## 33. $ObjId file
+- \$Extend\$ObjId has index called $O that correlates file's object ID to MFT entry
+- $ObjId file is not typically located in reserved MFT entry
+- index has typical $INDEX_ROOT and $INDEX_ALLOCATION
+- entry fields:
+
+	| Byte Range | Description | Essential | 
+	| --- | --- | --- | 
+	| 0–1 | Offset to file information | Yes | 
+	| 2–3 | Size of file information | Yes | 
+	| 4–7 | Unused | No | 
+	| 8–9 | Size of index entry | Yes | 
+	| 10–11 | Size of object ID(16-bytes) | Yes | 
+	| 12–15 | Flags | Yes | 
+	| 16–31 | Object ID | Yes | 
+	| 32–39 | File reference | Yes | 
+	| 40–55 | Birth volume ID | No | 
+	| 56–71 | Birth object ID | No |
+	| 72–87 | Birth domain ID | No |
+	- flag field has 0x01 when child node exists and 0x02 when last entry in index entry list
+
+## 34. $Quota file
+- \$Extend\$Quota is used by user quota feature
+- not located in rserved MFT entry
+- contains 2 indexes that both use standard $INDEX_ROOT and $INDEX_ALLOCATION to store index entries
+- $O index correlates SID to owner ID
+- $Q index correlates owner ID to quota information
+- $O index entry fields:
+
+	| Byte Range | Description | Essential | 
+	| --- | --- | --- | 
+	| 0–1 | Offset to owner ID(OFF) | Yes | 
+	| 2–3 | Length of owner ID | Yes | 
+	| 4–7 | Unused | No | 
+	| 8–9 | Size of index entry | Yes | 
+	| 10–11 | Size of SID(L) | Yes | 
+	| 12–15 | Flags | Yes | 
+	| 16–(16+L-1) | SID | Yes | 
+	| OFF+ | Owner ID | Yes | 
+	- if child exists, last 8 bytes are used as VCN of child
+- *icat* output:
+	``` sh
+	0000000: 1c00 0400 0000 0000 2000 0c00 0000 0000 ........ .......
+	0000016: 0101 0000 0000 0005 1200 0000 0401 0000 ................
+	0000032: 1c00 0400 0000 0000 2000 0c00 0000 0000 ........ .......
+	0000048: 0101 0000 0000 0005 1300 0000 0301 0000 ................
+	[REMOVED]
+	```
+	- bytes 0~1: owner ID located at offset 28 from start of entry
+	- bytes 2~3: owner ID 4 bytes
+	- bytes 8~9: index entry 32 bytes
+	- bytes 10~11: SID is 12 bytes
+	- bytes 16~27: SID
+	- bytes 28~31: owner ID
+	- second entry starts at byte 32, owner ID found in bytes 60~63
+
+- $Q index entry fields
+
+	| Byte Range | Description | Essential |
+	| --- | --- | --- |
+	| 0–1 | Offset to quota information | Yes |
+	| 2–3 | Size of quota information | Yes |
+	| 4–7 | Unused | No |
+	| 8–9 | Size of index entry | Yes |
+	| 10–11 | Size of owner ID(4 bytes) | Yes |
+	| 12–15 | Flags | Yes |
+	| 16–19 | Owner ID | Yes |
+	| 20–23 | Version | No |
+	| 24–27 | Quota flags | Yes |
+	| 28–35 | Bytes charged to user | Yes |
+	| 36–43 | Time of last charge | No |
+	| 44–51 | Threshold value(a soft limit) | Yes |
+	| 52–59 | Hard limit value | Yes |
+	| 60–67 | Exceeded time | Yes |
+	| 68–79 | SID | Yes |
+- quota flag values:
+
+	| Flag | Description | 
+	| --- | --- | 
+	| 0x00000001 | Default limits being used | 
+	| 0x00000002 | Limit reached | 
+	| 0x00000004 | ID deleted | 
+	| 0x00000010 | Tracking data usage | 
+	| 0x00000020 | Enforcing data usage | 
+	| 0x00000040 | Usage tracking requested | 
+	| 0x00000080 | Create log when threshold is met | 
+	| 0x00000100 | Create log when limit is met | 
+	| 0x00000200 | Out of date | 
+	| 0x00000400 | Corrupt | 
+	| 0x00000800 | Pending deletes | 
+- *icat* output:
+	``` sh
+	0000000: 1400 3c00 0000 0000 5000 0400 0000 0000 ..<.....P.......
+	0000016: 0301 0000 0200 0000 0100 0000 0028 0500 .............(..
+	0000032: 0000 0000 401b 7c3c 7751 c401 ffff ffff ....@.|<wQ......
+	0000048: ffff ffff ffff ffff ffff ffff 0000 0000 ................
+	0000064: 0000 0000 0101 0000 0000 0005 1300 0000 ................
+	0000080: 1400 3c00 0000 0000 5000 0400 0000 0000 ..<.....P.......
+	0000096: 0401 0000 0200 0000 0100 0000 0094 6602 ..............f.
+	0000112: 0000 0000 90fe 8bdf d769 c401 ffff ffff .........i......
+	0000128: ffff ffff ffff ffff ffff ffff 0000 0000 ................
+	0000144: 0000 0000 0101 0000 0000 0005 1200 0000 ................
+	```
+	- bytes 0~1: offset to quota information 20 bytes
+	- bytes 2~3: 60 bytes of quota information
+	- bytes 16~19: for owner ID 259
+	- bytes 24~27: quota flags
+	- bytes 28~35: user hasonly 337,920 charged to account
+
+## 35. $LogFile file
+- MFT entry 2
+- used as NTFS journal
+- has standard file attributes
+- stores log data in $DATA
+- exact DS unknown
+- log details: 
+	- 4,096 byte pages
+	- first two for restart area; RSTR signature in first 4 bytes
+		``` sh
+		$ icat -f ntfs ntfs1.dd 2 | xxd | grep RSTR
+		0000000: 5253 5452 1e00 0900 0000 0000 0000 0000 RSTR............
+		0004096: 5253 5452 1e00 0900 0000 0000 0000 0000 RSTR............
+		```
+	- records come after restart area
+		``` sh
+		$ icat –f ntfs ntfs1.dd 2 | xxd | grep RCRD
+		0008192: 5243 5244 2800 0900 0050 2500 0000 0000 RCRD(....P%.....
+		0012288: 5243 5244 2800 0900 0050 2500 0000 0000 RCRD(....P%.....
+		[REMOVED]
+		```
+	- possible to see resident data attributes in log file:
+		``` sh
+		2215936: 5243 5244 2800 0900 f93b 9403 0000 0000 RCRD(....;......
+		[REMOVED]
+		2217312: 3801 1800 0000 0000 ec12 0000 0000 0000 8...............
+		2217328: a14d 0500 0000 0000 4d79 206e 6577 2066 .M......My new f
+		2217344: 696c 652c 2063 616e 2079 6f75 2073 6565 ile, can you see
+		2217360: 2069 743f 0000 0000 0000 0000 0000 0000 it?............
+		2217376: 0000 0000 0000 0000 0000 0000 0000 0000 ................
+		[REMOVED]
+		2217808: 0003 0000 0094 7c22 5010 0000 004e 5446 ......|"P....NTF
+		2217824: 5320 4469 736b 2032 0043 3a5c 6c6f 672d S Disk 2.C:\log-
+		2217840: 7465 7374 2e74 7874 0000 1500 2e00 2e00 test.txt........
+		2217856: 5c00 2e00 2e00 5c00 2e00 2e00 5c00 6c00 \.....\.....\.l.
+		2217872: 6f00 6700 2d00 7400 6500 7300 7400 2e00 o.g.-.t.e.s.t...
+		2217888: 7400 7800 7400 0300 4300 3a00 5c00 6000 t.x.t...C.:.\.`.
+		```
+
+## 36. $UsrJrnl file
+- changes are recorded in $DATA named $J of \$Extend\$UsrJrnl
+- not located in reserved MFT entry
+- $J is sparse and contains list of different sized DS, called *journal entries*
+- $DATA called $Max that contains information about max settings for user journal also exists
+- $J fields:
+
+	| Byte Range | Description | Essential | 
+	| --- | --- | --- | 
+	| 0–3 | Size of this journal entry | Yes | 
+	| 4–5 | Major version | Yes | 
+	| 6–7 | Minor version | Yes | 
+	| 8–15 | File reference of file that caused this entry | Yes | 
+	| 16–23 | Parent directory file reference for file that caused this entry | No | 
+	| 24–31 | USN for entry | Yes | 
+	| 32–39 | Timestamp | Yes | 
+	| 40–43 | Flags for type of change | Yes | 
+	| 44–47 | Source information | No | 
+	| 48–51 | Security ID(SID) | No | 
+	| 52–55 | File attributes | No | 
+	| 56–57 | Size of file name | Yes | 
+	| 58+ | file name | yes | 
+	- essential column refers to whether data is essential for providing a log of file changes
+	- source byte typically 0; can be non-zero if OS caused entry to be made
+- $J entry flag values:
+
+	| Value | Description | 
+	| --- | --- | 
+	| 0x00000001 | The default $DATA attribute was overwritten | 
+	| 0x00000002 | The default $DATA attribute was extended | 
+	| 0x00000004 | The default $DATA attribute was truncated | 
+	| 0x00000010 | A named $DATA attribute was overwritten | 
+	| 0x00000020 | A named $DATA attribute was extended | 
+	| 0x00000040 | A named $DATA attribute was truncated | 
+	| 0x00000100 | The file or directory was created | 
+	| 0x00000200 | The file or directory was deleted | 
+	| 0x00000400 | The extended attributes of the file were changed | 
+	| 0x00000800 | The security descriptor was changed | 
+	| 0x00001000 | The name changed—change journal entry has old name | 
+	| 0x00002000 | The name changed—change journal entry has new name | 
+	| 0x00004000 | Content indexed status changed | 
+	| 0x00008000 | Changed basic file or directory attributes | 
+	| 0x00010000 | A hard link was created or deleted | 
+	| 0x00020000 | Compression status changed | 
+	| 0x00040000 | Encryption status changed | 
+	| 0x00080000 | Object ID changed | 
+	| 0x00100000 | Reparse point value changed | 
+	| 0x00200000 | A named $DATA attribute was created, deleted, or changed | 
+	| 0x80000000 | The file or directory was closed | 
+
+- $Max contains general change journal administrative information
+- $Max fields:
+
+	| Byte Range | Description | Essential |
+	| --- | --- | --- |
+	| 0–7 | Maximum size | Yes |
+	| 8–15 | Allocation size | Yes |
+	| 16–23 | USN ID | Yes |
+	| 24–31 | Lowest USN | Yes |
+- $Max *icat* output:
+	``` sh 
+	$ icat –f ntfs ntfs3.dd 27-128-4 | xxd
+	0000000: 0000 8000 0000 0000 0000 1000 0000 0000 ................
+	0000016: 4057 7491 eb69 c401 0000 0000 0000 0000 @Wt..i..........
+	```
+
+## 37. $UserJrnl $J example
+- *icat* output:
+	``` sh
+	$ icat –f ntfs ntfs3.dd 27-128-3 | xxd
+	0000000: 5000 0000 0200 0000 1c00 0000 0000 0100 P...............
+	0000016: 0500 0000 0000 0500 0000 0000 0000 0000 ................
+	0000032: 3000 e2b9 eb69 c401 0001 0000 0000 0000 0....i..........
+	0000048: 0201 0000 2000 0000 1400 3c00 6600 6900 .... .....<.f.i.
+	0000064: 6c00 6500 2d00 3000 2e00 7400 7800 7400 l.e.-.0...t.x.t.
+	```
+	- bytes 0~3: 80 bytes long
+	- bytes 8~13: entry is for MFT entry 28
+	- bytes 24~31: entry has USN of 0
+	- bytes 40~43: for overwriting default $DATA
+	- entry is for file file-o.txt
