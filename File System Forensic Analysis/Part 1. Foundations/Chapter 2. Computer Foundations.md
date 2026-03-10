@@ -41,10 +41,10 @@
 	- BIOS can translate addresses to physical address, but size is still limited
 - LBA 
 	- uses single number to address each sector
-- conversion formula:
-```math
-LBA = (((CYLINDER * heads_per_cylinder) + HEAD) * sectors_per_track) + SECTOR - 1
-```
+	- conversion formula:
+		```math
+		LBA = (((CYLINDER * heads_per_cylinder) + HEAD) * sectors_per_track) + SECTOR - 1
+		```
 
 ## 7. disk commands
 - commands are issued to both disks on cable

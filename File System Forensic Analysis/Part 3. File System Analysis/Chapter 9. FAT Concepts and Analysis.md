@@ -182,7 +182,7 @@ Block: 20513168 (+30218)
 ## 12. cluster and sector addresses
 - to convert between cluster and sector addresses get:
 	- sector address of cluster 2
-	-  # of sectors in cluster
+	-  \# of sectors in cluster
 S = (C-2) * (# of sectors in cluster) + (sector address of cluster 2)
 C = ((S - sector address of cluster 2) / (# of sectors in cluster)) + 2
 
