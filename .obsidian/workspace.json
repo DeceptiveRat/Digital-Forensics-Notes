@@ -8,31 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "ff1e17f35d9967c3",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "Chapter 2. Computer Foundations"
-            }
-          },
-          {
             "id": "7c2f6bcb479b7833",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
+                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 10. FAT Data Structures"
+              "title": "Chapter 14. Ext2 and Ext3 Concepts and Analysis"
             }
           }
         ]
@@ -194,14 +180,18 @@
       "bases:Create new base": false
     }
   },
-  "active": "ff1e17f35d9967c3",
+  "active": "7c2f6bcb479b7833",
   "lastOpenFiles": [
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md~",
+    "File System Forensic Analysis/Images/Chapter 14 images/Ext3 file allocation big picture.png",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
+    "File System Forensic Analysis/Images/Chapter 14 images/Ext3 file deletion big picture.png",
+    "File System Forensic Analysis/Images/Chapter 14 images/Ext3 journal with 2 transactions.png",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
@@ -215,10 +205,7 @@
     "File System Forensic Analysis/Images/Chapter 14 images/hard link soft link comparison.png",
     "File System Forensic Analysis/Images/Chapter 14 images/directory entries example.png",
     "File System Forensic Analysis/Images/Chapter 14 images/direct and indirect block pointers.png",
-    "File System Forensic Analysis/Images/Chapter 14 images/FS category analysis scenario layout.png",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
-    "File System Forensic Analysis/Images/Chapter 14 images/block group layout example.png",
-    "File System Forensic Analysis/Images/Chapter 14 images/ExtX layout example.png",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
     "File System Forensic Analysis/Images/Chapter 10 images",
@@ -228,7 +215,6 @@
     "File System Forensic Analysis/Images/Chapter 9 images",
     "File System Forensic Analysis/Images/Chapter 8 images",
     "File System Forensic Analysis/Images/Chapter 6 images",
-    "File System Forensic Analysis/Images/Chapter 5 images",
     "Untitled.md",
     "File System Forensic Analysis/etc/Data analysis layers.md",
     "File System Forensic Analysis/etc/Disk as layers of abstraction.md",

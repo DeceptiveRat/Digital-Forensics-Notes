@@ -12,7 +12,7 @@
 - all block groups except the last contain the same number of blocks
 - blocks are used to store file names, metadata, and file content
 
-![[block group layout example.png]]
+	![[block group layout example.png]]
 	- block bitmap:
 		- manages allocation status of blocks in group
 		- starting block address given in group descriptor
@@ -312,7 +312,7 @@ objective: read contents of last block in FS
 group = (inode - 1) / INODES_PER_GROUP
 - inodes 1~10 are typically reserved and should be allocated:
 	- inode 2 used for root directory
-	- inode 1 keeps track of bad blokcs; does not have any special status in Linux kernel
+	- inode 1 keeps track of bad blocks; does not have any special status in Linux kernel
 	- inode 8 used by journal
 - superblock has value of first non-reserved inode
 - first user file typically allocated inode 11; frequently used for lost+found directory
@@ -725,3 +725,221 @@ objective: determine user account that created files in suspicious directory
 		- random.dat was deleted after mytools.zip
 		- readme.txt was deleted before sniffer
 		- can infer files have been deleted in alphabetical order
+
+## 42. application category
+- Ext3 has one application layer feature; file system journal
+
+## 43. FS journaling
+- Ext3 journal typically uses inode 8; location specified in superblock
+- journal considered compatible FS feature; corresponding value in superblock set
+- superblock also has incompatible feature for journal device; being set means FS is using external journal, not saving data to local file
+- journal records what block updates will occur
+- after update journal identifies update is complete
+- journal has 2 modes of operation:
+	- only metadata updates are recorded in journal; default
+	- all updates are recorded in journal
+- journaling is done at block level; whole block is saved each change
+- first block in journal is for superblock:
+	- contains general info
+	- identifies where first descriptor block is located with seq num
+- journal wraps around to start after last block; size fixed as FS block size
+- blocks contain transaction administrative data or FS update data
+- *jls* output:
+	``` sh
+	$ jls –f linux-ext3 /dev/hdb2
+	JBlk Descriptrion
+	0: Superblock (seq: 0)
+	1: Allocated Descriptor Block (seq: 295)
+	2: Allocated FS Block 4
+	3: Allocated FS Block 2
+	4: Allocated FS Block 14
+	5: Allocated FS Block 5
+	6: Allocated FS Block 163
+	7: Allocated FS Block 3
+	8: Allocated Commit Block (seq: 295)
+	9: Unallocated FS Block Unknown
+	[REMOVED]
+	```
+
+## 44. transaction
+- updates are done in transactions
+- each has a sequence num
+- starts with descriptor block that contains transaction seq num and list of FS blocks being updated
+- following descriptor block are updated blocks described in descriptor
+- after update, a commit block exists with same seq num
+- more descriptor blocks with same seq num is allocated if 1 isn't enough
+
+![[Ext3 journal with 2 transactions.png]]
+
+## 45. journal revoke block
+- used to revoke so changes aren't applied during recovery
+- contains seq num and a list of blocks that were revoked
+- during recovery, any block listed in revoke block with seq num less than revoke block seq num will not be restored
+
+## 46. application category analysis techniques
+1. locate log
+	- address given in superblock
+2. process journal superblock
+3. process descriptor block
+	- determine FS blocks being updated
+
+## 47. application category analysis considerations
+- may be able to recover files if we find a block from an inode table that has block pointers
+- jounal useful for investigations that involve recent events
+- journal started from beginning every time FS is mounted
+- by default metadata is logged; but superblock and directory contents are recorded, can monitor when files were added or deleted
+
+## 48. application category analysis scenario
+- info:
+	- first inode in block group is 488,641
+	- inode table starts in block 983,044
+	- each block is 4,096 bytes
+1. *jls* on journal for entry for FS block 983,044:
+	``` sh
+	$ jls –f linux-ext3 ext3–8.dd 8
+	[REMOVED]
+	2293: Unallocated Descriptor Block (seq: 136723)
+	2294: Unallocated FS Block 983041
+	2295: Unallocated FS Block 1
+	2296: Unallocated FS Block 0
+	2297: Unallocated FS Block 983044
+	2298: Unallocated FS Block 983568
+	2299: Unallocated FS Block 983040
+	2300: Unallocated Commit Block (seq: 136723)
+	[REMOVED]
+	```
+	- for creation of file at inode 488,650
+	- inode table, superblock, group descriptors, parent directory, and block bitmap updated
+2. extract inode table from journal block 2,297:
+	``` sh
+	$ jcat -f linux-ext3 ext3-8.dd 8 2297 | dd bs=128 skip=9 count=1 | xxd
+	0000000: a481 0000 041f 0000 8880 3741 3780 3741 ..... ....7A7.7A
+	0000016: 3780 3741 0000 0000 0000 0100 1000 0000 7.7A............
+	0000032: 0000 0000 0000 0000 1102 0f00 1202 0f00 ................
+	0000048: 0000 0000 0000 0000 0000 0000 0000 0000 ................
+	[REMOVED]
+	```
+	- data that was once inode 488,650
+	- bytes 4~7: size was 7,940
+	- bytes 40~43, 44~47: direct block pointers to 983,569, 983,570
+3. view contents of blocks pointed to
+
+## 49. file allocation big picture
+- order presented here may not reflect an actual system; exact ordering of different DS vary by OS
+1. read superblock:
+	- block and fragment size 1,024 bytes
+	- each block group has 8.192 blocks and 2,016 inodes
+	- no reserved blocks before start of first block group
+2. read group descriptor table:
+	- learn layout of each block group
+3. use group descriptor table for group 0 to find inode table:
+	- inode table starts in block 6
+4. process inode table entry:
+	- inode 2 shots directory entry structures for root directory are located in block 258
+5. read root directory contents:
+	1. use directory entry length to find entry for dir1
+	2.  dir1 has inode value of 5,033
+	- A-time of root updated
+6. find inode table with inode 5,033:
+	1. 2,016 inodes per block group means 5,033 is in block 2
+	2. use group descriptor entry for block 2 to find location of inode table, block 16,390
+7. read inode table:
+	1. process entry 5,033 - 2,016 * 2 = 1,001
+	2. contents of dir1 located in block 18,431
+8. process contents of dir1:
+	1. file.dat is 8 characters long, 16 bytes required
+	2. empty location is allocated to file.dat
+	- M- and C-time of dir1 updated
+	- directory content changes recorded in journal
+9. allocate inode for file:
+	1. locate inode bitmap for group 2 using group descriptor
+	2. use first available search to find free inode 5,110
+	3. set bitmap for inode 5,110 to 1
+	4. decrement free inode count in group descriptor 
+	5. inode address added to file1.dat directory entry
+	- bitmap, group descriptor, superblock changes recorded in journal
+10. fill contents of inode 5,110:
+	- set time values
+	- link value set to 1
+	- inode table changes recorded in journal
+11. 6 blocks required to store file content:
+	1. process block bitmap
+	2. first available algorithm to find empty blocks
+	3. bits corresponding to blocks set in block bitmap
+	4. decrement free block counts in group descriptor, superblock
+	- modified and changed times in inode are updated
+	- inode, group descriptor, superblock, and bitmap changes are recorded in journal
+12. file content of file1.dat is written to allocated blocks
+
+![[Ext3 file allocation big picture.png]]
+
+## 50. file deletion example
+1. read superblock:
+	- block and fragment size 1,024 bytes
+	- each block group has 8.192 blocks and 2,016 inodes
+	- no reserved blocks before start of first block group
+2. read group descriptor table:
+	- learn layout of each block group
+3. use group descriptor table for group 0 to find inode table:
+	- inode table starts in block 6
+4. process inode table entry:
+	- inode 2 shots directory entry structures for root directory are located in block 258
+5. read root directory contents:
+	1. use directory entry length to find entry for dir1
+	2.  dir1 has inode value of 5,033
+	- A-time of root updated
+6. find inode table with inode 5,033:
+	1. 2,016 inodes per block group means 5,033 is in block 2
+	2. use group descriptor entry for block 2 to find location of inode table, block 16,390
+7. read inode table:
+	1. process entry 5,033 - 2,016 * 2 = 1,001
+	2. contents of dir1 located in block 18,431
+8. process dir1 contents:
+	1. locate entry and inode for file1.dat
+	2. unallocate directory entry by adding record length to record length field of previous directory entry
+	- M-, A-, and C- time are updated
+	- changes are recorded in journal
+9. process contents of inode 5,110
+	1. decrement link count from inode
+	2. set corresponding bit in inode bitmap to 0
+	3. update free journal counts in group descriptor and superblock
+	- changes are recored in journal
+10. deallocate blocks for file:
+	1. set corresponding bit in block bitmap to 0
+	2. block pointers in inode is cleared
+	3. file size is decremented each time a block is deallocated
+	- M-, C-, and D-time updated
+	- free block counts updated in group descriptor and superblock
+	- changes recorded in journal
+
+![[Ext3 file deletion big picture.png]]
+
+## 51. file recovery
+- Ext2:
+	- inode values are not wiped, block pointers still exist
+	- link between directory entry and inode is wiped, unallocated inode entries should be searched
+	- indirect block pointers may have been reallocated before inode entry, no longer containing block addresses
+- Ext3:
+	- pointer between file name and inode exists
+	- block pointers are wiped
+	- data carving must be done
+	- group restricted searching can reduce time; but data might exists somewhere else
+	- look in journal for copy of inode if file was recently deleted; inode would contain block pointers
+- indirect blocks may exist between data; consider when carving
+
+## 52. consistency check
+- examine superblock; most of the 1,024 bytes are not used
+- backup copies of gruop descriptors and superblocks should be used to detect manual changes 
+- last bytes of inode bitmap may not be fully used
+- final block group may have unused bits in block bitmap
+- every allocated block must have one allocated inode entry pointing to it, unless it is an administrative block
+- there could be unused bytes at end of inode table
+- all blocks an allocated inode entry has in its block pointer must be allocated
+- first 10 inodes are reserved, but not many are used
+- unused space in extended attributes could be used to hide data
+- all allocated inode entries should have a file name pointing to them; exceptions include reserved and orphan inodes
+- orphan files should be listed in superblock
+- number of names should equal link count
+- live acquisition means many orphan files from processes
+- all allocated file names must point to an allocated inode entry
+- space at end of directory could be used to hide data
