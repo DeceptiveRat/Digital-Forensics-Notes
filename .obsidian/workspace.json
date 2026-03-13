@@ -8,31 +8,31 @@
         "type": "tabs",
         "children": [
           {
-            "id": "7c2f6bcb479b7833",
+            "id": "c62a161bd22e8f2d",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
+                "file": "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Amcache.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 14. Ext2 and Ext3 Concepts and Analysis"
+              "title": "Amcache"
             }
           },
           {
-            "id": "a3241b62f93a4c29",
+            "id": "f41ac287bf658e30",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md",
+                "file": "Digital Forensics Concepts/Windows Artifacts/File Access Artifacts/LNK files.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 15. Ext2 and Ext3 Data Structures"
+              "title": "LNK files"
             }
           }
         ],
@@ -195,52 +195,52 @@
       "bases:Create new base": false
     }
   },
-  "active": "a3241b62f93a4c29",
+  "active": "f41ac287bf658e30",
   "lastOpenFiles": [
+    "Digital Forensics Concepts/Windows Artifacts/File Access Artifacts/LNK files.md~",
+    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/UserAssist.md",
+    "Digital Forensics Concepts/Windows Artifacts/File Access Artifacts/LNK files.md",
+    "Digital Forensics Concepts/Windows Artifacts/File Access Artifacts",
+    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/UserAssist.md~",
+    "Digital Forensics Concepts/Images/UserAssist artifact.png",
+    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Shimcache.md",
+    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Shimcache.md~",
+    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Amcache.md",
+    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Prefetch.md",
+    "Digital Forensics Concepts/Windows Artifacts/Windows Artifact Types.md",
+    "Digital Forensics Concepts/File System.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
+    "Digital Forensics Concepts/Partition System.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
+    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts",
+    "Digital Forensics Concepts/Windows Artifacts",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
     "File System Forensic Analysis/Images/Chapter 15 images/extended attributes block layout.png",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md~",
     "File System Forensic Analysis/Part 3. File System Analysis/4913",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
     "File System Forensic Analysis/Images/Chapter 15 images",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md~",
     "File System Forensic Analysis/Images/Chapter 14 images/Ext3 file allocation big picture.png",
     "File System Forensic Analysis/Images/Chapter 14 images/Ext3 file deletion big picture.png",
     "File System Forensic Analysis/Images/Chapter 14 images/Ext3 journal with 2 transactions.png",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Conceptsand Analysis.md~",
     "File System Forensic Analysis/Images/Chapter 14 images/file name category analysis scenario 1.png",
     "File System Forensic Analysis/Images/Chapter 14 images/file deletion order.png",
     "File System Forensic Analysis/Images/Chapter 14 images/hash tree with 2 leaves.png",
     "File System Forensic Analysis/Images/Chapter 14 images/volume mount in directory.png",
     "File System Forensic Analysis/Images/Chapter 14 images/hard link soft link comparison.png",
-    "File System Forensic Analysis/Images/Chapter 14 images/directory entries example.png",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
-    "File System Forensic Analysis/Images/Chapter 10 images",
-    "File System Forensic Analysis/Images/Chapter 14 images",
-    "File System Forensic Analysis/Images/Chapter 12 images",
-    "File System Forensic Analysis/Images/Chapter 11 images",
-    "File System Forensic Analysis/Images/Chapter 9 images",
     "File System Forensic Analysis/etc/Data analysis layers.md",
     "File System Forensic Analysis/etc/Disk as layers of abstraction.md",
-    "Digital Forensics Concepts/DOS (MBR) partitioning/Extended Boot Record.md",
-    "Digital Forensics Concepts/DOS (MBR) partitioning/Primary Extended Partition.md",
-    "Digital Forensics Concepts/File System.md",
-    "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
-    "File System Forensic Analysis/etc/LFN entry name chunks.md",
-    "Digital Forensics Concepts/Partition System.md",
-    "File System Forensic Analysis/etc/ATA and SCSI disk size limitations.md",
-    "File System Forensic Analysis/etc/data carving with no footer.md",
-    "File System Forensic Analysis/etc/journaling data changes.md"
+    "Digital Forensics Concepts/DOS (MBR) partitioning/Extended Boot Record.md"
   ]
 }

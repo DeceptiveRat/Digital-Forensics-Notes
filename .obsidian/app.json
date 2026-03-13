@@ -9,5 +9,6 @@
   "promptDelete": false,
   "foldHeading": false,
   "foldIndent": false,
-  "showIndentGuide": false
+  "showIndentGuide": false,
+  "focusNewTab": false
 }
