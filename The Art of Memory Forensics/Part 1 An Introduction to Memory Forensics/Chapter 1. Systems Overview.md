@@ -104,3 +104,168 @@
 	- *Page Directory(PD)*
 	- *Page Table(PT)*
 	- page offset
+- paging structure entries are 64-bits
+- translating VA to PA:
+	- bits 31:30 from VA select PDPTE
+	- bits 29:21 select from 512 PDEs
+	- if PS flag is set, PDE maps 2MB page; else bits 20:12 select from 512 PTEs
+	- bits 11:0 specify offset within page for PA
+
+![[VA to PA with PAE.png]]
+![[paging structure address format with PAE.png]]
+
+## 14. Intel 64
+- registers in IA-32 have been expanded to hold 64 bits
+- most current implmentations use 48-bit linear addresses only
+- bits 63:48 are set to all 1 or 0 depending on status bit of 47; *sign-extension*
+- supports additional level of paging structures, *Page Map Level 4(PML4)*
+- all entries in hierarchy of paging structures are 64-bits; can map to pages of size 4KB, 2MB, or 1GB
+![[4KB page address translation.png]]
+![[AMD64 paging structure addresses.png]]
+	- VA:
+		- bits 47:39 - PML4E offset
+		- bits 38:30 - PDPTE offset
+		- bits 23:21 - PDE offset
+		- bits 20:12 - PTE offset
+	- PDPTE: if PS set, entry maps to 1GB page
+	- PDE: if PS set, entry maps to 2MB page
+
+## 15. *Interrupt Descriptor Table(IDT)*
+- stores interrupt software routines
+- each processor has IDT composed of 256 8-byte or 16-byte entries
+- first 32 entries are reserved for processor-defined exceptions and interrupts
+- process:
+	- interrupt number serves as index to IDT
+	- entry contains address of *Interrupt Service Routine(ISR)*; indirectly references segment in GDT
+	- respective handler is called
+- IDT is also used to store handlers for other events:
+	- system calls
+	- debugger break points
+	- other faults
+- frequent target for malware
+
+## 16. privilege separation
+- untrusted/trusted applications run in user/kernel mode
+- enforced by IA-32 processor architecture through *protection rings*:
+	- ring 0: kernel mode; most privileged
+	- ring 3: user mode; least privileged
+- apps swtich from user mode to kernel mode through a set of system calls
+
+## 17. system calls
+- used by user app to request service from kernel; e.g:
+	- file I/O
+	- network communication
+	- process spawning
+- define low-level API between user app and kernel
+- OS typically define set of stable APIs that map to one or more system calls; e.g. ntdll.dll and kernel32.dll
+- before user app makes syste call, it must pass arguments via registers or the stack
+- invoking the system call:
+	1. user app executes a software interrupt or architecture-specific instruction
+	2. user mode register context is saved
+	3. execution mode changed to kernel
+	4. kernel stack is initialized
+	5. system call handler is invoked
+	6. register context restored
+	7. execution mode changed to user
+	8. control returns to user app
+- code used to service system call is inspected by security products
+
+## 18. process
+- program executing in memory
+- each process has set of attributes, such as unique process ID and address space
+- *process address space* contains:
+	- application code
+	- shared libraries
+	- dynamic data
+	- runtime stack
+- process provides execution environment, resources, and context for *threads*
+
+## 19. thread
+- basic unit of CPU utilization and execution
+- characterized by:
+	- thread ID
+	- CPU register set
+	- execution stacks
+- threads from same process share:
+	- code
+	- data
+	- address space
+	- OS resources
+- thread data structures often contain useful data, timestamps and starting addresses
+
+## 20. CPU scheduling
+- OS capability to distribute execution time among multiple threads
+- OS scheduler determines which threads execute and for how long
+
+## 21. context switch
+- switching execution to different thread
+- context switch steps:
+	1. suspend thread
+	2. stores execution context in main memory
+	3. retrieve execution context of different thread from memory
+	4. update register states
+	5. resume execution of new thread
+- saved execution contexts can provide valuable insight during memory analysis
+- execution context includes CPU register values, e.g. instruction pointer
+
+## 22. system resources
+- most OS maintain DS for managing:
+	- resources actively being accessed
+	- which process can access them
+	- how they are accessed
+	- e.g. Windows leverages object manager to supervise use of system resources and stores info in handler table; handler provides process with unique identifier for accessing and changing resources
+- examples of resources:
+	- processes
+	- threads
+	- files
+	- network sockets
+	- synchronization objects
+	- regions of shared memory
+
+## 23. virtual memory
+- OS provides process with private VA space
+- creates separation between logical memory that process sees and physical memory
+- memory manager is responsible for transferring regions of memory to secondary storage to free up physical memory
+- memory manager and MMU work together to translate VA into PA
+- range of accessible address for a process is frequently partitioned into addresses associated with OS(consistent) and private addresses(varies)
+
+## 24. *demand paging*
+- mechanism used to implement virtual memory
+- memory management policy for determining which regions are in memory and which are moved to secondary storage
+- secondary storage partition or file is called *swap* or *page file*
+- relies on *locality of reference*, meaning memory locations are likely to be frequently accessed in a short period of time
+- demand paging reduces time to load process and increases number of processes loaded
+- thread accessing non-resident page triggers page fault
+
+## 25. shared memory
+- memory accessible from more than one *Virtual Address Space(VAS)*
+- efficient means of *Inter-Process Communication(IPC)*
+- also used to conserve physical memory:
+	- shared/dynamic libraries taht contain common code and data
+	- mapped as *copy-on-write*
+
+## 26. *stack*
+- holds temporary data associated with executing functions
+- stored in DS called *stack frame* containing:
+	- function parameters
+	- local variables
+	- info required to recover previous stack frame
+- stack frames are pushed when calling a function and popped when returning 
+- OS uses separate stack for functions executed within each mode
+- provides insight into which code was being exectued and what data was being processed
+
+## 27. *heap*
+- can persist for lifetime of process
+- stores information whose length/contents can be unknown at compile time
+- OS may have regions of memory dynamically allocated within kernel mode; e.g:
+	- Windows creates paged and nonpaged regions in kernel called *pools*
+- interesting data that can be found:
+	- data read from files on disk
+	- data transferred over network
+	- input typed from keyboard
+
+## 28. *device drivers*
+- mechanism for extending the capabilities of kernel to support new devices
+- abstracts away details of how device controls data
+- typically communicate with registers of device controller
+- most CPU architectures map memory and registers of I/O devices into VAS; *memory mapped I/O*

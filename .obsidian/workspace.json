@@ -13,6 +13,20 @@
             "state": {
               "type": "markdown",
               "state": {
+                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "Chapter 11. NTFS Concepts"
+            }
+          },
+          {
+            "id": "d0b33d10dd467cf8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
                 "file": "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
                 "mode": "preview",
                 "source": true
@@ -21,7 +35,8 @@
               "title": "Chapter 1. Systems Overview"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -180,22 +195,31 @@
       "bases:Create new base": false
     }
   },
-  "active": "99abb855ea810d4e",
+  "active": "d0b33d10dd467cf8",
   "lastOpenFiles": [
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 1. Systems Overview.md~",
+    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/4913",
+    "The Art of Memory Forensics/Images/Chapter 1 images/AMD64 paging structure addresses.png",
+    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
+    "The Art of Memory Forensics/Images/Chapter 1 images/4KB page address translation.png",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
+    "The Art of Memory Forensics/Images/Chapter 1 images/paging structure address format with PAE.png",
+    "The Art of Memory Forensics/Images/Chapter 1 images/VA to PA with PAE.png",
+    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
     "The Art of Memory Forensics/Images/Chapter 1 images/VA to PA.png",
     "The Art of Memory Forensics/Images/Chapter 1 images/paging structure address format.png",
     "The Art of Memory Forensics/Images/Chapter 1 images/address translation example.png",
-    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/4913",
     "The Art of Memory Forensics/Images/Chapter 1 images",
     "The Art of Memory Forensics/Images/Chapter 1 images/Computer Architecture Overview.png",
-    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
     "The Art of Memory Forensics/Images",
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics",
     "The Art of Memory Forensics",
     "Digital Forensics Concepts/Windows Artifacts/Windows Artifact Types.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
     "Digital Forensics Concepts/Windows Artifacts/File Access Artifacts/LNK files.md",
     "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/UserAssist.md",
     "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Shimcache.md",
@@ -203,13 +227,9 @@
     "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Amcache.md",
     "Digital Forensics Concepts/NTFS/References.md",
     "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
     "Digital Forensics Concepts/Windows Artifacts/File Access Artifacts/LNK files.md~",
     "Digital Forensics Concepts/Windows Artifacts/File Access Artifacts",
@@ -221,11 +241,6 @@
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md",
     "File System Forensic Analysis/Images/Chapter 15 images/extended attributes block layout.png",
-    "File System Forensic Analysis/Images/Chapter 14 images/Ext3 file allocation big picture.png",
-    "File System Forensic Analysis/Images/Chapter 14 images/Ext3 file deletion big picture.png",
-    "File System Forensic Analysis/Images/Chapter 14 images/Ext3 journal with 2 transactions.png",
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
-    "File System Forensic Analysis/Images/Chapter 14 images/file name category analysis scenario 1.png"
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md"
   ]
 }
