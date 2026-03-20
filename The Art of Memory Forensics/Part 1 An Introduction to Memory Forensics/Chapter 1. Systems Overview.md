@@ -269,3 +269,8 @@
 - abstracts away details of how device controls data
 - typically communicate with registers of device controller
 - most CPU architectures map memory and registers of I/O devices into VAS; *memory mapped I/O*
+
+## 29. *I/O Controls(IOCTL)*
+- another common mechanism for communicating between user and kernel mode
+- allows user apps to communicate with kernel mode device driver
+- kenel-level malware may hook IOCTL functions to modify control flow
