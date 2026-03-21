@@ -27,26 +27,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
+                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 1. Systems Overview"
+              "title": "Chapter 13. NTFS Data Structures"
             }
           },
           {
-            "id": "5f19652c7a45da22",
+            "id": "5e7f05ca3dd1d19a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 3. The Volatility Framework.md",
-                "mode": "source",
+                "file": "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
+                "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 3. The Volatility Framework"
+              "title": "Chapter 4. Memory Acquisition"
             }
           }
         ],
@@ -209,21 +209,25 @@
       "bases:Create new base": false
     }
   },
-  "active": "5f19652c7a45da22",
+  "active": "5e7f05ca3dd1d19a",
   "lastOpenFiles": [
-    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 3. The Volatility Framework.md~",
-    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 2. Data Structures.md",
+    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md~",
+    "The Art of Memory Forensics/Images/Chapter 4 images/memory acquisition decision tree.png",
+    "The Art of Memory Forensics/Images/Chapter 4 images",
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 3. The Volatility Framework.md",
+    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
+    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 3. The Volatility Framework.md~",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
+    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
+    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 2. Data Structures.md",
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 2. Data Structures.md~",
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/4913",
     "The Art of Memory Forensics/Images/Chapter 2 images/chained overflow hash table example.png",
     "The Art of Memory Forensics/Images/Chapter 2 images/MajorFunction table example.png",
     "The Art of Memory Forensics/Images/Chapter 2 images",
-    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 1. Systems Overview.md~",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
     "The Art of Memory Forensics/Images/Chapter 1 images/AMD64 paging structure addresses.png",
     "The Art of Memory Forensics/Images/Chapter 1 images/4KB page address translation.png",
@@ -236,7 +240,6 @@
     "The Art of Memory Forensics/Images/Chapter 1 images/paging structure address format.png",
     "The Art of Memory Forensics/Images/Chapter 1 images/address translation example.png",
     "The Art of Memory Forensics/Images/Chapter 1 images",
-    "The Art of Memory Forensics/Images/Chapter 1 images/Computer Architecture Overview.png",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
     "The Art of Memory Forensics/Images",
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics",
@@ -253,9 +256,6 @@
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
-    "Digital Forensics Concepts/Windows Artifacts/File Access Artifacts/LNK files.md~",
-    "Digital Forensics Concepts/Windows Artifacts/File Access Artifacts",
-    "Digital Forensics Concepts/File System.md",
-    "Digital Forensics Concepts/Partition System.md"
+    "Digital Forensics Concepts/File System.md"
   ]
 }
