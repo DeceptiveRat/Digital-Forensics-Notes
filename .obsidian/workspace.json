@@ -8,63 +8,20 @@
         "type": "tabs",
         "children": [
           {
-            "id": "99abb855ea810d4e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "Chapter 11. NTFS Concepts"
-            }
-          },
-          {
-            "id": "d0b33d10dd467cf8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "Chapter 13. NTFS Data Structures"
-            }
-          },
-          {
-            "id": "5e7f05ca3dd1d19a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "Chapter 12. NTFS Analysis"
-            }
-          },
-          {
             "id": "2019a2f812a84533",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Amcache.md",
+                "file": "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Amcache"
+              "title": "Chapter 4. Memory Acquisition"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -121,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 302.5
+    "width": 300.5
   },
   "right": {
     "id": "1b490e33aebbb892",
@@ -223,15 +180,17 @@
       "bases:Create new base": false
     }
   },
-  "active": "d0b33d10dd467cf8",
+  "active": "2019a2f812a84533",
   "lastOpenFiles": [
+    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md~",
+    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/4913",
+    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/2",
+    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Amcache.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
-    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Amcache.md",
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
-    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md~",
     "The Art of Memory Forensics/Images/Chapter 4 images/memory acquisition decision tree.png",
     "The Art of Memory Forensics/Images/Chapter 4 images",
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 3. The Volatility Framework.md",
@@ -239,7 +198,6 @@
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 2. Data Structures.md",
     "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/Chapter 2. Data Structures.md~",
-    "The Art of Memory Forensics/Part 1 An Introduction to Memory Forensics/4913",
     "The Art of Memory Forensics/Images/Chapter 2 images/chained overflow hash table example.png",
     "The Art of Memory Forensics/Images/Chapter 2 images/MajorFunction table example.png",
     "The Art of Memory Forensics/Images/Chapter 2 images",
