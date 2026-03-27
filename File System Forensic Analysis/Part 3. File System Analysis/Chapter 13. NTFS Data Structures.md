@@ -927,8 +927,8 @@ rem(cluster address) = (bitmap bit)
 		2217888: 7400 7800 7400 0300 4300 3a00 5c00 6000 t.x.t...C.:.\.`.
 		```
 
-## 36. $UsrJrnl file
-- changes are recorded in $DATA named $J of \$Extend\$UsrJrnl
+## 36. $UsnJrnl file
+- changes are recorded in $DATA named $J of \$Extend\$UsnJrnl
 - not located in reserved MFT entry
 - $J is sparse and contains list of different sized DS, called *journal entries*
 - $DATA called $Max that contains information about max settings for user journal also exists
@@ -993,7 +993,7 @@ rem(cluster address) = (bitmap bit)
 	0000016: 4057 7491 eb69 c401 0000 0000 0000 0000 @Wt..i..........
 	```
 
-## 37. $UserJrnl $J example
+## 37. $UsnJrnl $J example
 - *icat* output:
 	``` sh
 	$ icat –f ntfs ntfs3.dd 27-128-3 | xxd
