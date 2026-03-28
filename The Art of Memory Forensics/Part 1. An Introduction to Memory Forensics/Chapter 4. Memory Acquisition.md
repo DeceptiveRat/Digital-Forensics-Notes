@@ -279,5 +279,69 @@
 	Writing data (5.00 MB chunks): |........[snip]........................|
 	```
 
-## 18. volatile memory on disk
+## 18. hibernation file
+- exists at \hiberfil.sys in root directory of `C:` partition
+- extraction example:
+	``` sh
+	$ mmls image.dd
+	$ fls -o 2048 image.dd | grep hiber
+	r/r 36218-128-1:		hiberfil.sys
+	$ icat –o 2048 image.dd 36218 > /media/external/hiberfil.sys
+	```
 
+## 19. querying registry for profile
+- query example
+	``` sh
+	$ fls -o 2048 -rp image.dd | grep -i config/system$
+	r/r 58832-128-3: 		Windows/System32/config/SYSTEM
+	$ fls -o 2048 -rp image.dd | grep -i config/software$
+	r/r 58830-128-3: 		Windows/System32/config/SOFTWARE
+	$ icat -o 2048 image.dd 58832 > /media/external/system
+	$ icat -o 2048 image.dd 58830 > /media/external/software
+	$ reglookup -p "Microsoft/Windows NT/CurrentVersion" /media/external/software | grep ProductName
+	/Microsoft/Windows NT/CurrentVersion/ProductName,SZ,Windows 7 Professional,
+	$ reglookup -p "ControlSet001/Control/Session Manager/Environment/PROCESSOR_ARCHITECTURE" /media/external/system
+	/ControlSet001/Control/[snip]/PROCESSOR_ARCHITECTURE,SZ,AMD64,
+	```
+
+## 20. recovering page files
+- Windows system can have up to 16 page files
+- locating page files:
+	``` sh
+	$ reglookup -p "ControlSet001/Control/Session Manager/Memory Management" -t MULTI_SZ /media/external/system
+	PATH,TYPE,VALUE,MTIME
+	/ControlSet001/Control/Session Manager/Memory
+	Management/PagingFiles,MULTI_SZ,\??\C:\pagefile.sys,
+	/ControlSet001/Control/Session Manager/Memory
+	Management/ExistingPageFiles,MULTI_SZ,\??\C:\pagefile.sys,
+	```
+
+## 21. analyzing page files
+- best current options are for unstructured data:
+	- strings
+	- Yara signatures
+	- AV scans
+- example using `page_brute`:
+	``` sh
+	$ python page_brute-BETA.py -r drugs.yar -f /media/external/pagefile.sys
+	[+] - YARA rule of File type provided for compilation: drugs.yar
+	..... Ruleset Compilation Successful.
+	[+] - PAGE_BRUTE running with the following options:
+			[-] - PAGE_SIZE: 4096
+			[-] - RULES TYPE: FILE
+			[-] - RULE LOCATION: drugs.yar
+			[-] - INVERSION SCAN: False
+			[-] - WORKING DIR: PAGE_BRUTE-2014-03-24-12-49-57-RESULTS
+			=================
+
+		[snip]
+			[!] FLAGGED BLOCK 58641: drugs
+			[!] FLAGGED BLOCK 58642: drugs
+	```
+- Windows 7+ can encrypt system paging files with *Encrypting File System(EFS)*
+- on Linux, swap is a partition, not a file
+- on Mac OS X, swap is encrypted by default
+
+## 22. crash dump files
+- by default saved to `%SystemRoot%\MEMORY.DMP`; can be changed via `CurrentControlSet\Control\CrashControl` in `SYSTEM`
+- `Software\Microsoft\Windows\Windows Error Reporting` key of `HKEY_CURRENT_USER` and `HKEY_LOCAL_MACHINE` can provide volatile data
