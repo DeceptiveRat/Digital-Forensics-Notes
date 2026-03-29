@@ -339,3 +339,9 @@
 - dispatcher head scans:
 	- to enable synchronization functionality for certain objects, their state info is stored in `_DISPATCHER_HEADER` at start of executive object structures
 	- `_DISPATCHER_HEADER` contains values consistent accross memory dumps; easy to build signature
+- robust signature scans:
+	- DTB alignment: `DirectoryTableBase` must be aligned on 32-bit boundary
+	- granted access flags: `GrantedAccess` member must have `0x1F07FB` flags set
+	- pointer validity: `VadRoot`, `ObjectTable`, `ThreadListHead`, and `ReadyListHead` members must contain valid kernel mode addresses
+	- working set list: `VmWorkingSetList` must point to kernel mode above `0xC0000000` (for 32-bit systems)
+	- lock counts: `WorkingSetLock` and `AddressCreationLock` counts must be equal to 1
