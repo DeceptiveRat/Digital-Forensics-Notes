@@ -325,4 +325,201 @@
 
 ## 18. commonly exploited privileges
 - privileges to watch for if explicitly enabled:
-	- 
+	- `SeBackupPrivilege`: 
+		- grants read access to any file on FS, regardless of *Access Control List(ACL)*
+	- `SeDebugPrivilege`: 
+		- grants ability to read from or write to another process' private memory
+	- `SeLoadDriverPrivilege`:
+		- grants ability to load/unload kernel drivers
+	- `SeChangeNotifyPrivilege`:
+		- allows caller to register callback function that executes when specific files/directories change
+		- notifies attacker to removal of config or executable files
+	- `SeShutdownPrivilege`:
+		- allows caller to reboot or shut down system
+		- triggers infections that modify the MBR
+- `privs` plugin output:
+	``` sh
+	$ python vol.py -f grrcon.img privs -p 1096
+	Volatility Foundation Volatility Framework 2.4
+	Pid Process Privilege Attributes
+	------ ------------- ------------------------------- ------------------------
+	1096 explorer.exe SeChangeNotifyPrivilege Present,Enabled,Default
+	1096 explorer.exe SeShutdownPrivilege Present
+	1096 explorer.exe SeUndockPrivilege Present,Enabled
+	1096 explorer.exe SeTakeOwnershipPrivilege Present
+	1096 explorer.exe SeDebugPrivilege Present,Enabled
+	1096 explorer.exe SeLoadDriverPrivilege Present,Enabled
+	1096 explorer.exe SeCreatePagefilePrivilege Present
+	1096 explorer.exe SeCreateGlobalPrivilege Present,Enabled,Default
+	1096 explorer.exe SeImpersonatePrivilege Present,Enabled,Default
+	```
+
+## 19. token manipulation
+- setting `Enabled` member of `_SEP_TOKEN_PRIVILEGES` to `0xFFFFFFFFFFFFFFFF` enables all privileges, even ones not present
+- example using volatility on VM memory:
+	1. get context of process
+	``` sh
+	$ python vol.py -f VistaSP0x64.vmem --profile=VistaSP2x64 volshell --write
+	Volatility Foundation Volatility Framework 2.4
+	Write support requested. Please type "Yes, I want to enable write support"
+	Yes, I want to enable write support
+	Current context: process System, pid=4, ppid=0 DTB=0x124000
+	To get help, type 'hh()'
+	>>> cc(pid = 1824)
+	Current context: process explorer.exe, pid=1824, ppid=1668 DTB=0x918d000
+	```
+	2. obtain pointer to `_TOKEN` structure
+	``` python
+	>>> token = proc().get_token()
+	>>> bin(token.Privileges.Present)
+	'0b11000000010100010000000000000000000'
+	>>> bin(token.Privileges.Enabled)
+	'0b100000000000000000000000'
+	```
+	3. set all enabled
+	``` python
+	>>> token.Privileges.Enabled = 0xFFFFFFFFFFFFFFFF
+	>>> bin(token.Privileges.Present)
+	'0b11000000010100010000000000000000000'
+	>>> bin(token.Privileges.Enabled)
+	'0b1111111111111111111111111111111111111111111111111111111111111111'
+	>>> quit()
+	```
+	- process explorer output:
+		![[process_explorer_privileges_output.png]]
+		- only 5 privileges are shown as enabled
+	- `privs` plugin output:	
+		``` sh
+		$ python vol.py -f VistaSP0x64.vmem --profile=VistaSP2x64 privs -p 1824
+		Volatility Foundation Volatility Framework 2.4
+		Pid Process Privilege Attributes
+		----- ------------ -------------------------------- --------------------
+		1824 explorer.exe SeCreateTokenPrivilege Enabled
+		1824 explorer.exe SeAssignPrimaryTokenPrivilege Enabled
+		[snip]
+		1824 explorer.exe SeRestorePrivilege Enabled
+		1824 explorer.exe SeShutdownPrivilege Present,Enabled
+		1824 explorer.exe SeDebugPrivilege Enabled
+		1824 explorer.exe SeAuditPrivilege Enabled
+		1824 explorer.exe SeSystemEnvironmentPrivilege Enabled
+		1824 explorer.exe SeChangeNotifyPrivilege Present,Enabled,Default
+		```
+		- privileges that aren't even present are enabled
+
+## 20. process handles
+- reference to an open instance of a kernel object; e.g. file, registry key, mutex, process, thread
+- handle creation example:
+	1. creation API is called
+	2. API places pointer to object in first available slot of calling process' handle table
+	3. API returns Windows data type `HANDLE`, index into handle table
+	4. handle count of object is incremented
+- handle usage example:
+	1. access API is called
+	2. API finds base address of handle table
+	3. seek index given with `HANDLE`
+	4. retieve pointer
+	5. carry out operation
+- closing handles decrements the object's handle count and removes the pointer from the handle table
+- handle table benefits:
+	- convenience: no need to pass full name or path for each operation
+	- security: prevents processes in user mode from having direct access to kernel objects
+
+## 21. kernel handles
+- kernel modules, or threads in kernel mode can call similar kernel APIs (i.e. `NtCreateFile`, `NtReadFile`, `NtCreateMutex`) to obtain handles
+- kernel handles are allocated from `System` (PID 4) process handle table
+- kernel code can access objects directly via `ObReferenceObjectByPointer` if address is known:
+	- increments reference count, not handle count
+	- `ObDereferenceObject` should be called to dereference object or objects may persist (reference leak)
+
+## 22. handle analysis objectives
+- handle table internals
+- targeted object attribution
+- unknown process investigation
+- detect registry persistence
+- identify remote mapped drives
+
+## 23. handle table
+- each process' `_EPROCESS.ObjectTable` member points to `_HANDLE_TABLE`
+- has `TableCode` that serves 2 purposes:
+	- specifies number of levels in table
+	- points to base of first level
+- all processes start with a single-level table
+- single-level table:
+	![[single_level_table.png]]
+- two-level table contains a first level that points to an array of `_HANDLE_TABLE_ENTRY` structures, allowing 1024x512 handles on x86
+- theoretically three-level table can contain up to 1024x1024x512 handles; observed limtits are fewer
+- handle table DS for 64-bit Windows 7:
+	``` python
+	>>> dt("_HANDLE_TABLE")
+	'_HANDLE_TABLE' (104 bytes)
+	0x0 : TableCode ['unsigned long long']
+	0x8 : QuotaProcess ['pointer64', ['_EPROCESS']]
+	0x10 : UniqueProcessId ['pointer64', ['void']]
+	0x18 : HandleLock ['_EX_PUSH_LOCK']
+	0x20 : HandleTableList ['_LIST_ENTRY']
+	0x30 : HandleContentionEvent ['_EX_PUSH_LOCK']
+	0x38 : DebugInfo ['pointer64', ['_HANDLE_TRACE_DEBUG_INFO']]
+	0x40 : ExtraInfoPages ['long']
+	0x44 : Flags ['unsigned long']
+	0x44 : StrictFIFO ['BitField', {'end_bit': 1, 'start_bit': 0, 'native_type': 'unsigned char'}]
+	0x48 : FirstFreeHandle ['unsigned long']
+	0x50 : LastFreeHandleEntry ['pointer64', ['_HANDLE_TABLE_ENTRY']]
+	0x58 : HandleCount ['unsigned long']
+	0x5c : NextHandleNeedingPool ['unsigned long']
+	0x60 : HandleCountHighWatermark ['unsigned long']
+	```
+	- `TableCode`: `TableCode & 7` obtains number of tables, `TableCode & ~7` obtains address of top-level table
+	- `QuotaProcess`: pointer to process
+	- `HandleTableList`: linked list of process handle tables 
+- table entry DS
+	``` python
+	>>> dt('_HANDLE_TABLE_ENTRY')
+	'_HANDLE_TABLE_ENTRY' (16 bytes)
+	0x0 : InfoTable ['pointer64', ['_HANDLE_TABLE_ENTRY_INFO']]
+	0x0 : ObAttributes ['unsigned long']
+	0x0 : Object ['_EX_FAST_REF']
+	0x0 : Value ['unsigned long long']
+	0x8 : GrantedAccess ['unsigned long']
+	0x8 : GrantedAccessIndex ['unsigned short']
+	0x8 : NextFreeTableEntry ['unsigned long']
+	0xa : CreatorBackTraceIndex ['unsigned short']
+	```
+	- `Object`: pointer to `_OBJECT_HEADER`. `_EX_FAST_REF` is a special data type that combines reference count information into least significant bits of pointer
+	- `GrantedAccess`: bit mask specifying granted access owning process has obtained for object
+
+## 24. `handles` plugin
+- generates output by walking handle table DS
+- using without options generates output for all handles for all object types in all processes
+- filtering options:
+	- `-p/--pid`: filter by PID
+	- `-o/-offset`: filter by physical offset of `_EPROCESS`
+	- `-t/--object-type`: filter by object type
+	- `--silent`: suppresses handles to unnamed objects
+
+## 25. Multiple *Universal Naming Convention(UNC)* Provider
+- aka MUP
+- kernel-mode component that channels requests to access remote files using UNC names to the appropriate redirector
+- `LanmanRedirector` handles SMB
+- search for file handles prefixed with `\Device\Mup` and `\Device\LanmanRedirector` for evidence of remote mapped drives
+- `handles` plugin output:
+	``` sh
+	$ python vol.py -f hop.mem --profile=VistaSP2x64 handles -t File | grep Mup
+	Volatility Foundation Volatility Framework 2.4
+	Offset(V) Pid Handle Access Type Details
+	------------------ ------ ------------ ----------- -------- -------
+	[snip]
+	0xfffffa8001345c80 752 0xfc 0x100000 File \Device\Mup\;P:000000000002210f\WIN-464MMR8O7GF\Users
+	0xfffffa8003f02050 752 0x200 0x100000 File \Device\Mup
+	0xfffffa80042c9f20 752 0x204 0x100000 File \Device\Mup
+	0xfffffa800134b190 752 0x264 0x100000 File \Device\Mup\;Q:000000000002210f\LH-7J277PJ9J85I\C$
+	0xfffffa800132b450 1544 0x8 0x100020 File \Device\Mup\;Q:000000000002210f\LH-7J277PJ9J85I\C$\Users\Jimmy\Documents
+	```
+- inspecting symbolic links to associate drive letter with redirected path:
+	``` sh
+	$ python vol.py -f hop.mem --profile=VistaSP2x64 symlinkscan
+	Volatility Foundation Volatility Framework 2.4
+	Offset(P) #Ptr #Hnd Creation time From To
+	------------------ ------ ------ ------------------------------ ---------- --
+	0x0000000024b0c6c0 1 0 2014-02-25 21:41:12 UTC+0000 Q:\Device\LanmanRedirector\;Q:0...00002210f\LH-7J277PJ9J85I\C$
+	0x0000000026f4a800 1 0 2014-02-25 21:40:45 UTC+0000 P:\Device\LanmanRedirector\;P:0...02210f\WIN-464MMR8O7GF\Users
+	```
