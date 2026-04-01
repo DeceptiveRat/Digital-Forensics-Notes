@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 304.5
+    "width": 305.5
   },
   "right": {
     "id": "1b490e33aebbb892",
@@ -183,11 +183,12 @@
   "active": "2019a2f812a84533",
   "lastOpenFiles": [
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md~",
+    "The Art of Memory Forensics/Images/Chapter 8 images/PE_file_in_memory.png",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
     "The Art of Memory Forensics/Images/Chapter 8 images/doubly linked lists.png",
     "The Art of Memory Forensics/Images/Chapter 8 images",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/4913",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
     "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md~",
     "The Art of Memory Forensics/Images/Chapter 7 images/Zeus_disassembled.png",
@@ -205,7 +206,6 @@
     "The Art of Memory Forensics/Images/Chapter 6 images/single_level_table.png",
     "The Art of Memory Forensics/Images/Chapter 6 images/process_explorer_privileges_output.png",
     "The Art of Memory Forensics/Images/Chapter 6 images/local_security_policy_editor.png",
-    "The Art of Memory Forensics/Images/Chapter 6 images/psxview_plugin_output.png",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md",
     "The Art of Memory Forensics/Images/Chapter 6 images",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md~",

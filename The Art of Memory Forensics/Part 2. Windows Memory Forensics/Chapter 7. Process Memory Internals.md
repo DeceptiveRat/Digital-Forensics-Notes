@@ -1,5 +1,6 @@
 ## 1. process memory contents
-![[process_memory_contents.png]]
+- process memory diagram:
+	![[process_memory_contents.png]]
 	- *Dynamic Linked Libraries(DLL)*: represents DLLs loaded into address space
 	- environment variables: environment variables such as: executable path, temporary directories, home folders, etc
 	- *Process Environment Block(PEB)*: 
