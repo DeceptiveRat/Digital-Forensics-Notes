@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
+                "file": "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - hands-on exp.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 8. Hunting Malware in Process Memory"
+              "title": "LNK files - hands-on exp"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 305.5
+    "width": 310.5
   },
   "right": {
     "id": "1b490e33aebbb892",
@@ -182,50 +182,50 @@
   },
   "active": "2019a2f812a84533",
   "lastOpenFiles": [
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md~",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - hands-on exp.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - hands-on exp.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - practice.md~",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/4913",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/parse_prefetch.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/execute_cmd.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/execute_registryexplorer.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/execute_logfileparser.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/initial_state.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images",
+    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Shimcache.md",
+    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Amcache.md",
+    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Registry.md",
+    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/UserAssist.md",
+    "Digital Forensics Concepts/Windows Artifacts/Windows Artifact Types.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - practice.md~",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - images/opened_file.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - images/entered_directory.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - images",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - images/initial_state.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files.md",
+    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Registry Forensic Analysis.md~",
+    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/4913",
+    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/SYSTEM",
+    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/SOFTWARE",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
     "The Art of Memory Forensics/Images/Chapter 8 images/PE_file_in_memory.png",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
     "The Art of Memory Forensics/Images/Chapter 8 images/doubly linked lists.png",
-    "The Art of Memory Forensics/Images/Chapter 8 images",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/4913",
     "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md~",
-    "The Art of Memory Forensics/Images/Chapter 7 images/Zeus_disassembled.png",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
-    "The Art of Memory Forensics/Images/Chapter 7 images/vadtree_plugin_output.png",
-    "The Art of Memory Forensics/Images/Chapter 7 images/memdump_visualization.png",
     "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 3. The Volatility Framework.md",
     "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 2. Data Structures.md",
     "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md",
-    "The Art of Memory Forensics/Images/Chapter 7 images/memory _allocation_APIs.png",
-    "The Art of Memory Forensics/Images/Chapter 7 images/process_memory_contents.png",
-    "The Art of Memory Forensics/Images/Chapter 7 images",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md~",
-    "The Art of Memory Forensics/Images/Chapter 6 images/single_level_table.png",
-    "The Art of Memory Forensics/Images/Chapter 6 images/process_explorer_privileges_output.png",
-    "The Art of Memory Forensics/Images/Chapter 6 images/local_security_policy_editor.png",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md",
-    "The Art of Memory Forensics/Images/Chapter 6 images",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md~",
-    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/UserAssist.md",
-    "Digital Forensics Concepts/Windows Artifacts/File Access Artifacts/LNK files.md",
-    "Digital Forensics Concepts/Windows Artifacts/Windows Artifact Types.md",
-    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Shimcache.md",
-    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Prefetch.md",
-    "Digital Forensics Concepts/Windows Artifacts/Execution Artifacts/Amcache.md",
-    "The Art of Memory Forensics/Images/Chapter 5 images",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
-    "Digital Forensics Concepts/NTFS/References.md",
-    "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md"
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md"
   ]
 }

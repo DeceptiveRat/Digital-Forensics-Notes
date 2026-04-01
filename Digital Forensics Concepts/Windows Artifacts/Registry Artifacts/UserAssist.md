@@ -27,4 +27,4 @@
 - user settings can disable or clear history
 
 ## reference
-[1] (2025/09/18) UserAssist Forensic Artifacts: What they are and how to use them, 2026/03/13, UserAssist Forensic Artifacts: What they are and how to use them
+[1] (2025/09/18) UserAssist Forensic Artifacts: What they are and how to use them, 2026/03/13, https://www.magnetforensics.com/blog/artifact-profile-userassist/
