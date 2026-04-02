@@ -13,12 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - hands-on exp.md",
+                "file": "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "LNK files - hands-on exp"
+              "title": "Browser history - hands-on exp"
+            }
+          },
+          {
+            "id": "dc8f35c7dd15a171",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "Browser history"
             }
           }
         ]
@@ -182,16 +196,31 @@
   },
   "active": "2019a2f812a84533",
   "lastOpenFiles": [
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - hands-on exp.md",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - hands-on exp.md",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch.md",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - practice.md~",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md~",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_formhistory3.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_formhistory2.png",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/4913",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/parse_prefetch.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/execute_cmd.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/execute_registryexplorer.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/execute_logfileparser.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/initial_state.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_formhistory.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_formhistory_database.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_downloads.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_places_metadata.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_places_database.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_places.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_DeletedBookmarks.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_bookmarks.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history.md~",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Windows event logs.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Windows event logs - hands-on exp.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Windows event logs - hands-on exp.md~",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - hands-on exp.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Windows event logs - images",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Windows event logs.md~",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - hands-on exp.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - practice.md~",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images",
     "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Shimcache.md",
     "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Amcache.md",
@@ -199,20 +228,9 @@
     "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/UserAssist.md",
     "Digital Forensics Concepts/Windows Artifacts/Windows Artifact Types.md",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - practice.md~",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - images/opened_file.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - images/entered_directory.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - images",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - images/initial_state.png",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files.md",
-    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Registry Forensic Analysis.md~",
-    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/4913",
-    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/SYSTEM",
-    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/SOFTWARE",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
-    "The Art of Memory Forensics/Images/Chapter 8 images/PE_file_in_memory.png",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
-    "The Art of Memory Forensics/Images/Chapter 8 images/doubly linked lists.png",
     "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
     "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 3. The Volatility Framework.md",
@@ -222,10 +240,6 @@
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md",
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 2. Computer Foundations.md",
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md"
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md"
   ]
 }
