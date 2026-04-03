@@ -8,31 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "2019a2f812a84533",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "Browser history - hands-on exp"
-            }
-          },
-          {
             "id": "dc8f35c7dd15a171",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history.md",
+                "file": "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Browser history"
+              "title": "Chapter 8. Hunting Malware in Process Memory"
             }
           }
         ]
@@ -92,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 310.5
+    "width": 319.5
   },
   "right": {
     "id": "1b490e33aebbb892",
@@ -194,8 +180,20 @@
       "bases:Create new base": false
     }
   },
-  "active": "2019a2f812a84533",
+  "active": "dc8f35c7dd15a171",
   "lastOpenFiles": [
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 9. Event Logs.md~",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 9. Event Logs.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md~",
+    "The Art of Memory Forensics/Images/Chapter 8 images/poison_ivy_memory.png",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/4913",
+    "The Art of Memory Forensics/Images/Chapter 8 images/hollow_process_memory.png",
+    "The Art of Memory Forensics/Images/Chapter 8 images/unpacked_DLL.png",
+    "The Art of Memory Forensics/Images/Chapter 8 images/packed_DLL.png",
+    "The Art of Memory Forensics/Images/Chapter 8 images/packed_executable_lifecycle.png",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history.md",
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md~",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_formhistory3.png",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_formhistory2.png",
@@ -203,13 +201,6 @@
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_formhistory.png",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_formhistory_database.png",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_downloads.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_places_metadata.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_places_database.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_places.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_DeletedBookmarks.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images/firefox_bookmarks.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history.md",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history.md~",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch.md",
@@ -220,16 +211,12 @@
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Windows event logs - images",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Windows event logs.md~",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - hands-on exp.md",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - practice.md~",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images",
     "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Shimcache.md",
     "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Amcache.md",
     "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Registry.md",
     "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/UserAssist.md",
     "Digital Forensics Concepts/Windows Artifacts/Windows Artifact Types.md",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - practice.md~",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
     "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
@@ -239,7 +226,6 @@
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md"
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md"
   ]
 }
