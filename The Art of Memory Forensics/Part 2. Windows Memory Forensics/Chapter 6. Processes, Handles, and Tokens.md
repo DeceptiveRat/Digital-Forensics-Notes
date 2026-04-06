@@ -1,7 +1,7 @@
 ## 1. `_EPROCESS`
 ![[basic process resources.png]]
 
-- name of structure Windows uses to represnt a process
+- name of structure Windows uses to represent a process
 - each process has a private VMS containing:
 	- list of loaded modules
 	- stack

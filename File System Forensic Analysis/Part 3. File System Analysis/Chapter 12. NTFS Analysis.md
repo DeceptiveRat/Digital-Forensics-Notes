@@ -801,7 +801,7 @@ objective: recover files from previous FS in a newly formatted disk
 - if enabled and trust worthy, could be useful in reconstructing recent events 
 
 ## 51. file allocation big picture
-scenario: create file \dir1\file1.dat and assume dir1 already exists in root. File size is 4,000 byets and cluster size is 2,048 bytes
+scenario: create file \dir1\file1.dat and assume dir1 already exists in root. File size is 4,000 bytes and cluster size is 2,048 bytes
 1. read and process first sector
 	1.  determine cluster size, MFT starting address, size of MFT entry
 2. read and process first entry from MFT
@@ -827,7 +827,7 @@ scenario: create file \dir1\file1.dat and assume dir1 already exists in root. Fi
 7. process dir1 MFT entry
 	1. process $INDEX_ROOT to find where file.dat should go
 	2. create new index entry and resort tree
-	3. new index entry hsa MFT entry 304 in file reference address and time and flags are set appropriately
+	3. new index entry has MFT entry 304 in file reference address and time and flags are set appropriately
 	4. last written, modified, and accessed times are updated for dir1
 8. in each previous step, entries could have been made to:
 	- FS journal in $LogFile
