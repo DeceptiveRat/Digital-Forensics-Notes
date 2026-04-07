@@ -61,14 +61,13 @@
 	``` sh
 	$ python vol.py –f Win7SP1x86.vmem --profile=Win7SP1x86 dumpfiles --regex .evtx$ --ignore-case --dump-dir output
 	Volatility Foundation Volatility Framework 2.4
-	DataSectionObject 0x8509eba8 756 \Device\HarddiskVolume1\Windows\System32\
-	winevt\Logs\Microsoft-Windows-Diagnostics-Performance%4Operational.evtx
-	SharedCacheMap 0x8509eba8 756 \Device\HarddiskVolume1\Windows\System32\
-	winevt\Logs\Microsoft-Windows-Diagnostics-Performance%4Operational.evtx
-	DataSectionObject 0x83eaec48 756 \Device\HarddiskVolume1\Windows\System32\
-	winevt\Logs\Microsoft-Windows-Kernel-WHEA%4Errors.evtx
-	SharedCacheMap 0x83eaec48 756 \Device\HarddiskVolume1\Windows\System32\
-	winevt\Logs\Microsoft-Windows-Kernel-WHEA%4Errors.evtx
-	DataSectionObject 0x845bcab0 756
+	DataSectionObject 0x8509eba8 756 \Device\HarddiskVolume1\Windows\System32\winevt\Logs\Microsoft-Windows-Diagnostics-Performance%4Operational.evtx
+	SharedCacheMap 0x8509eba8 756 \Device\HarddiskVolume1\Windows\System32\winevt\Logs\Microsoft-Windows-Diagnostics-Performance%4Operational.evtx
+	DataSectionObject 0x83eaec48 756 \Device\HarddiskVolume1\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-WHEA%4Errors.evtx
+	SharedCacheMap 0x83eaec48 756 \Device\HarddiskVolume1\Windows\System32\winevt\Logs\Microsoft-Windows-Kernel-WHEA%4Errors.evtx
 	[snip]
 	```
+- higher chance of retention if recently created or accessed
+- logs can be cleared from disk and memory via `ClearEventlog`:
+	- scan disk image or physical image for `LfLe` or `ElfChnk` signatures to recover deleted logs
+	- clearing an event log creates new artifacts; e.g. event ID 517 will be added to Security log to indicate it has been cleared
