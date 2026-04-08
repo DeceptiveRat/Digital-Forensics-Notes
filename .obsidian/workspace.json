@@ -13,12 +13,40 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
+                "file": "Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 11. Networking"
+              "title": "Scenario 1 - downloader and keylogger"
+            }
+          },
+          {
+            "id": "711fd91295ee789f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Note Format.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "Note Format"
+            }
+          },
+          {
+            "id": "3a07b2ec25dce016",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Amcache.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "Amcache"
             }
           }
         ]
@@ -182,50 +210,50 @@
   },
   "active": "dc8f35c7dd15a171",
   "lastOpenFiles": [
+    "Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md~",
+    "Memory Forensics Scenarios/4913",
+    "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Amcache.md",
+    "Note Format.md",
+    "Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md",
+    "Memory Forensics Scenarios/Scenario 1 images/5740_SetWindowsHookExA_references.png",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
+    "Memory Forensics Scenarios/Scenario 1 images/5740_VA_7ff7b131d040.png",
+    "Memory Forensics Scenarios/Scenario 1 images/5740_netscan.png",
+    "Memory Forensics Scenarios/downloader and keylogger.md~",
+    "Memory Forensics Scenarios/Scenario 1 images/imported_functions_2.png",
+    "Memory Forensics Scenarios/Scenario 1 images/imported_functions_1.png",
+    "Memory Forensics Scenarios/Scenario 1 images",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
+    "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
+    "Digital Forensics Concepts/Partition System.md",
+    "File System Forensic Analysis/etc/Disk as layers of abstraction.md",
+    "File System Forensic Analysis/etc/LFN entry name chunks.md",
+    "File System Forensic Analysis/etc/journaling data changes.md",
+    "File System Forensic Analysis/etc/Data analysis layers.md",
+    "File System Forensic Analysis/etc/ATA and SCSI disk size limitations.md",
+    "File System Forensic Analysis/etc/sector copy data loss.md",
+    "File System Forensic Analysis/etc/data carving with no footer.md",
+    "Memory Forensics Scenarios",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 10. Registry in Memory.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 9. Event Logs.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md~",
     "The Art of Memory Forensics/Images/Chapter 11 images/locating_socket_connection_objects.png",
     "The Art of Memory Forensics/Images/Chapter 11 images/tcp_client_API_artifacts.png",
     "The Art of Memory Forensics/Images/Chapter 11 images/tcp_server_API_artifacts.png",
     "The Art of Memory Forensics/Images/Chapter 11 images",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 10. Registry in Memory.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 10. Registry in Memory.md~",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/4913",
     "The Art of Memory Forensics/Images/Chapter 10 images/registry_file_format.png",
     "The Art of Memory Forensics/Images/Chapter 10 images/cell_breakdown.png",
     "The Art of Memory Forensics/Images/Chapter 10 images",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 9. Event Logs.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 9. Event Logs.md~",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history.md",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md",
     "README.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Windows event logs.md",
     "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Windows event logs - hands-on exp.md",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - hands-on exp.md",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch.md",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files.md",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - hands-on exp.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
-    "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md~",
-    "The Art of Memory Forensics/Images/Chapter 8 images/poison_ivy_memory.png",
-    "The Art of Memory Forensics/Images/Chapter 8 images/hollow_process_memory.png",
-    "The Art of Memory Forensics/Images/Chapter 8 images/unpacked_DLL.png",
-    "The Art of Memory Forensics/Images/Chapter 8 images/packed_DLL.png",
-    "The Art of Memory Forensics/Images/Chapter 8 images/packed_executable_lifecycle.png",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md~",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/4913",
-    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/Browser history - images"
+    "Digital Forensics Concepts/Windows Artifacts/FS artifacts/LNK files - hands-on exp.md"
   ]
 }
