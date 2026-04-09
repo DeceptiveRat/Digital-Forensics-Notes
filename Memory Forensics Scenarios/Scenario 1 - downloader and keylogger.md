@@ -18,11 +18,10 @@ The new exe file, *Windows Defender.exe*, works as follows:
 The memory dump was created with:
 ``` sh
 $ VBoxManage list vms
-"REMnux v7" {85cf9def-ded0-41ab-952b-bb4e1cccd015}
-"Malware Analysis Clone" {63f97069-4511-42e4-892e-dcd89346882c}
-"Forensics" {b40c3c06-7180-4a2b-9829-3aa783ec8941}
-"SIFT workstation" {432384d6-0024-4d88-94ec-809f535947fe}
-$ VBoxManage debugvm {63f97069-4511-42e4-892e-dcd89346882c} dumpvmcore --filename keylogger_captured.raw
+[REMOVED]
+"Malware Analysis Workstation" {ID}
+[REMOVED]
+$ VBoxManage debugvm {ID} dumpvmcore --filename keylogger_captured.raw
 ```
 
 ## 2. analyzing memory dump
@@ -157,6 +156,8 @@ There are several interesting things we can find out from this function.
 
 The `remove` function imported from *msvcrt.dll* is used to delete a file<sup>[1]</sup>. This means `param_2 + 8` is a pointer to the filename being deleted. We know that a suspicious exe file was passed as the second command line argument to PID 5740 when it started execution. Because each pointer is 8 bytes long, `param_2 + 8` would point to the second element in the `char*` array. Thus we can conclude this function is the main function, and that `C:\Users\User\Downloads\malware_downloader.exe` is the parent that spawned PID 5740.
 
+A thread that starts at `LAB_7ff7b13115a1` is created. A quick look at that address shows it calls `FUN_7ff7b1311761` which is the function that connects and sends data to the C2 server.
+
 The message functions are there because Windows requires a message loop to process low-level hooks<sup>[4]</sup>.
 
 `0xd` is 13 in decimal, which means `SetWindowsHookExA` sets a hook on `WH_KEYBOARD_LL`<sup>[2]</sup>. This confirms our suspicion that keyboard input is being captured. 
@@ -208,10 +209,104 @@ TreeDepth Offset         Proto LocalAddr                 LocalPort ForeignAddr  
 
 This confirms the C2 IP and port. 
 
-## **check vol -h to look for plugins I can use to gather more data**
+### 2.5. threads
+PID 5740 should have a thread that starts at `0x7ff7b13115a1`. If we try the *windows.threads* plugin:
+
+``` sh
+$ vol -f keylogger_captured.raw -r csv windows.threads > threads.csv
+$ csvtool readable threads.csv | grep -e "5740" -e "TID"
+TreeDepth Offset         PID  TID  StartAddress   StartPath                      Win32StartAddress Win32StartPath                                                                                                        CreateTime                     ExitTime
+0         0xac87b083b080 5740 5956 0x7ffe24bdcc70 \\Windows\\System32\\ntdll.dll 0x7ff7b1311410    \\Users\\Public\\Windows Defender.exe                                                                                 2026-04-08 06:06:16.000000 UTC 1600-09-16 18:39:40.000000 UTC
+[REMOVED]
+0         0xac87b0fe34c0 5740 3760 0xe584daa4c620 -                              0x7ff7b13115a1    \\Users\\Public\\Windows Defender.exe                                                                                 2026-04-08 06:06:17.000000 UTC 1600-09-16 18:39:41.000000 UTC
+[REMOVED]
+```
+
+The first thread starts at `0x7ff7b1311410` which should be the address of the entry point. You can confirm this by looking at the `AddressOfEntryPoint` member of the `_IMAGE_OPTIONAL_HEADER64`
+
+![[5740_AddressOfEntryPoint.png]]
+
+The second thread starts at `0x7ff7b13115a1` which is the address of the function that connects to the C2 server and sends data. 
+
+### 2.6. process history
+
+``` sh
+$ vol -f keylogger_captured.raw -r csv windows.registry.amcache > amcache.csv
+$ csvtool col 2,3,5,6,7,8,9 amcache.csv | csvtool readable - | grep -F -e "SHA1" -e "Defender" -e "downloader.exe"
+EntryType Path                                                                                                                                                                  LastModifyTime                 LastModifyTime2 InstallTime CompileTime SHA1
+File      c:\\users\\user\\downloads\\malware_downloader.exe                                                                                                                    2026-04-08 06:06:16.000000 UTC N/A             N/A         -           8b7e22e495a292c3e0cc43a9610da91cf0f6b276
+$ vol -f keylogger_captured.raw -r csv windows.shimcachemem > shimcachemem.csv
+$ csvtool readable shimcachemem.csv | grep -F -e TreeDepth -e "downloader.exe" -e "Defender.exe"
+TreeDepth Order Last Modified                  Last Update Exec Flag File Size File Path
+0         2     2026-04-08 06:06:16.000000 UTC N/A         N/A       N/A       C:\\Users\\Public\\Windows Defender.exe
+0         4     2026-04-08 05:31:53.000000 UTC N/A         N/A       N/A       C:\\Users\\User\\Downloads\\malware_downloader.exe
+0         8     2026-04-08 05:31:53.000000 UTC N/A         N/A       N/A       SIGN.MEDIA=4441A88 malware_downloader.exe
+$ vol -f keylogger_captured.raw -r csv windows.registry.userassist > userassist.csv
+$ csvtool col 5,6,7,8,9,10,11,12 userassist.csv | csvtool readable - | grep -e "downloader.exe" -e "Last Write Time"
+Last Write Time                Type  Name                                                                                                          ID  Count Focus Count Time Focused   Last Updated
+2026-04-08 06:06:25.000000 UTC Value C:\\Users\\User\\Downloads\\malware_downloader.exe                                                            N/A 1     0           0:00:00.610000 2026-04-08 06:06:16.000000 UTC
+```
+
+The parent process did exist and was run at `2026-04-08 06:06:16.000000 UTC`. It only ran once and for a very short time.
+
+### 2.7. memory
+In `_EPROCESS.ImageFileName` is a 15 byte array containing the image file name. Because it can only contain 14 bytes of the name (1 byte is reserved for the null terminator), we should be able to find the `_EPROCESS` structure for *malware_downloader.exe* if it still exists in memory.
+
+``` sh
+$ vol -f keylogger_captured.raw yarascan.YaraScan --yara-string "{ 6d 61 6c 77 61 72 65 5f 64 6f 77 6e 6c 6f 00 }" --max-size 4435369676Volatility 3 Framework 2.27.0
+Progress:  100.00               PDB scanning finished
+Offset  Rule    Component       Value
+
+0xe584d5908948  default.r1      $a
+6d 61 6c 77 61 72 65 5f 64 6f 77 6e 6c 6f 00    malware_downlo.
+```
+
+There is exactly 1 match for the file name, which is a good start. Next let's check the `_EPROCESS` structure using *volshell*.
+
+``` sh
+$ volshell -f keylogger_captured.raw -w --pid 5740
+[REMOVED]
+(layer_name_Process5740_3) >>> dt("_EPROCESS", 0xe584d59083a0)
+    0x0 :   Pcb                                    symbol_table_name1!_KPROCESS                               offset: 0xac87b0ef5080
+[REMOVED]
+  0x440 :   UniqueProcessId                        *symbol_table_name1!void                                   0x1 (unreadable pointer)
+[REMOVED]
+  0x468 :   CreateTime                             symbol_table_name1!_LARGE_INTEGER                          offset: 0xe584d5908808
+[REMOVED]
+  0x498 :   VirtualSize                            symbol_table_name1!unsigned long long                      435811593840
+[REMOVED]
+  0x520 :   SectionBaseAddress                     *symbol_table_name1!void                                   0x1 (unreadable pointer)
+[REMOVED]
+  0x540 :   InheritedFromUniqueProcessId           *symbol_table_name1!void                                   0x6769666e6f63 (unreadable pointer)
+[REMOVED]
+  0x5a8 :   ImageFileName                          symbol_table_name1!array                                   ['109', '97', '108', '119', '97', '114', '101', '95', '100', '111', '119', '110', '108', '111', '0']
+[REMOVED]
+  0x5c0 :   SeAuditProcessCreationInfo             symbol_table_name1!_SE_AUDIT_PROCESS_CREATION_INFO         offset: 0xe584d5908960
+[REMOVED]
+  0x7d4 :   ExitStatus                             symbol_table_name1!long                                    0
+[REMOVED]
+  0x7d8 :   VadRoot                                symbol_table_name1!_RTL_AVL_TREE                           offset: 0xe584d5908b78
+[REMOVED]
+  0x840 :   ExitTime                               symbol_table_name1!_LARGE_INTEGER                          offset: 0xe584d5908be0
+[REMOVED]
+(layer_name_Process5740_3) >>> db(0xe584d5908808, 8)
+0xe584d5908808    02 00 00 00 00 00 00 00                            ........
+(layer_name_Process5740_3) >>> db(0xe584d5908960)
+0xe584d5908960    03 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00    ................
+0xe584d5908970    0e 00 0f 00 00 00 00 00 80 89 90 d5 84 e5 ff ff    ................
+[REMOVED]
+```
+
+Unfortunately, after terminating, most of the data seems to have been cleaned up. I could not find any useful data from the data structure. 
+
+## 3. conclusion
+Using a simple keylogger and downloader, I created artifacts and analyzed the memory dump using *Volatility*. 
+
+The keylogger and downloader used in this scenario can be found in the references below.
 
 ## references
 [1] MicrosoftDocs/cpp-docs/docs/c-runtime-library/reference/remove-wremove.md, 2026/04/08, https://github.com/MicrosoftDocs/cpp-docs/blob/main/docs/c-runtime-library/reference/remove-wremove.md
 [2] SetWindowsHookExA function (winuser.h), 2026/04/08, https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowshookexa
 [3] HOOKPROC callback function (winuser.h), 2026/04/08, https://learn.microsoft.com/en-us/windows/win32/api/winuser/nc-winuser-hookproc
 [4] LowLevelKeyboardProc funcion, 2026/04/08, https://learn.microsoft.com/en-us/windows/win32/winmsg/lowlevelkeyboardproc
+[5] (DeceptiveRat, 2025/05/08) DeceptiveRat/malware-dev/windows-simple_keylogger, 2026/04/08, https://github.com/DeceptiveRat/malware-dev/tree/main/windows-simple_keylogger

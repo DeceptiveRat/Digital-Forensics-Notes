@@ -1,0 +1,5 @@
+/* Prevents wrapping and adds a horizontal scrollbar in Reading mode */
+.markdown-rendered pre code {
+  white-space: pre !important;
+}
+

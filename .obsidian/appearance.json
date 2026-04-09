@@ -1,3 +1,6 @@
 {
-  "baseFontSize": 23
+  "baseFontSize": 23,
+  "enabledCssSnippets": [
+    "codeblock_nowrap"
+  ]
 }
