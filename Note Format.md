@@ -5,11 +5,11 @@
 - tool names:
 	- *Volatility*
 	- *Autopsy*
-- abbreviations:
-	- *TSK*
 
 ### 2. `Codebox`
 - code
+- math:
+	- `92*12 = 1104`
 - hexadecimal numbers:
 	- `0xDEADBEEF`
 - file path:
