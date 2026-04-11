@@ -8,21 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "dc8f35c7dd15a171",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "File System Forensics Scenarios/Scenario 1 - recovering deleted data from FAT file system.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "Scenario 1 - recovering deleted data from FAT file system"
-            }
-          },
-          {
-            "id": "711fd91295ee789f",
+            "id": "89affeae8a63981a",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -36,34 +22,35 @@
             }
           },
           {
-            "id": "3a07b2ec25dce016",
+            "id": "ba510334bed01151",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
+                "file": "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 13. Kernel Forensics and Rootkits.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 10. FAT Data Structures"
+              "title": "Chapter 13. Kernel Forensics and Rootkits"
             }
           },
           {
-            "id": "bf75ce439d7e0443",
+            "id": "ef999b75384b4c07",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
+                "file": "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 9. FAT Concepts and Analysis"
+              "title": "Chapter 12. Windows Services"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -222,52 +209,52 @@
       "bases:Create new base": false
     }
   },
-  "active": "dc8f35c7dd15a171",
+  "active": "ba510334bed01151",
   "lastOpenFiles": [
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 13. Kernel Forensics and Rootkits.md~",
+    "The Art of Memory Forensics/Images/Chapter 13 images/process_explorer_modules.png",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 13. Kernel Forensics and Rootkits.md",
+    "The Art of Memory Forensics/Images/Chapter 13 images/kernel_memory_overview.png",
+    "The Art of Memory Forensics/Images/Chapter 13 images",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Untitled",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md~",
+    "The Art of Memory Forensics/Images/Chapter 12 images/unlinked_service.png",
+    "The Art of Memory Forensics/Images/Chapter 12 images/Blazgel_disassembled.png",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/4913",
+    "The Art of Memory Forensics/Images/Chapter 12 images/TDL3_stealth_service.png",
+    "Note Format.md",
+    "The Art of Memory Forensics/Images/Chapter 12 images/Windows_service_components.png",
+    "The Art of Memory Forensics/Images/Chapter 12 images",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md~",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md",
+    "The Art of Memory Forensics/Images/Chapter 11 images/port_pool.png",
+    "The Art of Memory Forensics/Images/Chapter 11 images/partition_table.png",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
+    "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
+    "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
+    "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 3. The Volatility Framework.md",
+    "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 2. Data Structures.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
+    "Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md",
+    "File System Forensics Scenarios/Scenario 1 - recovering deleted data from FAT file system.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
     "File System Forensics Scenarios/Scenario 1 - recovering deleted data from FAT file system.md~",
     "File System Forensics Scenarios/4913",
-    "Note Format.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
-    "File System Forensics Scenarios/Scenario 1 - recovering deleted data from FAT file system.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
-    "Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md",
     "Memory Forensics Scenarios/Scenario 1 images/imported_functions_2.png",
     "Memory Forensics Scenarios/Scenario 1 images/imported_functions_1.png",
-    "Memory Forensics Scenarios/Scenario 1 images/5740_VA_7ff7b131d040.png",
-    "Memory Forensics Scenarios/Scenario 1 images/5740_SetWindowsHookExA_references.png",
-    "Memory Forensics Scenarios/Scenario 1 images/5740_AddressOfEntryPoint.png",
     "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Amcache.md",
     "File System Forensics Scenarios",
-    "Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md~",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md",
-    "Memory Forensics Scenarios/4913",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
     "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/UserAssist.md",
     "Digital Forensics Concepts/Windows Artifacts/Registry Artifacts/Shimcache.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
-    "Memory Forensics Scenarios/Scenario 1 images/5740_netscan.png",
-    "Memory Forensics Scenarios/downloader and keylogger.md~",
-    "Memory Forensics Scenarios/Scenario 1 images",
-    "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
-    "Digital Forensics Concepts/Partition System.md",
-    "File System Forensic Analysis/etc/Disk as layers of abstraction.md",
-    "File System Forensic Analysis/etc/LFN entry name chunks.md",
-    "File System Forensic Analysis/etc/journaling data changes.md",
-    "File System Forensic Analysis/etc/Data analysis layers.md",
-    "File System Forensic Analysis/etc/ATA and SCSI disk size limitations.md",
-    "File System Forensic Analysis/etc/sector copy data loss.md",
-    "Memory Forensics Scenarios",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md~",
-    "The Art of Memory Forensics/Images/Chapter 11 images/locating_socket_connection_objects.png",
-    "The Art of Memory Forensics/Images/Chapter 11 images/tcp_client_API_artifacts.png",
-    "The Art of Memory Forensics/Images/Chapter 11 images/tcp_server_API_artifacts.png",
-    "The Art of Memory Forensics/Images/Chapter 11 images",
-    "The Art of Memory Forensics/Images/Chapter 10 images/registry_file_format.png"
+    "Digital Forensics Concepts/Partition System.md"
   ]
 }

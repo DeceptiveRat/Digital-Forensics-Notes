@@ -165,3 +165,150 @@
 	>>> struct.unpack(">I", socket.inet_aton("12.34.56.78"))[0]
 	203569230
 	```
+
+## 6. hidden connections
+- common techniques to hide connections:
+	- API hooking:
+		- APIs such as `DeviceIoControl`, `ZwDeviceIoControlFile`, `GetTcpTable`, and `GetExtendedTcpTable`
+		- `apihooks` plugin can detect hooks
+		- `netscan` plugin can detect hidden connections
+	- hook `IRP_MJ_DEVICE_CONTROL` function of `\Device\Tcp` to filter attempts to gather information using `IOCTL_TCP_QUERY_INFORMATION_EX`:
+		- `driverirp` plugin to detect kernel driver that does the hooking
+		- `netscan` can still detect connections
+	- NDIS driver which operates at a lower level thatn Winsock2 bypasses creation of common artifacts:
+		- find loaded driver by scanning driver objects or hidden kernel threads
+		- carve IP packets or Ethernet frames from memory dump
+
+
+## 7. packets in memory
+- IP packets and Ethernet frames must be structured; easy to identify
+- DNS operation is quick so it's difficult to capture memory while it is active; finding packets in memory is valuable
+
+## 8. DKOM attacks
+- not much of a threat against socket/connection objects because overwriting them causes communication to fail
+
+## 9. raw sockets
+- enable programs to access underlying transport layer data, allowing system to forge or spoof packets
+- raw sockets in promiscuous mode can be used to sniff packets
+- processes that open raw sockets will have a socket bound to port 0 of protocol 0 and an open handle to `\Device\RawIp\0`
+
+## 10. `netscan`
+- uses pool-scanning approach to lcoate `_TCP_ENDPOINT`, `_TCP_LISTENER`, and `_UDP_ENDPOINT` in memory
+	``` sh
+	$ python vol.py -f win764bit.raw --profile=Win7SP0x64 netscan
+	Volatility Foundation Volatility Framework 2.4
+	Proto Local Address Foreign Address State Pid Owner
+	----- -------------- ---------------- ----------- ---- ------------
+	[snip]
+	TCPv4 -:0 232.9.125.0:0 CLOSED 1 ?C?
+	TCPv4 -:49227 184.26.31.55:80 CLOSED 2820 iexplore.exe
+	TCPv4 -:49359 93.184.220.20:80 CLOSED 2820 iexplore.exe
+	TCPv4 10.0.2.15:49363 173.194.35.38:80 ESTABLISHED 2820 iexplore.exe
+	TCPv4 -:49341 82.165.218.111:80 CLOSED 2820 iexplore.exe
+	```
+	- "-" indicates information could not be accessed in memory dump; pointer chain can easily be broken if pages are swapped to disk
+
+## 11. partition tables
+- peformance in the TCP/IP stack is enhanced by splitting work between multiple processors
+- global variable `PartitionTable` in `tcpip.sys` stores a pointer to `_PARTITION_TABLE`, an array of `_PARTITION`s
+- during startup for `tcpip.sys`, `TcpStartPartitionModule` function allocates memory for partition structures and initializes them
+- partition table usage:
+	![[partition_table.png]]
+	- `_PARTITION` contains 3 `_RTL_DYNAMIC_HASH_TABLE` structures; one for each state: established, SYN sent, and time wait (about to close)
+	- dynamic hash tables point to doubly linked list of connection structures; e.g. `_TCP_ENDPOINT`
+
+## 12. port pools
+- big page tracker tables tell you the exact addresses of pools with `InPP` tag storing `_INET_PORT_POOL` structures
+- port pools contain a 65535-bit bitmap, one for each port, and an equal number of pointers to `_PORT_ASSIGNMENT` structures
+- index of a bit in the bitmap can be used to compute the address of the corresponding `_TCP_LISTENER`, `_TCP_ENDPOINT`, or `_UDP_ENDPOINT` structure
+- port pool:
+	![[port_pool.png]]
+	- `_PORT_ASSIGNMENT` structures don't directly point to the connection structures; the value is derived from a base address + index of bit in bitmap
+
+## 13. internet history
+- *Internet Explorer*'s history file is loaded by all processes that use the WinINet API to access HTTP, HTTPS, or FTP sites
+- viewing history in memory:
+	``` sh
+	$ python vol.py -f win7_x64.dmp --profile=Win7SP0x64 yarascan -Y "/(URL |REDR|LEAK)/" -p 2580,3004
+	Volatility Foundation Volatility Framework 2.4
+	Rule: r1
+	Owner: Process iexplore.exe Pid 3004
+	0x026f1600 55 52 4c 20 03 00 00 00 00 99 35 2c 82 43 ca 01 URL.......5,.C..
+	0x026f1610 a0 ec 34 cb 34 02 cc 01 00 00 00 00 00 00 00 00 ..4.4...........
+	0x026f1620 76 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 v...............
+	0x026f1630 60 00 00 00 68 00 00 00 03 01 10 10 c4 00 00 00 `...h...........
+	0x026f1640 41 00 00 00 dc 00 00 00 7d 00 00 00 00 00 00 00 A.......}.......
+	0x026f1650 98 3e a3 20 01 00 00 00 00 00 00 00 98 3e a3 20 .>...........>..
+	0x026f1660 00 00 00 00 ef be ad de 68 74 74 70 3a 2f 2f 6d ........http://m
+	0x026f1670 73 6e 62 63 6d 65 64 69 61 2e 6d 73 6e 2e 63 6f snbcmedia.msn.co
+	[snip]
+	Rule: r1
+	Owner: Process iexplore.exe Pid 3004
+	0x026c0b00 4c 45 41 4b 06 00 00 00 00 a6 3b 01 cc 97 cb 01 LEAK......;.....
+	0x026c0b10 c0 71 20 14 33 02 cc 01 98 3e 39 1f 00 00 00 00 .q..3....>9.....
+	0x026c0b20 f8 cf 00 00 00 00 00 00 00 00 00 00 80 2a 02 00 .............*..
+	0x026c0b30 60 00 00 00 68 00 00 00 03 00 10 10 40 02 00 00 `...h.......@...
+	0x026c0b40 41 00 00 00 60 02 00 00 9e 00 00 00 00 00 00 00 A...`...........
+	0x026c0b50 98 3e 99 1e 01 00 00 00 00 00 00 00 98 3e 99 1e .>...........>..
+	0x026c0b60 00 00 00 00 ef be ad de 68 74 74 70 3a 2f 2f 75 ........http://u
+	0x026c0b70 73 65 2e 74 79 70 65 6b 69 74 2e 63 6f 6d 2f 6b se.typekit.com/k
+	[snip]
+	Rule: r1
+	Owner: Process iexplore.exe Pid 3004
+	0x026e2680 52 45 44 52 02 00 00 00 78 1b 02 00 40 af d3 51 REDR....x...@..Q
+	0x026e2690 68 74 74 70 3a 2f 2f 62 73 2e 73 65 72 76 69 6e http://bs.servin
+	0x026e26a0 67 2d 73 79 73 2e 63 6f 6d 2f 42 75 72 73 74 69 g-sys.com/Bursti
+	0x026e26b0 6e 67 50 69 70 65 2f 61 64 53 65 72 76 65 72 2e ngPipe/adServer.
+	```
+	- at offset `0x34` from start of URL or LEAK, you can find a 4-byte number specifying offset from start of string to visited location
+	- location can be found at offset `0x10` for redirected URLs
+- brute-force searching for domains:
+	``` sh
+	$ python vol.py -f win7_x64.dmp --profile=Win7SP0x64 yarascan -p 3004 -Y "/[a-zA-Z0-9\-\.]+\.(com|org|net|mil|edu|biz|name|info)/"
+	Volatility Foundation Volatility Framework 2.4
+	Rule: r1
+	Owner: Process iexplore.exe Pid 3004
+	0x003e90dd 77 77 77 2e 72 65 75 74 65 72 73 2e 63 6f 6d 2f www.reuters.com/
+	0x003e90ed 61 72 74 69 63 6c 65 2f 32 30 31 31 2f 30 34 2f article/2011/04/
+	0x003e90fd 32 34 2f 75 73 2d 73 79 72 69 61 2d 70 72 6f 74 24/us-syria-prot
+	0x003e910d 65 73 74 73 2d 69 64 55 53 54 52 45 37 33 4c 31 ests-idUSTRE73L1
+	0x003e911d 53 4a 32 30 31 31 30 34 32 34 22 20 69 64 3d 22 SJ20110424".id="
+	0x003e912d 4d 41 41 34 41 45 67 42 55 41 4a 67 43 47 6f 43 MAA4AEgBUAJgCGoC
+	0x003e913d 64 58 4d 22 3e 3c 73 70 61 6e 20 63 6c 61 73 73 dXM"><span.class
+	0x003e914d 3d 22 74 69 74 6c 65 74 65 78 74 22 3e 52 65 75 ="titletext">Reu
+	Rule: r1
+	Owner: Process iexplore.exe Pid 3004
+	0x00490fa0 77 77 77 2e 62 69 6e 67 2e 63 6f 6d 2f 73 65 61 www.bing.com/sea
+	0x00490fb0 72 63 68 3f 71 3d 6c 65 61 72 6e 2b 74 6f 2b 70 rch?q=learn+to+p
+	0x00490fc0 6c 61 79 2b 68 61 72 6d 2b 31 11 3a 87 26 00 88 lay+harm+1.:.&..
+	0x00490fd0 00 00 00 00 00 00 00 00 80 00 00 00 00 00 00 00 ................
+	0x00490fe0 d8 50 0b 09 00 00 00 00 00 00 00 00 00 00 00 00 .P..............
+	0x00490ff0 00 00 00 00 3e 46 69 6e 5d c7 37 4e 20 00 00 00 ....>Fin].7N....
+	0x00491000 40 10 49 00 00 00 00 00 00 00 00 00 00 00 00 00 @.I.............
+	0x00491010 01 00 00 00 63 61 3c 2f 63 00 6f 00 6e 00 74 00 ....ca</c.o.n.t.
+	```
+
+## 14. DNS
+- DNS cache is stored in address space of `svchost.exe` that runs DNS resolver service, specifically heaps
+- *hosts* file should be examined for sabotage:
+	``` sh
+	$ python vol.py -f infectedhosts.dmp filescan | grep -i hosts
+	Volatility Foundation Volatility Framework 2.4
+	0x0000000002192f90 1 0 R--rw- \Device\HarddiskVolume1\WINDOWS\system32\
+	drivers\etc\hosts
+	$ python vol.py -f infectedhosts.dmp dumpfiles -Q 0x2192f90 -D OUTDIR --name
+	Volatility Foundation Volatility Framework 2.4
+	DataSectionObject 0x02192f90 None
+	\Device\HarddiskVolume1\WINDOWS\system32\drivers\etc\hosts
+	$ strings OUTDIR/file.None.0x8211f1f8.hosts.dat
+	# Copyright (c) 1993-1999 Microsoft Corp.
+	[snip]
+	127.0.0.1 localhost
+	127.0.0.1 avp.com
+	127.0.0.1 ca.com
+	127.0.0.1 customer.symantec.com
+	127.0.0.1 dispatch.mcafee.com
+	127.0.0.1 f-secure.com
+	127.0.0.1 kaspersky.com
+	127.0.0.1 liveupdate.symantec.com
+	```
