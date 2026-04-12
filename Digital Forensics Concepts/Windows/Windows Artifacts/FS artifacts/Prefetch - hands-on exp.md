@@ -1,6 +1,6 @@
 ## 1. creating prefetch files
 1. initial state
-![[Digital Forensics Concepts/Windows Artifacts/FS artifacts/Prefetch - images/initial_state.png]]
+![[Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Prefetch - images/initial_state.png]]
 
 2. execute *LogfileParser.exe*
 ![[execute_logfileparser.png]]

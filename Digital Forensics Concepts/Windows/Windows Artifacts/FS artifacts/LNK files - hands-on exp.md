@@ -1,6 +1,6 @@
 ## 1. lnk file creation
 1. initial state
-![[initial_state.png]]
+![[Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Prefetch - images/initial_state.png]]
 
 2. enter directory
 ![[entered_directory.png]]

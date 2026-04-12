@@ -139,3 +139,521 @@
 		```
 		- gives IDA context to properly display relative function calls, jumps, and string references
 		- `impscan` plugin may have to be used to generate labels for IDA depending on the state of the import address table
+
+## 9. `threads` plugin
+- some malware attempt to hide themselves by creating a thread to run from a kernel pool, then unloading the module; pool gets untagged
+- `threads` enumerates loaded modules by walking the list and matches their memories to system threads' `_ETHREAD.StartAddress`
+- example output:
+	``` sh
+	$ python vol.py -f orphan.vmem threads -F OrphanThread --profile=WinXPSP3x86
+	[snip]
+	ETHREAD: 0xff1f92b0 Pid: 4 Tid: 1648
+	Tags: OrphanThread,SystemThread
+	Created: 2010-08-15 19:26:13
+	Exited: 1970-01-01 00:00:00
+	Owning Process: System
+	Attached Process: System
+	State: Waiting:DelayExecution
+	BasePriority: 0x8
+	Priority: 0x8
+	TEB: 0x00000000
+	StartAddress: 0xf2edd150 UNKNOWN
+	ServiceTable: 0x80552180
+		[0] 0x80501030
+		[1] 0x00000000
+		[2] 0x00000000
+		[3] 0x00000000
+	Win32Thread: 0x00000000
+	CrossThreadFlags: PS_CROSS_THREAD_FLAGS_SYSTEM
+	```
+- thread starting address points to function in PE file, not PE file base; calculation needed to find MZ signature
+- patching `_ETHREAD.StartAddress` values can hide orphan threads
+
+## 10. driver object
+- when a kernel module loads, a corresponding `_DRIVER_OBJECT` is initialized as well as the `KLDR_DATA_TABLE_ENTRY`
+- applications in Windows communicate with drivers via *I/O Request Packets(IRP)*, which identify desired operations and buffers for data
+- contains critical information about kernel module:
+	- copy of module's base address
+	- unload routine
+	- pointer to list of handler functions
+- has table of 28 function pointers that can register to handle different operations
+- data structure:
+	``` python
+	>>> dt("_DRIVER_OBJECT")
+	'_DRIVER_OBJECT' (336 bytes)
+	0x0 : Type ['short']
+	0x2 : Size ['short']
+	0x8 : DeviceObject ['pointer64', ['_DEVICE_OBJECT']]
+	0x10 : Flags ['unsigned long']
+	0x18 : DriverStart ['pointer64', ['void']]
+	0x20 : DriverSize ['unsigned long']
+	0x28 : DriverSection ['pointer64', ['void']]
+	0x30 : DriverExtension ['pointer64', ['_DRIVER_EXTENSION']]
+	0x38 : DriverName ['_UNICODE_STRING']
+	0x48 : HardwareDatabase ['pointer64', ['_UNICODE_STRING']]
+	0x50 : FastIoDispatch ['pointer64', ['_FAST_IO_DISPATCH']]
+	0x58 : DriverInit ['pointer64', ['void']]
+	0x60 : DriverStartIo ['pointer64', ['void']]
+	0x68 : DriverUnload ['pointer64', ['void']]
+	0x70 : MajorFunction ['array', 28, ['pointer64', ['void']]]
+	```
+	- `DeviceObject`: pointer to first device created by driver
+	- `DriverStart`: copy of kernel module's base address
+	- `DriverSize`: byte size of kernel module
+	- `DriverExtension`: points to structure with `ServiceKeyName`, which tells path within registry that stores driver configuration
+	- `DriverInit`: pointer to driver initialization routine
+	- `DriverUnload`: pointer to function that executes when driver unloads
+	- `MajorFunction`: array of 28 major function pointers; can hook operations by overwriting an index in this array 
+
+## 11. `driverscan` plugin
+- finds driver objects by pool tag scanning
+- example output:
+	``` sh
+	$ python vol.py -f memory.dmp --profile=Win7SP1x64 driverscan
+	Volatility Foundation Volatility Framework 2.4
+	Offset(P) Start Size Service Key Driver Name
+	------------------ ------------------ -------- ------------ -----------
+	0x000000000038ac80 0xfffff88003bd9000 0xf000 mouclass \Driver\mouclass
+	0x00000000254eaa80 0xfffff88000e00000 0x15000 volmgr \Driver\volmgr
+	0x00000000254eae40 0xfffff88000fba000 0xd000 vdrvroot \Driver\vdrvroot
+	0x000000003e0f1060 0xfffff8800323c000 0x20000 BthPan \Driver\BthPan
+	[snip]
+	```
+	- `start` displays starting address of driver in kernel memory
+	- the address for drivers should match base address of modules shown by `modscan` or `modules`
+
+## 12. `driverirp` plugin
+- can be used to detect IRP hooking
+- example output:
+	``` sh
+	$ python vol.py -f hooker.bin --profile=WinXPSP3x86 driverirp -r tcpip
+	Volatility Foundation Volatility Framework 2.4
+	--------------------------------------------------
+	DriverName: Tcpip
+	DriverStart: 0xb2ef3000
+	DriverSize: 0x58480
+	DriverStartIo: 0x0
+	0 IRP_MJ_CREATE 0xb2ef94f9 tcpip.sys
+	1 IRP_MJ_CREATE_NAMED_PIPE 0xb2ef94f9 tcpip.sys
+	[snip]
+	12 IRP_MJ_DIRECTORY_CONTROL 0xb2ef94f9 tcpip.sys
+	13 IRP_MJ_FILE_SYSTEM_CONTROL 0xb2ef94f9 tcpip.sys
+	14 IRP_MJ_DEVICE_CONTROL 0xf8b615d0 url.sys
+	15 IRP_MJ_INTERNAL_DEVICE_CONTROL 0xb2ef9718 tcpip.sys
+	16 IRP_MJ_SHUTDOWN 0xb2ef94f9 tcpip.sys
+	[snip]
+	```
+	- `IRP_MJ_DEVICE_CONTROL` handler points to function in *url.sys*, which is not normal
+- there are legitimate cases in which drivers forward handlers to different drivers so manual analysis is still required
+- if a driver doesn't handle certain operations, it points to `nt!IopInvalidDeviceRequest`, instead of leaving it at null
+- high value targets for IRP hooking:
+	- `IRP_MJ_READ` and `IRP_MJ_WRITE` of FS drivers
+	- `IRP_MJ_DEVICE_CONTROL` for networking drivers such as `\Driver\Tcpip`, `\Driver\NDIS`, and `\Driver\HTTP`
+
+## 13. stealth hooks
+- IRP hook detection evasion:
+	![[IRP_hook_detection_evasion.png]]
+- example:
+	``` sh
+	$ python vol.py -f tdl3.vmem driverirp -r vmscsi
+	--profile=WinXPSP3x86
+	Volatility Foundation Volatility Framework 2.4
+	--------------------------------------------------
+	DriverName: vmscsi
+	DriverStart: 0xf9db8000
+	DriverSize: 0x2c00
+	DriverStartIo: 0xf97ea40e
+	0 IRP_MJ_CREATE 0xf9db9cbd vmscsi.sys
+	1 IRP_MJ_CREATE_NAMED_PIPE 0xf9db9cbd vmscsi.sys
+	2 IRP_MJ_CLOSE 0xf9db9cbd vmscsi.sys
+	3 IRP_MJ_READ 0xf9db9cbd vmscsi.sys
+	```
+	- all indices point to `0xf9db9cbd`
+	``` sh
+	>>> dis(0xf9db9cbd)
+	0xf9db9cbd a10803dfff MOV EAX, [0xffdf0308]
+	0xf9db9cc2 ffa0fc000000 JMP DWORD [EAX+0xfc]
+	0xf9db9cc8 0000 ADD [EAX], AL
+	[snip]
+	>>> dd(0xffdf0308, length=4)
+	ffdf0308 817ef908
+	>>> dd(0x817ef908 + 0xFC, length=4)
+	817efa04 81926e31
+	>>> dis(0x81926e31)
+	0x81926e31 55 PUSH EBP
+	0x81926e32 8bec MOV EBP, ESP
+	0x81926e34 8b450c MOV EAX, [EBP+0xc]
+	[snip]
+	```
+	- actual code found at `0x81926e31`
+
+## 14. device trees
+- Windows uses layered architecture for handling I/O requests; multiple drivers can handle the same IRP
+- malware can attach to the target device stack to read/modify data:
+	![[rootkit_in_device_stack.png]]
+- attaching steps:
+	1. create device via `IoCreateDevice`
+	2. obtain pointer to target device with `IoGetDeviceObjectPointer`
+	3. pass both device objects to `IoAttachDeviceToDeviceStack`; `IoAttachDevice` can be used in a similar manner
+- `_DEVICE_OBJECT` DS:
+	``` python
+	>>> dt("_DEVICE_OBJECT")
+	'_DEVICE_OBJECT' (184 bytes)
+	0x0 : Type ['short']
+	0x2 : Size ['unsigned short']
+	0x4 : ReferenceCount ['long']
+	0x8 : DriverObject ['pointer', ['_DRIVER_OBJECT']]
+	0xc : NextDevice ['pointer', ['_DEVICE_OBJECT']]
+	0x10 : AttachedDevice ['pointer', ['_DEVICE_OBJECT']]
+	0x14 : CurrentIrp ['pointer', ['_IRP']]
+	[snip]
+	0x28 : DeviceExtension ['pointer', ['void']]
+	0x2c : DeviceType ['unsigned long']
+	[snip]
+	0xb0 : DeviceObjectExtension ['pointer', ['_DEVOBJ_EXTENSION']]
+	0xb4 : Reserved ['pointer', ['void']]
+	```
+	- `DriverObject`: pointer to driver
+	- `NextDevice`: linked list of devices by same driver
+	- `AttachedDevice`: linked list of devices attached to stack
+	- `CurrentIrp`: IRP being processed by this device
+	- `DeviceExtension`: undefined member that can stores any custom DS
+	- `DeviceType`: type of device; e.g. `FILE_DEVICE_KEYBOARD`, `FILE_DEVICE_NETWORK`, or `FILE_DEVICE_DISK`
+
+## 15. `devicetree` plugin
+- example output:
+	``` sh
+	$ python vol.py -f klog.dmp --profile=Win2003SP1x86 devicetree
+	DRV 0x01f89310 \Driver\klog
+	---| DEV 0x81d2d730 (?) FILE_DEVICE_KEYBOARD
+	[snip]
+	DRV 0x02421770 \Driver\Kbdclass
+	---| DEV 0x81e96030 KeyboardClass1 FILE_DEVICE_KEYBOARD
+	---| DEV 0x822211e0 KeyboardClass0 FILE_DEVICE_KEYBOARD
+	------| ATT 0x81d2d730 (?) - \Driver\klog FILE_DEVICE_KEYBOARD
+	[snip]
+	```
+	- unnamed device from `\Driver\klog` attached to `KeyboardClass0`
+- high priority targets:
+	- network device
+	- keyboard device
+	- disk device
+
+## 16. *System Service Descriptor Table(SSDT)*
+- contains pointer to kernel mode functions
+- SSDT high level diagram:
+	![[SSDT_diagram.png]]
+	- `nt!KeServiceDescriptorTable` and `nt!KeServiceDescriptorTableShadow` symbols are instances of `_SERVICE_DESCRIPTOR_TABLE` that contain up to 4 entries
+- `_SERVICE_DESCRIPTOR_TABLE` DS:
+	``` python
+	>>> dt("_SERVICE_DESCRIPTOR_TABLE")
+	'_SERVICE_DESCRIPTOR_TABLE' (64 bytes)
+	0x0 : Descriptors ['array', 4, ['_SERVICE_DESCRIPTOR_ENTRY']]
+	```
+- `_SERVICE_DESCRIPTOR_ENTRY` DS:
+	``` python
+	>>> dt("_SERVICE_DESCRIPTOR_ENTRY")
+	'_SERVICE_DESCRIPTOR_ENTRY' (32 bytes)
+	0x0 : KiServiceTable ['pointer', ['void']]
+	0x8 : CounterBaseTable ['pointer', ['unsigned long']]
+	0x10 : ServiceLimit ['unsigned long']
+	0x18 : ArgumentTable ['pointer', ['unsigned char']]
+	```
+	- `KiServiceTable`: points to array of functions
+	- `ServiceLimit: specifies number of functions in array
+
+## 17. `ssdt` plugin
+- on 32-bit Windows, enumerates all thread objects and gathers unique values for `_ETHREAD.Tcb.ServiceTable`
+- on 64-bit Windows, disassemble exported `nt!KeAddSystemServiceTable` function and extract *Relative Virtual Address(RVA)* for `KeServiceDescriptorTable` and `KeServiceDescriptorTableShadow` symbols:
+	![[enumerating_SSDT.png]]
+- example output:
+	``` sh
+	$ python vol.py -f memory.dmp --profile=Win7SP1x64 ssdt
+	Volatility Foundation Volatility Framework 2.4
+	[x64] Gathering all referenced SSDTs from KeAddSystemServiceTable...
+	Finding appropriate address space for tables...
+	SSDT[0] at fffff800028dc300 with 401 entries
+	Entry 0x0000: 0xfffff80002ce9ca0 (NtMapUser[snip]) owned by ntoskrnl.exe
+	Entry 0x0001: 0xfffff80002bd18c0 (NtWaitForSingleObject) owned by ntoskrnl.exe
+	[snip]
+	SSDT[1] at fffff960001a1f00 with 827 entries
+	Entry 0x1000: 0xfffff96000195974 (NtUserGetThreadState) owned by win32k.sys
+	Entry 0x1001: 0xfffff96000192a50 (NtUserPeekMessage) owned by win32k.sys
+	Entry 0x1002: 0xfffff960001a3f6c (NtUserCallOneParam) owned by win32k.sys
+	[snip]
+	```
+	- table at `0xfffff800028dc300` is `SSDT[0]`, the first descriptor in `_SERVICE_DESCRIPTOR_TABLE.Descriptors`
+
+## 18. attacking SSDT
+- pointer replacement:
+	- overwrites pointers in SSDT to hook individual functions
+	- typically need base address of call table in kernel memory and index of function you want to hook:
+		1. `MmGetSystemRoutineAddress` (kernel version of `GetProcAddress`) to locate `KeServiceDescriptorTable` exported by NT module
+		2. reference `ServiceTable` member
+		3. `InterlockedExchange` API to perform pointer replacement
+	- all pointers in native and GUI function tables should point inside NT module and *win32k.sys* respectively; easy to detect hooks
+	- detection example:
+		``` sh
+		$ python vol.py -f laqma.vmem ssdt --profile=WinXPSP3x86 | egrep -v '(ntoskrnl\.exe|win32k\.sys)'
+		Volatility Foundation Volatility Framework 2.4
+		[x86] Gathering all referenced SSDTs from KTHREADs...
+		Finding appropriate address space for tables...
+		SSDT[0] at 805011fc with 284 entries
+		Entry 0x0049: 0xf8c52884 (NtEnumerateValueKey) owned by lanmandrv.sys
+		Entry 0x007a: 0xf8c5253e (NtOpenProcess) owned by lanmandrv.sys
+		Entry 0x0091: 0xf8c52654 (NtQueryDirectoryFile) owned by lanmandrv.sys
+		Entry 0x00ad: 0xf8c52544 (NtQuerySystemInformation) owned by lanmandrv.sys
+		[snip]
+		```
+- inline hooking:
+	- detection example:
+		``` sh
+		$ python vol.py -f skynet.bin --profile=WinXPSP3x86 ssdt --verbose
+		[snip]
+		SSDT[0] at 804e26a8 with 284 entries
+		Entry 0x0047: 0x80570d64 (NtEnumerateKey) owned by ntoskrnl.exe
+		** INLINE HOOK? => 0x820f1b3c (UNKNOWN)
+		Entry 0x0048: 0x80648aeb (NtEnumerateSystem[snip]) owned by ntoskrnl.exe
+		Entry 0x0049: 0x80590677 (NtEnumerateValueKey) owned by ntoskrnl.exe
+		Entry 0x004a: 0x80625738 (NtExtendSection) owned by ntoskrnl.exe
+		```
+		- instructions at `0x80570d64` is overwritten with `JMP` to `0x830f1b3c
+- table duplication:
+	- on 32-bit systems, each thread has a `_ETHREAD.Tcb.ServiceTable` that identifies SSDT it uses; each thread can be using a different SSDT
+	- malware can copy native function table, hook a few functions, then use it for certain threads
+	- detection example:
+		``` sh
+		$ python vol.py -f blackenergy.vmem --profile=WinXPSP3x86 ssdt
+		SSDT[0] at 814561b0 with 284 entries Entry 0x0115: 0x817315c1 (NtWriteVirtualMemory) owned by 00000B9D
+		SSDT[0] at 81882980 with 284 entries Entry 0x0115: 0x817315c1 (NtWriteVirtualMemory) owned by 00000B9D
+		SSDT[0] at 80501030 with 284 entries Entry 0x0115: 0x805a82f6 (NtWriteVirtualMemory) owned by ntoskrnl.exe
+		```
+		- 3 instances of SSDT[0] when there are usually 1
+		- `0x80501030` is the clean copy, pointing to NT module
+	
+## 19. SSDT hooking disadvantages
+- patchguard: 
+	- hooking SSDT on 64-bit systems is prevented due to *Kernel Patch Protection(KPP)*, aka. Patchguard
+- multiple cores:
+	- while 1 core is attempting to apply a hook, another may be trying to call APIs
+- duplicate entries:
+	- multiple drivers may try to hook the same function; outcome is unpredictable
+- undocumented APIs:
+	- SSDT functions are subject to change; portable rootkit is difficult
+
+## 20. kernel callbacks
+- aka. notification routines
+- new API hooks
+- solve many SSDT hooking problems:
+	- documented
+	- supported on 64-bit systems
+	- safe for multicore machines
+	- fine for mulitiple modules to register for same event
+
+## 21. `callbacks` plugin
+- events detected:
+	- process creation:
+		- installed with `PsSetCreateProcessNotifyRoutine` API
+		- relied upon by *Process Monitor*, AV tools, and rootkits
+		- triggered when process starts or exits
+	- thread creation:
+		- installed with `PsSetCreateThreadNotifyRoutine` API
+		- triggered when thread starts or exits
+	- image load:
+		- installed with `PsSetLoadImageNotifyRoutine` API
+		- purpose is to notify when executable is mapped to memory; e.g. process, library, or kernel module
+	- system shutdown:
+		- installed with `IoRegisterShutdownNotification` API
+		- target driver's `IRP_MJ_SHUTDOWN` handler is invoked when system is about to be powered off
+	- FS registration:
+		- installed with `IoRegisterFsRegistrationChange` API
+		- notify when new FS becomes available
+	- debug message:
+		- `DbgSetDebugPrintCallback` API
+		- capture debug messages emitted by kernel modules
+	- registry modification:
+		- `CmRegisterCallback` or `CmRegisterCallbackEx` API
+		- notify when any thread performs operation on registry
+	- *Plug and Play(PnP)*:
+		- `IoRegisterPlugPlayNotification` API
+		- trigger when PnP devices are introduced, removed, or changed
+	- bugchecks:
+		- `KeRegisterBugCheckCallback` or `KeRegisterBugCheckReasonCallback` API
+		- notify when bug check (unhandled exception) occurs
+		- provides opportunity to reset device configurations or add device specific state information to crash dump file
+- output example:
+	``` sh
+	$ python vol.py -f memory.dmp --profile=Win7SP1x64 callbacks
+	Volatility Foundation Volatility Framework 2.4
+	Type Callback Module Details
+	------------------------------------ ------------------ -------------- -------
+	GenericKernelCallback 0xfffff88002922d2c peauth.sys -
+	EventCategoryTargetDeviceChange 0xfffff96000221304 win32k.sys Win32k
+	EventCategoryDeviceInterfaceChange 0xfffff88000db99b0 partmgr.sys partmgr
+	EventCategoryTargetDeviceChange 0xfffff800029ef180 ntoskrnl.exe ACPI
+	GenericKernelCallback 0xfffff800028a6af0 ntoskrnl.exe -
+	IoRegisterShutdow[snip] 0xfffff88001434b04 VIDEOPRT.SYS \Driver\
+	[snip]
+	```
+	- `Callback` shows address of function invoked upon event
+
+## 22. Stuxnet malicious callback case study
+- loads 2 modules:
+	- *mrxnet.sys*: installs FS registration change callback; to spread immediately
+	- *mrxcls.sys*: installs image load callback; used to inject code into processes when they try to load other DLLs
+- `callbacks` plugin output:
+	``` sh
+	$ python vol.py -f stuxnet.vmem --profile=WinXPSP3x86 callbacks
+	Volatility Foundation Volatility Framework 2.4
+	Type Callback Module Details
+	------------------------------------ ---------- -------------------- -------
+	IoRegisterFsRegistrationChange 0xf84be876 sr.sys -
+	IoRegisterFsRegistrationChange 0xb21d89ec mrxnet.sys -
+	IoRegisterFsRegistrationChange 0xf84d54b8 fltMgr.sys -
+	[snip]
+	PsSetLoadImageNotifyRoutine 0x805f81a6 ntoskrnl.exe -
+	PsSetLoadImageNotifyRoutine 0xf895ad06 mrxcls.sys -
+	PsSetCreateThreadNotifyRoutine 0xb240cc9a PROCMON20.SYS -
+	```
+	- hard-coded names make it easy to build IoCs
+
+## 23. Rustock.C malicious callback case study
+- registers bug check callback so it can clean memory before crash dump is created
+- `callbacks` plugin output:
+	``` sh
+	$ python vol.py -f rustock-c.mem --profile=WinXPSP3x86 callbacks
+	Volatility Foundation Volatility Framework 2.4
+	Type Callback Module Details
+	------------------------------------ ---------- -------------------- -------
+	IoRegisterFsRegistrationChange 0xf84be876 sr.sys -
+	KeBugCheckCallbackListHead 0x81f53964 UNKNOWN -
+	[snip]
+	```
+
+## 24. kernel timers
+- malware use timers for synchronization and notification
+- can be created via `KeInitializeTimer`
+- when creating timers, *Deferred Procedure Call(DPC)* routine can be supplied:
+	- called when timer expires
+	- address stored in `_KTIMER` structure
+
+## 25. timer objects
+- in Windows 7, can be found via CPU's control region (`_KPCR`) structure
+
+## 26. `timers` plugin
+- example output:
+	``` sh
+	$ python vol.py -f zeroaccess2.vmem timers
+	Volatility Foundation Volatility Framework 2.1_alpha
+	Offset DueTime Period(ms) Signaled Routine Module
+	0x805598e0 0x00000084:0xce8b961c 1000 Yes 0x80523dee ntoskrnl.exe
+	0x820a1e08 0x00000084:0xdf3c0c1c 30000 Yes 0xb2d2a385 afd.sys
+	0x81ebf0b8 0x00000084:0xce951f84 0 - 0xf89c23f0 TDI.SYS
+	[snip]
+	0xb20bbbb0 0x00000084:0xd4de72d2 60000 Yes 0xb20b5990 UNKNOWN
+	```
+	- timer points to unknown region of kernel
+
+## 27. putting it together
+- `timers` and `callbacks` output:
+	``` sh
+	$ python vol.py -f spark.mem --profile=WinXPSP3x86 timers
+	Volatility Foundation Volatility Framework 2.4
+	Offset(V) DueTime Period(ms) Signaled Routine Module
+	---------- ------------------------ ---------- -------- ---------- ------
+	0x8055b200 0x00000086:0x1c631c38 0 - 0x80534a2a ntoskrnl.exe
+	[snip]
+	0x81b9f790 0x00000084:0x290c9ad8 60000 - 0x81b99db0 UNKNOWN
+	$ python vol.py -f spark.mem --profile=WinXPSP3x86 callbacks
+	Volatility Foundation Volatility Framework 2.4
+	Type Callback Module Details
+	--------------------------------- ---------- ----------- -------
+	IoRegisterFsRegistrationChange 0xf84be876 sr.sys -
+	KeBugCheckCallbackListHead 0xf83e65ef NDIS.sys Ndis miniport
+	KeBugCheckCallbackListHead 0x806d77cc hal.dll ACPI 1.0 - APIC
+	IoRegisterShutdownNotification 0x81b934e0 UNKNOWN \Driver\03621276
+	IoRegisterShutdownNotification 0xf88ddc74 Cdfs.SYS \FileSystem\Cdfs
+	[snip]
+	PsSetCreateProcessNotifyRoutine 0xf87ad194 vmci.sys -
+	CmRegisterCallback 0x81b92d60 UNKNOWN -
+	```
+	- procedure at `0x81b99db0` set to execute every 60000 milliseconds
+	- function at `0x81b934e0` called when system shuts down; associated with `\Driver\03621276`
+	- function at `0x81b92d60` notified of registry operations
+- find details on driver with `driverscan`:
+	``` sh
+	$ python vol.py -f spark.mem --profile=WinXPSP3x86 driverscan
+	Volatility Foundation Volatility Framework 2.4
+	Offset(P) #Ptr Start Size Service Key Driver Name
+	---------- ---- ---------- -------- ----------------- -----------
+	0x01e109b8 1 0x00000000 0x0 \Driver\03621276 \Driver\03621276
+	0x0214f4c8 1 0x00000000 0x0 \Driver\03621275 \Driver\03621275
+	[snip]
+	```
+	- starting address for kernel module is overwritten
+- start of PE file can be found using methods:
+	- get address of function and scan backward for MZ signature; first result may not be correct if multiple binaries are embedded
+	- set address to 20KB~1MB before lowest pointer and scan forward for MZ signature:
+		``` python
+		$ python vol.py -f spark.mem volshell
+		[snip]
+		>>> start = 0x81b99db0 - 0x100000
+		>>> end = 0x81b93690
+		>>> while start < end:
+		... if addrspace().zread(start, 4) == "MZ\x90\x00":
+		... print hex(start)
+		... break
+		... start += 1
+		...
+		0x81b91b80
+		>>> db(0x81b91b80)
+		0x81b91b80 4d5a 9000 0300 0000 0400 0000 ffff 0000 MZ..............
+		0x81b91b90 b800 0000 0000 0000 4000 0000 0000 0000 ........@.......
+		0x81b91ba0 0000 0000 0000 0000 0000 0000 0000 0000 ................
+		0x81b91bb0 0000 0000 0000 0000 0000 0000 d000 0000 ................
+		0x81b91bc0 0e1f ba0e 00b4 09cd 21b8 014c cd21 5468 ........!..L.!Th
+		0x81b91bd0 6973 2070 726f 6772 616d 2063 616e 6e6f is.program.canno
+		0x81b91be0 7420 6265 2072 756e 2069 6e20 444f 5320 t.be.run.in.DOS.
+		0x81b91bf0 6d6f 6465 2e0d 0d0a 2400 0000 0000 0000 mode....$.......
+		```
+- dump module with `moddump`:
+	``` sh
+	$ python vol.py -f spark.mem moddump -b 0x81b91b80 --dump-dir=OUTPUT --profile=WinXPSP3x86
+	Volatility Foundation Volatility Framework 2.4
+	Module Base Module Name Result
+	----------- -------------------- ------
+	0x081b91b80 UNKNOWN OK: driver.81b91b80.sys
+	```
+- fix `ImageBase` value:
+	``` python
+	$ python
+	Python 2.7.6 (v2.7.6:3a1db0d2747e, Nov 10 2013, 00:42:54)
+	[GCC 4.2.1 (Apple Inc. build 5666) (dot 3)] on darwin
+	Type "help", "copyright", "credits" or "license" for more information.
+	>>> import pefile
+	>>> pe = pefile.PE("driver.81b91b80.sys")
+	>>> pe.OPTIONAL_HEADER.ImageBase = 0x81b91b80
+	>>> pe.write("driver.81b91b80.sys")
+	>>> quit()
+	```
+- generate labels for API functions with `impscan`:
+	``` sh
+	$ python vol.py -f spark.mem impscan --base=0x81b91b80 --output=idc --profile=WinXPSP3x86
+	Volatility Foundation Volatility Framework 2.4
+	MakeDword(0x81B9CB90);
+	MakeName(0x81B9CB90, "PsGetVersion");
+	MakeDword(0x81B9CB94);
+	MakeName(0x81B9CB94, "PsGetProcessImageFileName");
+	MakeDword(0x81B9CB98);
+	MakeName(0x81B9CB98, "ExAllocatePool");
+	MakeDword(0x81B9CB9C);
+	MakeName(0x81B9CB9C, "ZwWriteFile");
+	MakeDword(0x81B9CBA0);
+	MakeName(0x81B9CBA0, "ExFreePoolWithTag");
+	MakeDword(0x81B9CBA4);
+	MakeName(0x81B9CBA4, "ZwQueryInformationThread");
+	[snip]
+	```
+	- in IDA, go to File->ScriptCommand and paste `impscan` output
+
+![[module_loaded_IDA.png]]
