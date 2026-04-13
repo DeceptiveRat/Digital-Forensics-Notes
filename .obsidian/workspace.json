@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 14. Windows GUI Subsystem, Part I.md",
+                "file": "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 15. Windows GUI Subsystem, Part II.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 14. Windows GUI Subsystem, Part I"
+              "title": "Chapter 15. Windows GUI Subsystem, Part II"
             }
           },
           {
@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md",
+                "file": "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 14. Windows GUI Subsystem, Part I.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 12. Windows Services"
+              "title": "Chapter 14. Windows GUI Subsystem, Part I"
             }
           }
         ],
@@ -211,33 +211,34 @@
   },
   "active": "ba510334bed01151",
   "lastOpenFiles": [
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 15. Windows GUI Subsystem, Part II.md~",
+    "The Art of Memory Forensics/Images/Chapter 15 images/ACCDFISA_disassembled.png",
+    "The Art of Memory Forensics/Images/Chapter 15 images/ACCDFISA_ransom_note.png",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 14. Windows GUI Subsystem, Part I.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md",
+    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 15. Windows GUI Subsystem, Part II.md",
+    "The Art of Memory Forensics/Images/Chapter 15 images/gSharedInfo_variable.png",
+    "The Art of Memory Forensics/Images/Chapter 15 images/Laqma_hook_disassembly.png",
+    "The Art of Memory Forensics/Images/Chapter 15 images/hooked_window_message.png",
+    "The Art of Memory Forensics/Images/Chapter 15 images/nonhooked_window_message.png",
+    "The Art of Memory Forensics/Images/Chapter 15 images",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 14. Windows GUI Subsystem, Part I.md~",
     "The Art of Memory Forensics/Images/Chapter 14 images/Vundo_subclass_abuse.png",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/4913",
     "The Art of Memory Forensics/Images/Chapter 14 images/Conficker_new_window.png",
     "The Art of Memory Forensics/Images/Chapter 14 images/Blazgel_ctrl+alt+del.png",
     "The Art of Memory Forensics/Images/Chapter 14 images/Blazgel_mouse.png",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 14. Windows GUI Subsystem, Part I.md",
-    "The Art of Memory Forensics/Images/Chapter 14 images/Bankpatch_message_dismissing.png",
-    "The Art of Memory Forensics/Images/Chapter 14 images/Bankpatch_message_catching.png",
-    "The Art of Memory Forensics/Images/Chapter 14 images/Tigger_disable_KAV.png",
-    "The Art of Memory Forensics/Images/Chapter 14 images/screenshot_plugin_demo.png",
-    "The Art of Memory Forensics/Images/Chapter 14 images/Tigger_atom_sync.png",
-    "The Art of Memory Forensics/Images/Chapter 14 images/Tigger_atom_presence.png",
     "The Art of Memory Forensics/Images/Chapter 14 images",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 13. Kernel Forensics and Rootkits.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 13. Kernel Forensics and Rootkits.md~",
     "Digital Forensics Concepts/Windows/SSDT.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md",
     "Digital Forensics Concepts/Windows",
     "Digital Forensics Concepts/Windows/Windows Artifacts/Windows Artifact Types.md",
     "The Art of Memory Forensics/Images/Chapter 13 images",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Untitled",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md~",
     "Note Format.md",
-    "The Art of Memory Forensics/Images/Chapter 12 images",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md~",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
@@ -254,7 +255,6 @@
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
-    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md",
-    "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Amcache.md"
+    "File System Forensic Analysis/Part 1. Foundations/Chapter 1. Digital Investigation.md"
   ]
 }
