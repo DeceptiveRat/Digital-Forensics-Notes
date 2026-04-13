@@ -489,4 +489,281 @@
 	- Tigger uses atoms for synchronization:
 		![[Tigger_atom_sync.png]]
 
-## 25. windows
+## 25. windows analysis objectives
+- process validity checks:
+	- can cross-reference window names with owning process
+	- e.g. *explorer.exe* without `SysFader` is probably not real
+- detecting anti-monitoring software: malware may scan for AV windows (`FindWindow`) and attempt to shut them down or refuse to execute
+- metadata forensics:
+	- window titles often contain metadata:
+		- system time
+		- logged-on usernames
+		- web pages
+		- partial *cmd.exe* commands
+
+## 26. windows DS
+- `tagWND`:
+	``` python
+	>>> dt("tagWND")
+	'tagWND' (296 bytes)
+	0x0 : head ['_THRDESKHEAD']
+	[snip]
+	0x30 : ExStyle ['unsigned long']
+	0x34 : style ['unsigned long']
+	[snip]
+	0x48 : spwndNext ['pointer64', ['tagWND']]
+	0x50 : spwndPrev ['pointer64', ['tagWND']]
+	0x58 : spwndParent ['pointer64', ['tagWND']]
+	0x60 : spwndChild ['pointer64', ['tagWND']]
+	0x68 : spwndOwner ['pointer64', ['tagWND']]
+	0x70 : rcWindow ['tagRECT']
+	0x80 : rcClient ['tagRECT']
+	0x90 : lpfnWndProc ['pointer64', ['void']]
+	0x98 : pcls ['pointer64', ['tagCLS']]
+	[snip]
+	0xd8 : strName ['_LARGE_UNICODE_STRING']
+	[snip]
+	0x118 : spwndClipboardListenerNext ['pointer64', ['tagWND']]
+	0x120 : ExStyle2 ['unsigned long']
+	0x120 : bChildNoActivate ['BitField', {'end_bit': 12, 'start_bit': 11, 'native_type': 'long'}]
+	0x120 : bClipboardListener ['BitField', {'end_bit': 1, 'start_bit': 0, 'native_type': 'long'}]
+	[snip]
+	```
+	- `ExStyle`: combination of extended style flags such as `WS_EX_ACCEPTFILES`
+	- `style`: combination of style flags such as `WS_VISIBLE`
+	- `rcWindow`, `rcClient`, `tagRECT`: 
+		- structures that have a left, right, bottom, and top value
+		- together indicate position of window within desktop
+	- `lpfnWndProc`: 
+		- window procedure functino
+		- typically same for all windows of a given class, but can be changed
+	- `pcls`: pointer to `tagCLS` structure that identifies window class
+	- `strName`: window name
+
+## 27. `windows` plugin
+- example output:
+	``` data
+	$ python vol.py -f win7x64.dd --profile=Win7SP1x64 windows
+	Volatility Foundation Volatility Framework 2.4
+	**************************************************
+	Window context: 1\WinSta0\Default
+	Window Handle: #40170 at 0xfffff900c06258a0, Name: Download: Microsoft \
+	Windows SDK 7.1 - Microsoft Download Center - Confirmation - \
+	Windows Internet Explorer
+	ClassAtom: 0xc193, Class: IEFrame
+	SuperClassAtom: 0xc193, SuperClass: IEFrame
+	pti: 0xfffff900c24c4c30, Tid: 680 at 0xfffffa8002007060
+	ppi: 0xfffff900c28c2320, Process: iexplore.exe, Pid: 2328
+	Visible: Yes
+	Left: -32000, Top: -32000, Bottom: -32000, Right: -32000
+	Style Flags: WS_MINIMIZE,WS_MINIMIZEBOX,WS_TABSTOP,WS_DLGFRAME,\
+	WS_BORDER,WS_THICKFRAME,WS_CAPTION,WS_CLIPCHILDREN,\
+	WS_SYSMENU,WS_MAXIMIZEBOX,WS_GROUP,WS_OVERLAPPED,\
+	WS_VISIBLE,WS_CLIPSIBLINGS
+	ExStyle Flags: WS_EX_LTRREADING,WS_EX_RIGHTSCROLLBAR,\
+	WS_EX_WINDOWEDGE,WS_EX_LEFT
+	Window procedure: 0x714f6f7a
+	```
+	- can view windows of class `IEFrame` to see what page is being viewed
+- `HH Parent` class is used by *hh.exe* to view *.chm* files; can be used to deliver exe files
+- `TrayClockWClass` typically displays local time of computer:
+	``` data
+	Window Handle: #3004e at 0xfffff900c0606d60, Name: 12:34 PM
+	ClassAtom: 0xc0e8, Class: TrayClockWClass
+	SuperClassAtom: 0xc0e8, SuperClass: TrayClockWClass
+	[snip]
+	```
+- `Desktop User Picture` reveals logged-on user name:
+	``` data
+	Window Handle: #70268 at 0xfffff900c06352d0, Name: Sam
+	ClassAtom: 0xc0d8, Class: Desktop User Picture
+	SuperClassAtom: 0xc0d8, SuperClass: Desktop User Picture
+	[snip]
+	```
+
+## 28. `wintree` plugin
+- shows parent/child relationships between windows
+- example output:
+	``` data
+	$ python vol.py -f win7x64.dd --profile=Win7SP1x64 wintree
+	[snip]
+	.Debugging Tools for Windows (visible) hh.exe:1952 HH Parent
+	..#70422 (visible) hh.exe:1952 HH Child
+	...#90452 (visible) hh.exe:1952 SysTabControl32
+	....#a0202 (visible) hh.exe:1952 -
+	.....Found: 62 (visible) hh.exe:1952 Static
+	.....Select &topic: (visible) hh.exe:1952 Static
+	.....Type in the &word(s) to search for: (visible) hh.exe:1952 Static
+	.....Sea&rch titles only (visible) hh.exe:1952 Button
+	.....&Match similar words (visible) hh.exe:1952 Button
+	.....Search previous res&ults (visible) hh.exe:1952 Button
+	.....List1 (visible) hh.exe:1952 SysListView32
+	......#50164 (visible) hh.exe:1952 SysHeader32
+	.....&Display (visible) hh.exe:1952 Button
+	.....&List Topics (visible) hh.exe:1952 Button
+	.....#70424 (visible) hh.exe:1952 Button
+	.....#702cc (visible) hh.exe:1952 ComboBox
+	......#f038e (visible) hh.exe:1952 Edit
+	..#702ba (visible) hh.exe:1952 HH SizeBar
+	..#70420 (visible) hh.exe:1952 HH Child
+	...#a0478 (visible) hh.exe:1952 Shell Embedding
+	....#36029e (visible) hh.exe:1952 Shell DocObject View
+	.....#9013e (visible) hh.exe:1952 Internet Explorer_Server
+	..#18029a (visible) hh.exe:1952 ToolbarWindow32
+	```
+
+## 29. `screenshot` plugin
+- enumerates windows in Z-Order (front-to-back focus), takes coordinates from `tagWND`, and draws rectangles with *Python Imaging Library(PIL)*
+- example output:
+	``` data
+	$ python vol.py -f users.vmem --profile=Win7SP1x86 screenshot -D shots/
+	Volatility Foundation Volatility Framework 2.4
+	Wrote shots/session_0.Service-0x0-3e4$.Default.png
+	Wrote shots/session_0.Service-0x0-3e5$.Default.png
+	Wrote shots/session_0.msswindowstation.mssrestricteddesk.png
+	Wrote shots/session_0.Service-0x0-3e7$.Default.png
+	Wrote shots/session_1.WinSta0.Default.png
+	Wrote shots/session_1.WinSta0.Disconnect.png
+	Wrote shots/session_1.WinSta0.Winlogon.png
+	Wrote shots/session_0.WinSta0.Default.png
+	Wrote shots/session_0.WinSta0.Disconnect.png
+	Wrote shots/session_0.WinSta0.Winlogon.png
+	Wrote shots/session_2.WinSta0.Default.png
+	Wrote shots/session_2.WinSta0.Disconnect.png
+	Wrote shots/session_2.WinSta0.Winlogon.png
+	```
+	- `Session1\WinSta0\Default` and `Session2\WindSta0\Default`:
+		![[screenshot_plugin_demo.png]]
+
+## 30. window message
+- notification sent to window that UI event was triggered
+- can be broadcast to all windows in some cases
+- done via `SendMessage` or `PostMessage` APIs:
+	``` C
+	LRESULT WINAPI SendMessage(
+	_In_ HWND hWnd,
+	_In_ UINT Msg,
+	_In_ WPARAM wParam,
+	_In_ LPARAM lParam
+	);
+	```
+
+## 31. window message abuse
+- older versions of *Kaspersky AntiVirus(KAV)* were vulnerable to a shatter attack:
+	![[Tigger_disable_KAV.png]]
+	- message with `WPARAM` `0x466` and `LPARAM` `0x10001` sent to AV engine's `__AVP.Root` caused it to stop
+- dismissing alerts:
+	![[Bankpatch_message_catching.png]]
+	![[Bankpatch_message_dismissing.png]]
+	- Bankpatch simulates clicking "OK" with `GetDlgItem` to restart system stealthily
+- simulating keystrokes and mouse movement:
+	![[Blazgel_ctrl+alt+del.png]]
+	![[Blazgel_mouse.png]]
+	- Blazgel accesses login prompt with `WM_HOTKEY` message and moves mouse using `SetCursorPos` and `mouse_event`
+- detecting new hardware device:
+	![[Conficker_new_window.png]]
+	- Conficker creates a new window to monitor `WM_DEVICECHANGE` broadcasts
+	- Stuxnet does the same, but with a hard-coded name, "AFX64c313":
+		``` data
+		$ python vol.py –f stuxnet.vmem --profile=WinXPSP3x86 atomscan
+		Volatility Foundation Volatility Framework 2.4
+		AtomOfs(V) Atom Refs Pinned Name
+		---------- ---------- ------ ------ ----
+		[snip]
+		0xe1fee430 0xc0e1 1 0 image/jpeg
+		0xe20514d8 0xc118 2 0 AFX64c313
+		0xe20e0de0 0xc090 4 0 OLE_MESSAHE
+		[snip]
+		```
+		- window name can be found using `atomscan` plugin
+		``` data
+		$ python vol.py –f stuxnet.vmem --profile=WinXPSP3x86 windows
+		[snip]
+		Window Handle: #e00e8 at 0xbc940720, Name: AFX64c313
+		ClassAtom: 0xc118, Class: AFX64c313
+		SuperClassAtom: 0xc118, SuperClass: AFX64c313
+		pti: 0xe1e81380, Tid: 1420 at 0x82126bf0
+		ppi: 0xe163f008, Process: services.exe, Pid: 668
+		Visible: No
+		Left: 92, Top: 146, Bottom: 923, Right: 695
+		Style Flags: WS_MINIMIZEBOX,WS_TABSTOP,WS_DLGFRAME,\
+		WS_BORDER,WS_THICKFRAME,WS_CAPTION,WS_SYSMENU,WS_MAXIMIZEBOX,\
+		WS_GROUP,WS_OVERLAPPED,WS_CLIPSIBLINGS
+		ExStyle Flags: WS_EX_LTRREADING,WS_EX_RIGHTSCROLLBAR,\
+		WS_EX_WINDOWEDGE,WS_EX_LEFT
+		Window procedure: 0x13fe695
+		[snip]
+		```
+		- `CreateWindowEx` artifact can be seen via `windows` plugin
+
+## 32. window procedure callbacks
+- all take same number and type of parameters
+- returns same type of value
+- prototype:
+	``` C
+	LRESULT CALLBACK WindowProc(
+	_In_ HWND hwnd, ; EBP + 0x08
+	_In_ UINT uMsg, ; EBP + 0x0C
+	_In_ WPARAM wParam, ; EBP + 0x10
+	_In_ LPARAM lParam ; EBP + 0x14
+	);
+	```
+	- `hwnd`: handle to window
+	- `uMsg`:
+		- integer indicating message being received
+		- can be any system-defined `WM_` constants; e.g. `WM_PAINT`, `WM_KEYDOWN`, `WM_MOUSEMOVE`
+	- `wParam`, `lParam`: additional information based on value of `uMsg`
+
+## 33. window subclassing
+- windows are instances of a particular class
+- windows that extend a base class share common window procedures
+- subclassing can be used to customize behavior of classes
+
+## 34. window subclassing abuse
+- Vundo subclass abuse:
+	![[Vundo_subclass_abuse.png]]
+	- malicious DLL calls `CreaetWindowExA` to create window of "button" class
+	- `SetWindowLongA` with `GWL_WNDPROC` flag changes window procedure to `NewButtonWndProc`, subclassing it
+	- new procedure executes when user logs off or copmuter is about to shutdown
+- `windows` plugin output:
+	``` data
+	$ python vol.py –f ddabx.vmem --profile=WinXPSP3x86 windows
+	Volatility Foundation Volatility Framework 2.4
+	[snip]
+	Window Handle: #a00ea at 0xbbe4d1d0, Name:
+	ClassAtom: 0xc061, Class: 6.0.2600.6028!Button
+	SuperClassAtom: 0xc017, SuperClass: Button
+	pti: 0xe21ca5b8, Tid: 2328 at 0x81fe7da8
+	ppi: 0xe2325a98, Process: procexp.exe, Pid: 2056
+	Visible: No
+	Left: 4, Top: 30, Bottom: 119, Right: 30
+	Style Flags: WS_MINIMIZEBOX,WS_TABSTOP,WS_DLGFRAME,WS_BORDER,\
+	WS_THICKFRAME,WS_CAPTION,WS_SYSMENU,WS_MAXIMIZEBOX,WS_GROUP,\
+	WS_OVERLAPPED,WS_CLIPSIBLINGS
+	ExStyle Flags: WS_EX_LTRREADING,WS_EX_RIGHTSCROLLBAR,\
+	WS_EX_WINDOWEDGE,WS_EX_LEFT
+	Window procedure: 0x20a21a7
+	[snip]
+	```
+	- window procedure address for `Button` class is not the default
+	- DLL has been injected into *procexp.exe*
+- disassembling procedure code:
+	``` data
+	$ python vol.py -f ddabx.vmem --profile=WinXPSP3x86 volshell
+	Volatility Foundation Volatility Framework 2.4
+	Current context: process System, pid=4, ppid=0 DTB=0x319000
+	Welcome to volshell!
+	To get help, type 'hh()'
+	>>> cc(pid = 2056)
+	Current context: process procexp.exe, pid=2056, ppid=1008 DTB=0xa9401e0
+	>>> dis(0x20a21a7)
+	0x20a21a7 55 PUSH EBP
+	0x20a21a8 8bec MOV EBP, ESP
+	0x20a21aa 837d0c11 CMP DWORD [EBP+0xc], 0x11 ; WM_QUERYENDSESSION
+	0x20a21ae 752f JNZ 0x20a21df
+	0x20a21b0 803d00b00a0200 CMP BYTE [0x20ab000], 0x0
+	0x20a21b7 750c JNZ 0x20a21c5
+	0x20a21b9 c60527b00a0201 MOV BYTE [0x20ab027], 0x1
+	0x20a21c0 e8b3100000 CALL 0x20a3278 ; ReInfectSystem
+	[snip]
+	```
