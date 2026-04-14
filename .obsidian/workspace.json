@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md",
+                "file": "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 18. Timelining.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 17. Event Reconstruction"
+              "title": "Chapter 18. Timelining"
             }
           },
           {
@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md",
+                "file": "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 12. Windows Services"
+              "title": "Chapter 17. Event Reconstruction"
             }
           }
         ],
@@ -211,15 +211,20 @@
   },
   "active": "ba510334bed01151",
   "lastOpenFiles": [
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 18. Timelining.md~",
+    "Reference Notes/The Art of Memory Forensics/Images/Chapter 18 images/Gh0st_pcap.png",
+    "Reference Notes/The Art of Memory Forensics/Images/Chapter 18 images",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/4913",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 10. Registry in Memory.md",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 18. Timelining.md",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md~",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 17 images/cmd_console_settings.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 17 images/registry_console_settings.png",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/4913",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
     "README.md",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md",
     "Blog/Writeups/DFIR-LABS/1. Gotham Hustle (WIP)/Notes.md",
     "Blog/Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md",
     "Blog/Writeups/DFIR-LABS/1. Gotham Hustle (WIP)",
@@ -233,9 +238,7 @@
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 14. Windows GUI Subsystem, Part I.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 13. Kernel Forensics and Rootkits.md",
     "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md~",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/4913",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 16. Disk Artifacts in Memory.md~",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 16 images/TrueCrypt_mount.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 16 images/SharedCacheMap_diagram.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 16 images/cache_manager_DS.png",
@@ -243,7 +246,6 @@
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 15 images/ACCDFISA_ransom_note.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 15 images/gSharedInfo_variable.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 15 images/Laqma_hook_disassembly.png",
-    "Reference Notes/The Art of Memory Forensics/Images/Chapter 15 images/hooked_window_message.png",
     "Reference Notes/Digital Forensics Concepts/Windows/SSDT.md",
     "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/Windows Artifact Types.md",
     "Note Format.md",
@@ -253,8 +255,6 @@
     "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
     "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 3. The Volatility Framework.md",
     "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 2. Data Structures.md",
-    "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
-    "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 10. FAT Data Structures.md",
-    "Reference Notes/File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md"
+    "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md"
   ]
 }
