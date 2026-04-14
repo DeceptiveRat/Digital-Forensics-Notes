@@ -1,5 +1,5 @@
 *.swp
 *.dat
 *.txt
-The Art of Memory Forensics/**/*.png
-File System Forensic Analysis/**/*.png
+Reference\ Notes/The Art of Memory Forensics/**/*.png
+Reference\ Notes/File System Forensic Analysis/**/*.png
