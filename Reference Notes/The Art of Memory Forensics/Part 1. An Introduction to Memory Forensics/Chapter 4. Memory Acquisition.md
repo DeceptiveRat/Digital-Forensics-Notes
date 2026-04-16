@@ -17,7 +17,7 @@
 	- memory acquisition is not atomic
 	- at best memory dump will help infer state of system between start and end of acquisition
 - device memory:
-	- on x86/x64 computers, BIOS provides physical memory map to OS with different regions marked as reserved for use by firmware, PIC buses, etc, called *device-memory regions*
+	- on x86/x64 computers, BIOS provides physical memory map to OS with different regions marked as reserved for use by firmware, PCI buses, etc, called *device-memory regions*
 	- reading from device memory can alter state of device, causing system to freeze
 	- most devices are not designed to accommodate simultaneous access from more than one processor
 	- may contain valuable evidence:

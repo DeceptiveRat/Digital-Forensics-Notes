@@ -27,26 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Blog/자료 2 - 디지털 증거 수집 (WIP).md",
+                "file": "Blog/자료 2 - 디지털 증거 수집.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "자료 2 - 디지털 증거 수집 (WIP)"
-            }
-          },
-          {
-            "id": "d4aa821b8354821c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "Chapter 4. Memory Acquisition"
+              "title": "자료 2 - 디지털 증거 수집"
             }
           }
         ],
@@ -209,17 +195,21 @@
       "bases:Create new base": false
     }
   },
-  "active": "ba510334bed01151",
+  "active": "1bf19fb8e457e453",
   "lastOpenFiles": [
-    "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
-    "Reference Notes/File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
-    "Blog/자료 2 - 디지털 증거 수집 (WIP).md",
-    "Blog/File System Forensics Scenarios/Scenario 1 - recovering deleted data from FAT file system.md",
     "Blog/자료 1 - 디지털 포렌식이란?.md",
+    "Blog/자료 2 - 디지털 증거 수집.md",
+    "Note Format.md",
+    "Blog/Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md",
+    "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
+    "Blog/자료 Images/자료 2 - Vbox_pause.png",
+    "Blog/자료 Images",
+    "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Browser history.md",
+    "Reference Notes/File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
+    "Blog/File System Forensics Scenarios/Scenario 1 - recovering deleted data from FAT file system.md",
     "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs.md",
     "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Prefetch.md",
     "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/LNK files.md",
-    "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Browser history.md",
     "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md",
     "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Amcache.md",
@@ -238,12 +228,10 @@
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
     "README.md",
-    "Blog/Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md",
     "Blog/Writeups/DFIR-LABS/1. Gotham Hustle (WIP)",
     "Blog/Writeups/DFIR-LABS",
     "Blog",
     "Blog/Writeups",
-    "Reference Notes",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 16. Disk Artifacts in Memory.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 15. Windows GUI Subsystem, Part II.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 14. Windows GUI Subsystem, Part I.md",
@@ -254,8 +242,6 @@
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 16 images/cache_manager_DS.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 15 images/ACCDFISA_disassembled.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 15 images/ACCDFISA_ransom_note.png",
-    "Reference Notes/The Art of Memory Forensics/Images/Chapter 15 images/gSharedInfo_variable.png",
-    "Reference Notes/The Art of Memory Forensics/Images/Chapter 15 images/Laqma_hook_disassembly.png",
-    "Reference Notes/Digital Forensics Concepts/Windows/SSDT.md"
+    "Reference Notes/The Art of Memory Forensics/Images/Chapter 15 images/gSharedInfo_variable.png"
   ]
 }
