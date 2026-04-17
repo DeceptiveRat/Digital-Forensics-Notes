@@ -717,6 +717,11 @@ $ cat strings.txt | grep -F -C 2 -e "com."
 ```
 - why would domains be in reverse order?
 
+``` data
+$ cat strings.txt | grep -F -C 2 -e " com." -e " uk." -e " fr." | grep -F -v -e "--" > domains_strings.txt
+$ vol -f gotham.raw windows.string --strings-file domains_strings.txt > processed_domains_strings.txt
+```
+
 ### getting process list
 ``` python
 (layer_name) >>> hex(self.context.symbol_space.get_symbol("symbol_table_name1!PsActiveProcessHead").address)
