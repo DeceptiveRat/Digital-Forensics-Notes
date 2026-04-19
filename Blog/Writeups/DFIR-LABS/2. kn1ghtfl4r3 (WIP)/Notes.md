@@ -36,6 +36,28 @@ $ strings -td -a pid.3484.dmp > strings_3484.txt
 $ strings -td -el -a pid.3484.dmp >> strings_3484.txt
 ```
 
+- 7128 strings:
+``` data
+$ cat strings_7128.txt | grep -i -e "keepass"
+[REMOVED]
+203354788 [{"application":"{6D809377-6AF0-444B-8957-A3773F02200E}\\KeePass Password Safe 2\\KeePass.exe","platform":"windows_win32"},{"application":"{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\\KeePass Password Safe 2\\KeePass.exe","platform":"windows_win32"},{"application":"{6D809377-6AF0-444B-8957-A3773F02200E}\\KeePass Password Safe 2\\KeePass.exe","platform":"packageId"},{"application":"","platform":"alternateId"}]6MYBtTFFGOjLzXy4t88PskM+uG9H5+ahA9mrDwevVoM=ECB32AF3-1440-4086-94E3-5311F97F89C4\{Local Downloads}\Keylist.kdbx
+[REMOVED]
+337991658 qpackageid{6d809377-6af0-444b-8957-a3773f02200e}\keepass password safe 2\keepass.exegD
+[REMOVED]
+345098381 c:\users\kimsh\appdata\local\temp\is-09q7j.tmp\keepass-2.53.1-setup.tmpx_exe_path
+[REMOVED]
+289482674 When checked, the trigger will initially be on when KeePass starts.
+289599776 In order to avoid data loss, it is recommended to install/use the latest version of KeePass.
+289600098 KeePass Data Editor
+289600139 If you lose the database file or any of the master key components (or forget the composition), all data stored in the database is lost. KeePass does not have any built-in file backup functionality. There is no backdoor and no universal key that can open your database.
+289600677 KeePass Data Viewer
+289603308 A KeePass emergency sheet contains all important information that is required to open your database. It should be printed, filled out and 
+[REMOVED]
+434160784 "C:\Program Files\KeePass Password Safe 2\KeePass.exe" "C:\Users\kimsh\Downloads\Keylist.kdbx"
+434210896 KeePass Password Safe 2KEEPAS~1
+[REMOVED]
+```
+
 ### keepass
 ``` data
 $ cat strings.txt | grep -C 4 -i -e "keepass" >strings_keepass.txt
@@ -65,6 +87,87 @@ $ cat strings.txt | grep -C 4 -i -e "keepass" >strings_keepass.txt
 194266448 !TrickbotVP.A!MTB
 194266501 nvpnDll build %s %s startedv
 194266580 VPN bridge failureV
+[REMOVED]
+```
+
+- CVE abuse:
+``` data
+$ dotnet run --roll-forward LatestMajor /home/sansforensics/Downloads/2672.KeePass.exe.0x4f0000.dmp
+[REMOVED]
+Password candidates (character positions):
+Unknown characters are displayed as "●"
+1.:	●
+Combined: ●
+$ python3 keepass_dump.py -f 2672.KeePass.exe.0x4f0000.dmp 
+[*] Searching for masterkey characters
+[-] Couldn't find jump points in file. Scanning with slower method.
+[*] 0:	{UNKNOWN}
+[-] couldn't find any characters
+```
+
+- finding heap:
+``` data
+$ vol -f chall.raw -o PID_2672 -r csv windows.vadinfo --pid 2672 --dump > PID_2672/vadinfo_2672.csv
+[REMOVED]
+(layer_name_Process2672_1) >>> dt("_EPROCESS", 0x9c84de6c40c0)
+[REMOVED]
+  0x550 :   Peb                                    *symbol_table_name1!_PEB                                   0xa2f000
+[REMOVED]
+(layer_name_Process2672_1) >>> dt("_PEB", 0xa2f000)
+[REMOVED]
+   0xe8 :   NumberOfHeaps                            symbol_table_name1!unsigned long                     11
+   0xec :   MaximumNumberOfHeaps                     symbol_table_name1!unsigned long                     16
+   0xf0 :   ProcessHeaps                             **symbol_table_name1!void                            0x7ffea9a3ad40
+[REMOVED]
+(layer_name_Process2672_1) >>> dd(0x7ffea9a3ad40, count=88)
+0x7ffea9a3ad40    00de0000 00000000 00810000 00000000    .... .... .... ....
+0x7ffea9a3ad50    009f0000 00000000 01040000 00000000    .... .... .... ....
+0x7ffea9a3ad60    029d0000 00000000 02930000 00000000    .... .... .... ....
+0x7ffea9a3ad70    029c0000 00000000 1b480000 00000000    .... .... .H.. ....
+0x7ffea9a3ad80    1b670000 00000000 1b370000 00000000    .g.. .... .7.. ....
+0x7ffea9a3ad90    227b0000 00000000                      "{.. ....
+```
+- 11 heap addresses found:
+	- 0xde0000
+	- 0x810000
+	- 0x9f0000
+	- 0x1040000
+	- 0x29d0000
+	- 0x2930000
+	- 0x29c0000
+	- 0x1b480000
+	- 0x1b670000
+	- 0x1b370000
+	- 0x227b0000
+
+- viewing heap:
+``` data
+$ cat heap_addresses.txt 
+0xde0000
+0x810000
+0x9f0000
+0x1040000
+0x29d0000
+0x2930000
+0x29c0000
+0x1b480000
+0x1b670000
+0x1b370000
+0x227b0000
+$ ll | grep -f heap_addresses.txt | awk '{print $NF}' | xargs -I {} strings -a {} > heap_strings
+$ ll | grep -f heap_addresses.txt | awk '{print $NF}' | xargs -I {} strings -el -a {} >> heap_strings
+$ cat heap_strings
+[REMOVED]
+0${"
+P~{"
+C:\Program Files\KeePass Password Safe 2\KeePass.exe
+C:\Users\kimsh\Downloads\Keylist.kdbx
+ALLUSERSPROFILE=C:\ProgramData
+        APPDATA=C:\Users\kimsh\AppData\Roaming
+[REMOVED]
+://www.sajatypeworks.com
+[REMOVED]
+http://www.monotype.com/html/mtname/
 [REMOVED]
 ```
 
@@ -428,3 +531,547 @@ $ cat mft.csv | grep "vault\.hc"
 1,0x4e240d70,FILE,93057,1,File,Archive,FILE_NAME,2024-10-26 17:34:50.000000 UTC,2024-10-26 17:34:50.000000 UTC,2024-10-26 17:34:50.000000 UTC,2024-10-26 17:34:50.000000 UTC,vault.hc
 ```
 - same time as *note.txt*
+
+### process 7128
+``` handles
+$ vol -f chall.raw -r csv windows.handles --pid 7128 > handles_7128.csv
+$ csvtool col 4,5,6,7,8 handles_7128.csv | csvtool readable -
+[REMOVED]
+0xd8856700b080 0x444       Key                  0x20019       MACHINE\\SOFTWARE\\MICROSOFT\\INTERNET EXPLORER\\SECURITY
+[REMOVED]
+0xd885670095f0 0x454       Key                  0x20019       USER\\S-1-5-21-3188986842-248894163-1689600432-1001\\SOFTWARE\\MICROSOFT\\INTERNET EXPLORER\\MAIN
+0xd8856700b7f0 0x458       Key                  0x20019       MACHINE\\SOFTWARE\\MICROSOFT\\INTERNET EXPLORER\\MAIN
+0xd88567009e70 0x45c       Key                  0x20019       USER\\S-1-5-21-3188986842-248894163-1689600432-1001\\SOFTWARE\\MICROSOFT\\INTERNET EXPLORER\\SECURITY
+[REMOVED]
+0xd88567fd58e0 0x4b0       Key                  0x20019       MACHINE\\SOFTWARE\\POLICIES\\MICROSOFT\\WINDOWS\\CURRENTVERSION\\INTERNET SETTINGS
+0xd88567fd65a0 0x4b4       Key                  0x20019       USER\\S-1-5-21-3188986842-248894163-1689600432-1001\\SOFTWARE\\POLICIES\\MICROSOFT\\WINDOWS\\CURRENTVERSION\\INTERNET SETTINGS
+0xd88567fd66b0 0x4b8       Key                  0x20019       USER\\S-1-5-21-3188986842-248894163-1689600432-1001\\SOFTWARE\\MICROSOFT\\WINDOWS\\CURRENTVERSION\\INTERNET SETTINGS
+0xd88567fd67c0 0x4bc       Key                  0x20019       MACHINE\\SOFTWARE\\MICROSOFT\\WINDOWS\\CURRENTVERSION\\INTERNET SETTINGS
+0xd88567fd68d0 0x4c0       Key                  0x1           MACHINE\\SOFTWARE\\MICROSOFT\\INTERNET EXPLORER\\MAIN\\FEATURECONTROL
+0xd88567fd5c10 0x4c4       Key                  0x1           USER\\S-1-5-21-3188986842-248894163-1689600432-1001\\SOFTWARE\\MICROSOFT\\INTERNET EXPLORER\\MAIN\\FEATURECONTROL
+0xd88567fd69e0 0x4c8       Key                  0x20019       MACHINE\\SOFTWARE\\POLICIES
+0xd88567fd6c00 0x4cc       Key                  0x20019       USER\\S-1-5-21-3188986842-248894163-1689600432-1001\\SOFTWARE\\POLICIES
+0xd88567fd55b0 0x4d0       Key                  0x20019       USER\\S-1-5-21-3188986842-248894163-1689600432-1001\\SOFTWARE
+0xd88567fd59f0 0x4d4       Key                  0x20019       MACHINE\\SOFTWARE
+0xd88567fd5390 0x4d8       Key                  0x20019       MACHINE\\SOFTWARE\\WOW6432NODE
+0xd88567fd4f50 0x4dc       Key                  0x2001f       USER\\S-1-5-21-3188986842-248894163-1689600432-1001\\SOFTWARE\\MICROSOFT\\WINDOWS\\CURRENTVERSION\\INTERNET SETTINGS\\ZONEMAP
+0xd88567fd5280 0x4e0       Key                  0x20019       MACHINE\\SOFTWARE\\MICROSOFT\\WINDOWS\\CURRENTVERSION\\INTERNET SETTINGS\\ZONEMAP
+[REMOVED]
+```
+
+- vad:
+``` data
+$ vol -f chall.raw -r csv windows.vadinfo --pid 7128 > vadinfo_7128.csv
+$ csvtool col 4-12 vadinfo_7128.csv | csvtool readable - | grep -e "VPN" -e "PAGE_READWRITE"
+Offset             Start VPN      End VPN        Tag  Protection             CommitCharge PrivateMemory Parent             File
+0xffff9c84db94bf10 0x2a217e00000  0x2a217efffff  VadS PAGE_READWRITE         180          1             0xffff9c84dfb91a20 N/A
+0xffff9c84db94c500 0xbb4c880000   0xbb4c8fffff   VadS PAGE_READWRITE         20           1             0xffff9c84dfb91ca0 N/A
+0xffff9c84db94ccd0 0x17c70000     0x17c70fff     VadS PAGE_READWRITE         1            1             0xffff9c84db94c0f0 N/A
+0xffff9c84db94cf00 0x17c60000     0x17c60fff     VadS PAGE_READWRITE         1            1             0xffff9c84db94ccd0 N/A
+0xffff9c84db94c050 0xbb4c600000   0xbb4c7fffff   VadS PAGE_READWRITE         13           1             0xffff9c84db94c0f0 N/A
+0xffff9c84db94c0a0 0xbb4c550000   0xbb4c5cffff   VadS PAGE_READWRITE         20           1             0xffff9c84db94c050 N/A
+0xffff9c84db94c730 0xbb4c800000   0xbb4c87ffff   VadS PAGE_READWRITE         20           1             0xffff9c84db94c050 N/A
+0xffff9c84e3f6c160 0x2a217c60000  0x2a217c6ffff  Vad  PAGE_READWRITE         0            0             0xffff9c84db94c500 N/A
+0xffff9c84db94ce60 0xbb4c980000   0xbb4c9fffff   VadS PAGE_READWRITE         20           1             0xffff9c84e3f6c160 N/A
+0xffff9c84db94d1d0 0xbb4c900000   0xbb4c97ffff   VadS PAGE_READWRITE         20           1             0xffff9c84db94ce60 N/A
+0xffff9c84db94cb90 0xbb4ca00000   0xbb4ca7ffff   VadS PAGE_READWRITE         20           1             0xffff9c84db94ce60 N/A
+0xffff9c84db94c5f0 0x2a217cc0000  0x2a217cc1fff  VadS PAGE_READWRITE         2            1             0xffff9c84e3f6d7e0 N/A
+0xffff9c84db94c7d0 0x2a217dc0000  0x2a217dccfff  VadS PAGE_READWRITE         2            1             0xffff9c84e3f6ca20 N/A
+0xffff9c84db94bfb0 0x2a217df0000  0x2a217dfffff  VadS PAGE_READWRITE         15           1             0xffff9c84dfb93780 N/A
+0xffff9c84db94ca00 0x2a2197f0000  0x2a2197fffff  VadS PAGE_READWRITE         10           1             0xffff9c84db94bf10 N/A
+0xffff9c84db94caa0 0x2a219750000  0x2a219750fff  VadS PAGE_READWRITE         1            1             0xffff9c84db94ca00 N/A
+0xffff9c84db94bf60 0x2a2196a0000  0x2a2196acfff  VadS PAGE_READWRITE         2            1             0xffff9c84dfb958a0 N/A
+0xffff9c84db94cd70 0x2a219720000  0x2a219720fff  VadS PAGE_READWRITE         1            1             0xffff9c84dfb958a0 N/A
+0xffff9c84db94cb40 0x2a219790000  0x2a21979cfff  VadS PAGE_READWRITE         1            1             0xffff9c84db94caa0 N/A
+0xffff9c84db94d180 0x2a219770000  0x2a219770fff  VadS PAGE_READWRITE         1            1             0xffff9c84db94cb40 N/A
+0xffff9c84dfb9ce20 0x2a219760000  0x2a219760fff  Vad  PAGE_READWRITE         0            0             0xffff9c84db94d180 N/A
+0xffff9c84db947960 0x2a21cd10000  0x2a21cd10fff  VadS PAGE_READWRITE         1            1             0xffff9c84db94ca00 N/A
+0xffff9c84db359190 0x2a21c000000  0x2a21c3e4fff  Vad  PAGE_READWRITE         0            0             0xffff9c84db947960 N/A
+0xffff9c84db94ceb0 0x2a21bf00000  0x2a21bffffff  VadS PAGE_READWRITE         1            1             0xffff9c84e3f730a0 N/A
+0xffff9c84db94d770 0x2a21cbf0000  0x2a21cceffff  VadS PAGE_READWRITE         5            1             0xffff9c84db359190 N/A
+0xffff9c84dee1ead0 0x2a21ccf0000  0x2a21ccf0fff  Vad  PAGE_READWRITE         0            0             0xffff9c84db94d770 N/A
+0xffff9c84db359f50 0x2a21ce20000  0x2a21ce20fff  Vad  PAGE_READWRITE         0            0             0xffff9c84dfb91f20 N/A
+```
+
+- data dump:
+``` data
+$ vol -f chall.raw -o PID_7128 windows.vadinfo --pid 7128 --dump
+$ csvtool col 4-12 vadinfo_7128.csv | csvtool readable - | grep -e "PAGE_READWRITE" | awk '{print "pid.7128.vad."$2"-"$3".dmp"}' | xargs -I {} strings {} >> total_strings
+strings: 'pid.7128.vad.0x7df4d0970000-0x7df5d098ffff.dmp': No such file
+$ cat total_strings 
+[REMOVED]
+kern
+mark
+mkmk
+dist
+o@)l
+B	C	SimSun-ExtB
+N	M	`	r	a	b
+e	f	g	h
+%	Y
+?	&	W
+/C:\
+Users
+kimsh
+Desktop
+/C:\
+Users
+kimsh
+Music
+/C:\
+Users
+kimsh
+Videos
+[REMOVED]
+C:\Users\kimsh\AppData\Local\Microsoft\OneDrive\OneDrive.exe,1
+[REMOVED]
+$ csvtool col 4-12 vadinfo_7128.csv | csvtool readable - | grep -e "PAGE_READWRITE" | awk '{print "pid.7128.vad."$2"-"$3".dmp"}' | xargs -I {} strings -el {} >> long_total_strings
+strings: 'pid.7128.vad.0x7df4d0970000-0x7df5d098ffff.dmp': No such file
+$ cat long_total_strings
+[REMOVED]
+Cannot open the %% file.
+Make sure a disk is in the drive you specified.
+Cannot find the %% file.
+Do you want to create a new file?
+The text in the %% file has changed.
+Do you want to save the changes?
+Untitled
+Not enough memory available to complete this operation. Quit one or more applications to increase available memory, and then try again.
+Cannot find "%%"
+%1%2 - Notepad
+The %% file is too large for Notepad.
+Use another editor to edit the file.
+Notepad
+Failed to initialize file dialogs. Change the file name and try again.
+Failed to initialize print dialogs. Make sure that your printer is connected properly and use Control Panel to verify that the printer is configured properly.
+Cannot print the %% file. Be sure that your printer is connected properly and use Control Panel to verify that the printer is configured properly.
+Not a valid file name.
+Cannot create the %% file.
+Make sure that the path and file name are correct.
+Cannot carry out the Word Wrap command because there is too much text in the file.
+notepad.hlp
+Text Documents (*.txt)
+All Files
+Open
+Save As
+You cannot shut down or log off Windows because
+the Save As dialog box in Notepad is open. Switch to
+Notepad, close this dialog box, and then try shutting
+down or logging off Windows again.
+Cannot access your printer.
+Be sure that your printer is connected properly and use Control Panel to verify that the printer is configured properly.
+You do not have permission to open this file.  See the owner of the file or an administrator to obtain permission.
+ This file contains characters in Unicode format which will be lost if you save this file as an ANSI encoded text file. To keep the Unicode information, click Cancel below and then select one of the Unicode options from the Encoding drop down list. Continue?
+Common Dialog error (0x%04x)
+Page too small to print one line.
+Try printing using smaller font.
+Notepad - Goto Line
+The line number is beyond the total number of lines
+Auto-Detect
+[REMOVED]
+DESKTOP-9BHKMOM
+10.0.2.15
+[REMOVED]
+ISUN0407.EXE
+\??\C:\Users\kimsh
+open
+Start menu cache
+C:\Users\kimsh
+GUESTMODEMSG.EXE
+UNINSTAL.EXE
+[REMOVED]
+WUAPP.EXE
+[REMOVED]
+JAVAW.EXE
+Startup
+*.exe
+ST5UNST.EXE
+[REMOVED]
+ADOR.EXE
+ALAR.EXE
+DFSVC.EXE
+EAUNINSTALL.EXE
+MODEMSG.EXE
+HPZSCR01.EXE
+HPZSCR40.EX
+STALL.EXE
+ISUN0407.EXE
+ISUNINST.EXE
+002.EXE
+LNKSTUB.EXE
+MSIEXEC.EXE
+MSOO
+SETUP.EXE
+ST5UNST.EXE
+UNINS000.EX
+INS001.EXE
+UNINS002.EXE
+UNINST.EXE
+TAL.EXE
+UNINSTALL.EXE
+UNINSTALLER.EX
+[REMOVED]
+```
+
+- finding heap:
+``` data
+$ volshell -w -f chall.raw --pid 7128
+[REMOVED]
+(layer_name_Process7128_2) >>> for entry in ps():
+...     print(entry)
+...     print(entry.UniqueProcessId)
+[REMOVED]
+<EPROCESS symbol_table_name1!_EPROCESS: layer_name @ 0x9c84de9f2080 #2624>
+7128
+[REMOVED]
+(layer_name_Process7128_2) >>> dt("_EPROCESS", 0x9c84de9f2080)
+[REMOVED]
+  0x550 :   Peb                                    *symbol_table_name1!_PEB                                   0xbb4c76f000
+[REMOVED]
+(layer_name_Process7128_3) >>> dt("_PEB", 0xbb4c76f000)
+[REMOVED]
+   0x30 :   ProcessHeap                              *symbol_table_name1!void                             0x2a217e00000
+[REMOVED]
+   0xe8 :   NumberOfHeaps                            symbol_table_name1!unsigned long                     4
+   0xec :   MaximumNumberOfHeaps                     symbol_table_name1!unsigned long                     16
+   0xf0 :   ProcessHeaps                             **symbol_table_name1!void                            0x7ffea9a3ad40
+[REMOVED]
+(layer_name_Process7128_3) >>> dd(0x7ffea9a3ad40)
+0x7ffea9a3ad40    17e00000 000002a2 17c60000 000002a2    .... .... .... ....
+0x7ffea9a3ad50    17df0000 000002a2 197f0000 000002a2    .... .... .... ....
+```
+- found 4 heaps:
+	- 0x2a217e00000
+	- 0x2a217c60000
+	- 0x2a217df0000
+	- 0x2a2197f0000
+
+- extracting heap strings:
+``` data
+$ ll | grep -e 0x2a217e00000 -e 0x2a217c60000 -e 0x2a217df0000 -e 0x2a2197f0000 | awk '{print $NF}' | xargs -I {} strings -a {} > heap_strings
+$ ll | grep -e 0x2a217e00000 -e 0x2a217c60000 -e 0x2a217df0000 -e 0x2a2197f0000 | awk '{print $NF}' | xargs -I {} strings  -el -a {} >> heap_strings
+$ cat heap_strings | grep -F -v -i -e "\\" -e  " " -e "\;" -e "t0Pq" -e "system" -e "?pq" -e ".exe" -e "ext-ms-win-core" -e "Windows" -e ".dll" -e "S-1-15-3" -e "-"
+```
+
+- potential passwords:
+``` data
+?{8s
+%)yAI
+=1W)
+J]/i2
+MP{9
+MqXM
+n30'
+gWk&c[?
+h8H$
+lUz9
+$/A*
+bfiJi
+C2#l
+FtNM
+(GX&
+$^+8
+n30'
+gWk&c[?
+|:0Po
+[B9J
+$zO*/;
+h`%}
+S/3L
+GFS]A=
+QF)P,
+52C64B7E
+Y24k8UPs
+fFpPtTdDcCrRlL
+```
+
+- password cracking
+``` data
+$ hashcat -a 0 -m 13711 file.0x9c84e3f0fe30.0x9c84dbc4e590.DataSectionObject.vault.hc.dat passwords.txt
+$ hashcat -a 0 -m 13712 -o cracked.txt file.0x9c84e3f0fe30.0x9c84dbc4e590.DataSectionObject.vault.hc.dat passwords.txt
+$ hashcat -a 0 -m 13713 -o cracked.txt file.0x9c84e3f0fe30.0x9c84dbc4e590.DataSectionObject.vault.hc.dat passwords.txt
+$ hashcat -a 0 -m 13721 -o cracked.txt file.0x9c84e3f0fe30.0x9c84dbc4e590.DataSectionObject.vault.hc.dat passwords.txt
+$ hashcat -a 0 -m 13731 -o cracked.txt file.0x9c84e3f0fe30.0x9c84dbc4e590.DataSectionObject.vault.hc.dat passwords.txt
+```
+- nothing found
+
+- viewing heap:
+``` data
+$ volshell -w -f chall.raw --pid 7128
+[REMOVED]
+(layer_name_Process7128_1) >>> dt("_HEAP", 0x2a217e00000)
+[REMOVED]
+   0x38 :   NumberOfPages                      symbol_table_name1!unsigned long                   255
+   0x40 :   FirstEntry                         *symbol_table_name1!_HEAP_ENTRY                    0x2a217e00740
+   0x48 :   LastValidEntry                     *symbol_table_name1!_HEAP_ENTRY                    0x2a217eff000 (unreadable pointer)
+   0x50 :   NumberOfUnCommittedPages           symbol_table_name1!unsigned long                   75
+   0x54 :   NumberOfUnCommittedRanges          symbol_table_name1!unsigned long                   1
+[REMOVED]
+(layer_name_Process7128_1) >>> dt("_HEAP_ENTRY", 0x2a217e00740)
+[REMOVED]
+  0x8 :   Size                         symbol_table_name1!unsigned short           30439
+[REMOVED]
+  0xa :   Flags                        symbol_table_name1!unsigned char            150
+[REMOVED]
+```
+
+### PID 924
+``` data
+$ vol -f chall.raw -o PID_924 -r csv windows.vadinfo --pid 924 --dump > PID_924/vadinfo_924.csv
+$ csvtool col 4-12 vadinfo_924.csv | csvtool readable - | grep -e "PAGE_READWRITE" | awk '{print "pid.924.vad."$2"-"$3".dmp"}' |     xargs -I {} strings {} >> total_strings
+strings: 'pid.924.vad.0x7df4f4020000-0x7df5f403ffff.dmp': No such file
+$ csvtool col 4-12 vadinfo_924.csv | csvtool readable - | grep -e "PAGE_READWRITE" | awk '{print "pid.924.vad."$2"-"$3".dmp"}' | xargs -I {} strings -el {} >> long_total_strings
+strings: 'pid.924.vad.0x7df4f4020000-0x7df5f403ffff.dmp': No such file
+$ cat long_total_strings
+[REMOVED]
+```
+
+- finding heap:
+``` data
+$ volshell -f chall.raw -w --pid 924
+[REMOVED]
+(layer_name_Process924_1) >>> dt("_EPROCESS", 0x9c84de30f080)
+[REMOVED]
+  0x550 :   Peb                                    *symbol_table_name1!_PEB                                   0xc1186f4000
+[REMOVED]
+(layer_name_Process924_1) >>> dt("_PEB", 0xc1186f4000)
+[REMOVED]
+   0xe8 :   NumberOfHeaps                            symbol_table_name1!unsigned long                     4
+   0xec :   MaximumNumberOfHeaps                     symbol_table_name1!unsigned long                     16
+   0xf0 :   ProcessHeaps                             **symbol_table_name1!void                            0x7ffea9a3ad40
+[REMOVED]
+(layer_name_Process924_1) >>> dd(0x7ffea9a3ad40, count=32)
+0x7ffea9a3ad40    04a90000 0000026d 04860000 0000026d    .... ...m .... ...m
+0x7ffea9a3ad50    063f0000 0000026d 063b0000 0000026d    .?.. ...m .;.. ...m
+[REMOVED]
+```
+
+- viewing heap data:
+``` data
+$ ll | grep -e 0x26d04a90000 -e 0x26d04860000 -e 0x26d063f0000 -e 0x26d063b0000
+-rw-------  1 sansforensics sansforensics    65536 Apr 19 01:54 pid.924.vad.0x26d04860000-0x26d0486ffff.dmp
+-rw-------  1 sansforensics sansforensics  1048576 Apr 19 01:54 pid.924.vad.0x26d04a90000-0x26d04b8ffff.dmp
+-rw-------  1 sansforensics sansforensics    65536 Apr 19 01:54 pid.924.vad.0x26d063b0000-0x26d063bffff.dmp
+-rw-------  1 sansforensics sansforensics    65536 Apr 19 01:54 pid.924.vad.0x26d063f0000-0x26d063fffff.dmp
+$ ll | grep -e 0x26d04a90000 -e 0x26d04860000 -e 0x26d063f0000 -e 0x26d063b0000 | awk '{print $NF}' | xargs -I {} strings -el {} > heap_wide_strings.txt
+$ cat heap_wide_strings.txt | grep -F -v -e "\\" -e  " "
+```
+
+- potential passwords found:
+``` data
+Y454wE3kh7
+s_65
+Wind
+eppi
+ROCE
+APPDA
+veCo
+Y24k8UPs
+Tahoma
+Ebrima
+Gadugi
+Leelawadee
+OLEB5266094BAFF215EBFF4BBDF1071
+07eb
+4da9
+Y454wE3kh7
+%)0:@FLRX^djpv|
+&*1;AGMSY_ekqw}
+!,37=CIOU[agmsy
+$/69?EKQW]ciou{
+(Rbr
+>4nrvz~
+edWi
+```
+- password cracking
+``` data
+$ hashcat -a 0 -m 13711 -o cracked.txt file.0x9c84e3f0fe30.0x9c84dbc4e590.DataSectionObject.vault.hc.dat passwords_924.txt
+$ hashcat -a 0 -m 13712 -o cracked.txt file.0x9c84e3f0fe30.0x9c84dbc4e590.DataSectionObject.vault.hc.dat passwords_924.txt
+$ hashcat -a 0 -m 13713 -o cracked.txt file.0x9c84e3f0fe30.0x9c84dbc4e590.DataSectionObject.vault.hc.dat passwords_924.txt
+$ hashcat -a 0 -m 13721 -o cracked.txt file.0x9c84e3f0fe30.0x9c84dbc4e590.DataSectionObject.vault.hc.dat passwords_924.txt
+[REMOVED]
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+[REMOVED]
+$ cat cracked.txt
+file.0x9c84e3f0fe30.0x9c84dbc4e590.DataSectionObject.vault.hc.dat:Y454wE3kh7
+```
+- password found: Y454wE3kh7
+
+### PID 3484
+``` data
+$ vol -f chall.raw -o PID_3484 -r csv windows.vadinfo --pid 3484 --dump > PID_3484/vadinfo_3484.csv
+$ csvtool col 4-12 vadinfo_3484.csv | csvtool readable - | grep -e "PAGE_READWRITE" | awk '{print "pid.3484.vad."$2"-"$3".dmp"}' | xargs -I {} strings {} >> total_strings
+strings: 'pid.3484.vad.0x7df468c60000-0x7df568c7ffff.dmp': No such file
+$ csvtool col 4-12 vadinfo_3484.csv | csvtool readable - | grep -e "PAGE_READWRITE" | awk '{print "pid.3484.vad."$2"-"$3".dmp"}' | xargs -I {} strings -el {} >> long_total_strings
+$ cat long_total_strings
+[REMOVED]
+Cannot open the %% file.
+Make sure a disk is in the drive you specified.
+Cannot find the %% file.
+Do you want to create a new file?
+The text in the %% file has changed.
+Do you want to save the changes?
+Untitled
+Not enough memory available to complete this operation. Quit one or more applications to increase available memory, and then try again.
+Cannot find "%%"
+%1%2 - Notepad
+The %% file is too large for Notepad.
+Use another editor to edit the file.
+Notepad
+Failed to initialize file dialogs. Change the file name and try again.
+Failed to initialize print dialogs. Make sure that your printer is connected properly and use Control Panel to verify that the printer is configured properly.
+Cannot print the %% file. Be sure that your printer is connected properly and use Control Panel to verify that the printer is configured properly.
+Not a valid file name.
+Cannot create the %% file.
+Make sure that the path and file name are correct.
+Cannot carry out the Word Wrap command because there is too much text in the file.
+notepad.hlp
+Text Documents (*.txt)
+All Files
+Open
+Save As
+You cannot shut down or log off Windows because
+the Save As dialog box in Notepad is open. Switch to
+Notepad, close this dialog box, and then try shutting
+down or logging off Windows again.
+Cannot access your printer.
+Be sure that your printer is connected properly and use Control Panel to verify that the printer is configured properly.
+You do not have permission to open this file.  See the owner of the file or an administrator to obtain permission.
+ This file contains characters in Unicode format which will be lost if you save this file as an ANSI encoded text file. To keep the Unicode information, click Cancel below and then select one of the Unicode options from the Encoding drop down list. Continue?
+Common Dialog error (0x%04x)
+Page too small to print one line.
+Try printing using smaller font.
+Notepad - Goto Line
+The line number is beyond the total number of lines
+[REMOVED]
+Page &p
+ Ln %d, Col %d
+ Compressed,
+ Encrypted,
+ Hidden,
+ Offline,
+ ReadOnly,
+ System,
+ File
+fFpPtTdDcCrRlL
+&Encoding:
+Notepad was running in a transaction which has completed.
+Would you like to save the %% file non-transactionally?
+Text Editor
+Status Bar
+We can
+t open this file
+Either your organization doesn
+t allow it, or there
+s a problem with the file
+s encryption.
+ Windows (CRLF)
+ Unix (LF)
+ Macintosh (CR)
+ Found next from the bottom
+ Found next from the top
+ %d%%
+[REMOVED]
+gotiate
+NegoExtender
+Kerberos
+NTLM
+TSSSP
+pku2u
+Schannel
+[REMOVED]
+DESKTOP-9BHKMOM
+10.0.2.15
+[REMOVED]
+C:\Users\kimsh\AppData\Roaming\Microsoft\Windows\Recent
+C:\Users\kimsh\AppData\Roaming\Microsoft\Windows\Recent
+TabGroupingPreference.LaunchingWindow
+C:\Users\kimsh\AppData\Local\Microsoft\Windows\INetCache
+Software\Microsoft\Windows NT\CurrentVersion\ProfileList
+C:\Users\kimsh\AppData\Local\Microsoft\Windows\INetCookies
+[REMOVED]
+```
+
+### cmdscan
+``` data
+$ vol -f chall.raw -r csv windows.cmdscan > cmdscan.csv
+$ csvtool col 3,4,5,6,7 cmdscan.csv | csvtool readable -
+Process     ConsoleInfo   Property                         Address       Data
+conhost.exe 0x1c642ad7860 _COMMAND_HISTORY                 0x1c642ad7860 None
+conhost.exe 0x1c642ad7860 _COMMAND_HISTORY.Application     0x1c642ad7890 powershell.exe
+conhost.exe 0x1c642ad7860 _COMMAND_HISTORY.ProcessHandle   0x1c640b85b30 0x130
+conhost.exe 0x1c642ad7860 _COMMAND_HISTORY.CommandCount    N/A           0
+conhost.exe 0x1c642ad7860 _COMMAND_HISTORY.LastDisplayed   0x1c642ad78bc -1
+conhost.exe 0x1c642ad7860 _COMMAND_HISTORY.CommandCountMax 0x1c642ad7888 50
+conhost.exe 0x1c642ad7860 _COMMAND_HISTORY.CommandBucket   0x1c642ad7870 
+conhost.exe 0x1c1a6ecac50 _COMMAND_HISTORY                 0x1c1a6ecac50 None
+conhost.exe 0x1c1a6ecac50 _COMMAND_HISTORY.Application     0x1c1a6ecac80 DumpIt.exe
+conhost.exe 0x1c1a6ecac50 _COMMAND_HISTORY.ProcessHandle   0x1c1a4de5380 0x124
+conhost.exe 0x1c1a6ecac50 _COMMAND_HISTORY.CommandCount    N/A           0
+conhost.exe 0x1c1a6ecac50 _COMMAND_HISTORY.LastDisplayed   0x1c1a6ecacac -1
+conhost.exe 0x1c1a6ecac50 _COMMAND_HISTORY.CommandCountMax 0x1c1a6ecac78 50
+conhost.exe 0x1c1a6ecac50 _COMMAND_HISTORY.CommandBucket   0x1c1a6ecac60
+```
+
+### netstat
+``` data
+$ vol -f chall.raw -r pretty windows.netstat
+Volatility 3 Framework 2.27.0
+Formatting...0.00		PDB scanning finished
+  |         Offset | Proto |                 LocalAddr | LocalPort |    ForeignAddr | ForeignPort |       State |  PID |          Owner |                        Created
+* | 0x9c84def11b20 | TCPv4 |                 10.0.2.15 |     49708 | 23.215.215.227 |         443 | ESTABLISHED | 4528 |  SearchApp.exe | 2024-10-26 17:34:04.000000 UTC
+* | 0x9c84d9890b00 | TCPv4 |                 10.0.2.15 |     49760 |   40.99.34.226 |         443 | ESTABLISHED | 4528 |  SearchApp.exe | 2024-10-26 17:37:06.000000 UTC
+* | 0x9c84e56eaa20 | TCPv4 |                 10.0.2.15 |     49723 |    4.188.4.136 |         443 | ESTABLISHED |  636 | smartscreen.ex | 2024-10-26 17:34:32.000000 UTC
+* | 0x9c84dbde8a20 | TCPv4 |                 10.0.2.15 |     49765 | 204.79.197.222 |         443 | ESTABLISHED | 4528 |  SearchApp.exe | 2024-10-26 17:37:12.000000 UTC
+* | 0x9c84dfab8010 | TCPv4 |                 10.0.2.15 |     49701 | 20.198.119.143 |         443 | ESTABLISHED | 2912 |    svchost.exe | 2024-10-26 17:32:22.000000 UTC
+* | 0x9c84e0d17a20 | TCPv4 |                 10.0.2.15 |     49762 | 13.107.246.254 |         443 | ESTABLISHED | 4528 |  SearchApp.exe | 2024-10-26 17:37:09.000000 UTC
+* | 0x9c84df1d8590 | TCPv4 |                 10.0.2.15 |     49758 | 204.79.197.239 |         443 | ESTABLISHED | 6872 |     msedge.exe | 2024-10-26 17:36:11.000000 UTC
+* | 0x9c84dbfeab00 | TCPv4 |                 10.0.2.15 |     49764 |   20.217.24.74 |         443 | ESTABLISHED | 4528 |  SearchApp.exe | 2024-10-26 17:37:10.000000 UTC
+* | 0x9c84e03b0b50 | TCPv4 |                 10.0.2.15 |     49763 | 13.107.246.254 |         443 | ESTABLISHED | 4528 |  SearchApp.exe | 2024-10-26 17:37:10.000000 UTC
+* | 0x9c84dbe66a60 | TCPv4 |                 10.0.2.15 |     49744 | 20.198.119.143 |         443 | ESTABLISHED | 6580 |   OneDrive.exe | 2024-10-26 17:35:10.000000 UTC
+* | 0x9c84df9d4010 | TCPv4 |                 10.0.2.15 |     49703 |     23.36.7.22 |         443 | ESTABLISHED | 4936 |    svchost.exe | 2024-10-26 17:33:46.000000 UTC
+* | 0x9c84e0272570 | TCPv4 |                 10.0.2.15 |     49761 |  52.138.229.66 |         443 | ESTABLISHED | 4528 |  SearchApp.exe | 2024-10-26 17:37:06.000000 UTC
+* | 0x9c84dfb633d0 | TCPv4 |                 10.0.2.15 |     49752 | 23.200.238.233 |         443 | ESTABLISHED | 5016 |   explorer.exe | 2024-10-26 17:35:28.000000 UTC
+[REMOVED]
+```
+
+### device tree
+``` data
+$ vol -r csv -f chall.raw windows.devicetree.DeviceTree > devicetree.csv
+$ csvtool readable devicetree.csv 
+TreeDepth Offset         Type DriverName            DeviceName                                         DriverNameOfAttDevice     DeviceType
+[REMOVED]
+0         0x9c84d98b6870 DRV  Ntfs                  N/A                                                N/A                       N/A
+1         0x9c84d98b6870 DEV  Ntfs                  -                                                  N/A                       FILE_DEVICE_DISK_FILE_SYSTEM
+2         0x9c84d98b6870 ATT  Ntfs                  -                                                  \\FileSystem\\FltMgr      FILE_DEVICE_DISK_FILE_SYSTEM
+[REMOVED]
+```
+
+### PID 5016 explorer.exe
+- strings:
+``` data
+$ vol -f chall.raw -o PID_5016/ -r csv windows.vadinfo --pid 5016 --dump > PID_5016/vadinfo_5016.csv
+$ csvtool col 4-12 vadinfo_5016.csv | csvtool readable - | grep -e "PAGE_READWRITE" | awk '{print "pid.5016.vad."$2"-"$3".dmp"}' | xargs -I {} strings {} >> total_strings
+$ csvtool col 4-12 vadinfo_5016.csv | csvtool readable - | grep -e "PAGE_READWRITE" | awk '{print "pid.5016.vad."$2"-"$3".dmp"}' | xargs -I {} strings -el {} >> total_strings
+$ cat total_strings
+HXC138~1.PNG
+[REMOVED]
+USERPI~1
+CACHED~1.JPG
+[REMOVED]
+www.digicert.com1 0
+DigiCert Global Root G3
+[REMOVED]
+ 200 OK
+Content-Type: image/png
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: *
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Timing-Allow-Origin: *
+Report-To: {"group":"network-errors","max_age":604800,"endpoints":[{"url":"https://aefd.nelreports.net/api/report?cat=bingth&ndcParam=QWthbWFp"}]}
+NEL: {"report_to":"network-errors","max_age":604800,"success_fraction":0.001,"failure_fraction":1.0}
+Content-Length: 8291
+Alt-Svc: h3=":443"; ma=93600
+[REMOVED]
+
+```

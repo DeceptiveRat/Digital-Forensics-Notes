@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
+                "file": "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 1. Systems Overview"
+              "title": "Chapter 11. Networking"
             }
           }
         ],
@@ -209,19 +209,22 @@
       "bases:Create new base": false
     }
   },
-  "active": "1bf19fb8e457e453",
+  "active": "ba510334bed01151",
   "lastOpenFiles": [
+    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/Notes.md~",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 16. Disk Artifacts in Memory.md",
+    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/Notes.md",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md",
+    "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
     "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3/Notes.md~",
     "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3/4913",
-    "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md",
     "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 7. Process Memory Internals.md",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md",
     "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 2. Data Structures.md",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md",
     "Blog/Writeups/DFIR-LABS/1. Gotham Hustle/Notes.md",
-    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/Notes.md",
     "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
     "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
     "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
@@ -231,9 +234,7 @@
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 14. Windows GUI Subsystem, Part I.md",
     "Blog/Writeups/DFIR-LABS/1. Gotham Hustle (WIP)/4913",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 15. Windows GUI Subsystem, Part II.md",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 16. Disk Artifacts in Memory.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 18. Timelining.md",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 13. Kernel Forensics and Rootkits.md",
     "Blog/자료 2 - 디지털 증거 수집.md",
     "Blog/자료 1 - 디지털 포렌식이란?.md",
@@ -247,8 +248,6 @@
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 18. Timelining.md~",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 18 images/Gh0st_pcap.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 18 images",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/4913",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md~",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 17 images/cmd_console_settings.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 17 images/registry_console_settings.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 16 images/TrueCrypt_mount.png",
