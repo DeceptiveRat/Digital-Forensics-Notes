@@ -92,17 +92,39 @@ $ cat strings.txt | grep -C 4 -i -e "keepass" >strings_keepass.txt
 
 - CVE abuse:
 ``` data
-$ dotnet run --roll-forward LatestMajor /home/sansforensics/Downloads/2672.KeePass.exe.0x4f0000.dmp
-[REMOVED]
-Password candidates (character positions):
-Unknown characters are displayed as "●"
+$ dotnet run --roll-forward LatestMajor /home/sansforensics/Downloads/pid.2672.dmp
 1.:	●
-Combined: ●
-$ python3 keepass_dump.py -f 2672.KeePass.exe.0x4f0000.dmp 
-[*] Searching for masterkey characters
-[-] Couldn't find jump points in file. Scanning with slower method.
-[*] 0:	{UNKNOWN}
-[-] couldn't find any characters
+2.:	0, Ú,  a, U, ), N, V, Á, O, S, I, 2, !, , 1, .,  , #, û, g, ¯,
+3.:	r,
+4.:	p,
+5.:	_,
+6.:	R,
+7.:	X, ð,
+8.:	_,
+9.:	2,
+10.:	4,
+11.:	3,
+12.:	1,
+13.:	2,
+Combined: ●{0, Ú,  a, U, ), N, V, Á, O, S, I, 2, !, , 1, .,  , #, û, g, ¯}rp_R{X, ð}_24312
+$ keepass2john Keylist.kdbx > keylist.hash
+$ python3 createlist.py 
+$ head wordlist.txt 
+a0rp_RX_24312
+a0rp_Rð_24312
+aÚrp_RX_24312
+aÚrp_Rð_24312
+aarp_RX_24312
+aarp_Rð_24312
+aUrp_RX_24312
+aUrp_Rð_24312
+a)rp_RX_24312
+a)rp_Rð_24312
+$ cut -d ":" -f 2- Keylist.hash > Keylist_clean.hash
+$ hashcat -a 0 -o keepass_cracked.txt -m 13400 Keylist_clean.hash wordlist.txt
+Status...........: Cracked
+$ cat keepass_cracked.txt
+[REMOVED]c0rp_RX_24312
 ```
 
 - finding heap:
@@ -992,6 +1014,18 @@ C:\Users\kimsh\AppData\Local\Microsoft\Windows\INetCookies
 [REMOVED]
 ```
 
+- potential passwords found:
+``` data
+Y454wE3kh7
+s_65
+52C64B7E
+Y24k8UPs
+fFpPtTdDcCrRlL
+bb6ea983fc583c3d9d71280b69d603640f2ca6c42b888e894ef5636292eca27e
+BHKMOM
+lasses5
+```
+
 ### cmdscan
 ``` data
 $ vol -f chall.raw -r csv windows.cmdscan > cmdscan.csv
@@ -1073,5 +1107,810 @@ NEL: {"report_to":"network-errors","max_age":604800,"success_fraction":0.001,"fa
 Content-Length: 8291
 Alt-Svc: h3=":443"; ma=93600
 [REMOVED]
+```
 
+### vault.hc
+- mounted directory:
+``` data
+$ ll
+total 8764
+drwx------ 1 sansforensics sansforensics       0 Oct 26  2024 '$RECYCLE.BIN'/
+drwx------ 1 sansforensics sansforensics    4096 Oct 26  2024  ./
+drwxr-xr-x 4 root          root             4096 Apr 20 00:10  ../
+drwx------ 1 sansforensics sansforensics       0 Oct 26  2024 'System Volume Information'/
+-rwx------ 1 sansforensics sansforensics 8963778 Oct 22  2024  project.zip*
+```
+
+- unzip:
+``` data
+$ unzip project.zip
+Archive:  project.zip
+   creating: project/
+[project.zip] project/Confidential password:
+```
+- requires password
+
+- attempt password list:
+``` data
+$ fcrackzip -D -p potential_passwords.txt -v project.zip
+'project/' is not encrypted, skipping
+found file 'project/Confidential', (size cp/uc 320812/320800, flags 1, chk 1ebc)
+found file 'project/enc.exe', (size cp/uc 8639848/8823677, flags 1, chk 92e1)
+found file 'project/Keylist.kdbx', (size cp/uc   2522/  2510, flags 1, chk dd0b)
+```
+
+- attempt bruteforce:
+``` data
+$ fcrackzip -b -u -v project.zip
+'project/' is not encrypted, skipping
+found file 'project/Confidential', (size cp/uc 320812/320800, flags 1, chk 1ebc)
+found file 'project/enc.exe', (size cp/uc 8639848/8823677, flags 1, chk 92e1)
+found file 'project/Keylist.kdbx', (size cp/uc   2522/  2510, flags 1, chk dd0b)
+^Cecking pw axpLN~
+```
+
+- use password found from powershell envar:
+``` data
+$ unzip project.zip
+Archive:  project.zip
+   creating: project/
+[project.zip] project/Confidential password:
+ extracting: project/Confidential
+  inflating: project/enc.exe
+ extracting: project/Keylist.kdbx
+```
+
+### files that seem safe
+- MS edge
+``` data
+$ cat filescan.txt | grep -F "\\Users\\kimsh\\AppData\\Local\\Microsoft\\Edge\\User Data\\" | cut -f 2- | sort | uniq
+[REMOVED]
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Autofill\4.0.1.5\autofill_bypass_cache_forms.json
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Autofill\4.0.1.5\edge_autofill_field_data.json
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Autofill\4.0.1.5\edge_autofill_global_block_list.json
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Autofill\4.0.1.5\manifest.fingerprint
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Autofill\4.0.1.5\manifest.json
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Autofill\4.0.1.5\v1FieldTypes.json
+[REMOVED]
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Cache\Cache_Data\data_0
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Cache\Cache_Data\data_1
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Cache\Cache_Data\data_2
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Cache\Cache_Data\data_3
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Cache\Cache_Data\index
+[REMOVED]
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\History
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\History-journal
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Local Storage\leveldb\000003.log
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Local Storage\leveldb\CURRENT
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Local Storage\leveldb\LOCK
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Local Storage\leveldb\LOG
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Local Storage\leveldb\MANIFEST-000001
+[REMOVED]
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Site Characteristics Database\000003.log
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Site Characteristics Database\CURRENT
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Site Characteristics Database\LOCK
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Site Characteristics Database\LOG
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Site Characteristics Database\MANIFEST-000001
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Sync Data\LevelDB\000003.log
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Sync Data\LevelDB\CURRENT
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Sync Data\LevelDB\LOCK
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Sync Data\LevelDB\LOG
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Sync Data\LevelDB\MANIFEST-000001
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Sync Data\Logs\sync_diagnostic.log
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Top Sites
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Visited Links
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Web Data
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Default\Web Data-journal
+[REMOVED]
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Edge Wallet\128.18169.18147.7\json\wallet\wallet-checkout-eligible-sites.json
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Edge Wallet\128.18169.18147.7\json\wallet\wallet-notification-config.json
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Edge Wallet\128.18169.18147.7\json\wallet\wallet-stable.json
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Edge Wallet\128.18169.18147.7\json\wallet\wallet-tokenization-config.json
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Edge Wallet\128.18169.18147.7\manifest.fingerprint
+\Users\kimsh\AppData\Local\Microsoft\Edge\User Data\Edge Wallet\128.18169.18147.7\manifest.json
+[REMOVED]
+$ cat filescan.txt | grep -f edge_files | cut -f 1 | xargs -I {} vol -f chall.raw -o edge_userdata/ windows.dumpfiles --virtaddr {}
+```
+
+- filescan.txt:
+``` data
+$ cat filescan.txt | grep -v -F -i -e ".sys" -e ".dll" -e ".exe" -e ".ttf"| cut -f 2 | sort | uniq | less
+[REMOVED]
+\ProgramData\Microsoft\Network\Downloader\edb.chk
+\ProgramData\Microsoft\Network\Downloader\edb.log
+\ProgramData\Microsoft\Network\Downloader\edb00001.log
+\ProgramData\Microsoft\Network\Downloader\qmgr.db
+\ProgramData\Microsoft\Network\Downloader\qmgr.jfm
+[REMOVED]
+\Users\Public\Desktop\VeraCrypt.lnk
+[REMOVED]
+\Users\kimsh\AppData\Local\Microsoft\Credentials
+\Users\kimsh\AppData\Local\Microsoft\Credentials\00380DB8A62A9469B936B7474D92F74D
+\Users\kimsh\AppData\Local\Microsoft\Credentials\DFBE70A7E5CC19A398EBF1B96859CE5D
+\Users\kimsh\AppData\Local\Microsoft\Credentials\E05DBE15D38053457F3523A375594044
+[REMOVED]
+\Users\kimsh\AppData\Roaming\KeePass\KeePass.config.xml
+\Users\kimsh\AppData\Roaming\Microsoft\Credentials
+\Users\kimsh\AppData\Roaming\Microsoft\Crypto\Keys\de7cf8a7901d2ad13e5c67c29e5d1662_2eb6cbae-3012-4ae0-bc82-1556eec145f2
+[REMOVED]
+\Users\kimsh\AppData\Roaming\Microsoft\Windows\Printer Shortcuts
+[REMOVED]
+\Users\kimsh\AppData\Roaming\Microsoft\Windows\SendTo\Bluetooth File Transfer.LNK
+[REMOVED]
+\Users\kimsh\Desktop\final.png
+[REMOVED]
+\Users\kimsh\OneDrive\Personal Vault.lnk
+[REMOVED]
+```
+
+### lsadump
+``` data
+$ vol -f chall.raw windows.registry.lsadump
+Volatility 3 Framework 2.27.0
+Progress:  100.00		PDB scanning finished
+Key	Secret	Hex
+
+DefaultPassword
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+2b ac 9e d1 b1 45 e0 eb f9 37 a6 10 e3 94 fc c7 +....E...7......	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 2b ac 9e d1 b1 45 e0 eb f9 37 a6 10 e3 94 fc c7
+DPAPI_SYSTEM
+2c 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ,...............
+01 00 00 00 89 6c 21 ae 57 0c 7e 67 fc be ed d5 .....l!.W.~g....
+bb 31 fc 5c e4 69 0f 7f 29 45 1d 89 72 c5 5b 6d .1.\.i..)E..r.[m
+0e 76 d5 17 98 36 a8 2e bb 7b d7 6c 00 00 00 00 .v...6...{.l....	2c 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 89 6c 21 ae 57 0c 7e 67 fc be ed d5 bb 31 fc 5c e4 69 0f 7f 29 45 1d 89 72 c5 5b 6d 0e 76 d5 17 98 36 a8 2e bb 7b d7 6c 00 00 00 00
+```
+
+### envars
+``` data
+$ vol -f chall.raw windows.envars > envars.txt
+$ cat envars.txt | grep -F -i -e "notepad.exe" -e "powershell.exe" -e "keepass.exe"
+[REMOVED]
+1116	powershell.exe	0x24112d11c00	zippa4s5wo0rD	MP0Z\CRJws&4e\c':=3k
+[REMOVED]
+```
+
+- search for TMP tinkering
+``` data
+$ cat envars.txt | grep -e "TMP" | cut -f 4,5 | sort | uniq
+CHROME_CRASHPAD_PIPE_NAME	\\.\pipe\crashpad_6540_FTMPKNJNXAPMMBDZ
+TMP	%TEMP%\Packages\microsoft.windows.fontdrvhost\AC\Temp
+TMP	C:\ProgramData\Microsoft\Search\Data\Temp\usgthrsvc
+TMP	C:\Users\kimsh\AppData\Local\Packages\microsoft.windows.search_cw5n1h2txyewy\AC\Temp
+TMP	C:\Users\kimsh\AppData\Local\Packages\microsoft.windows.startmenuexperiencehost_cw5n1h2txyewy\AC\Temp
+TMP	C:\Users\kimsh\AppData\Local\Temp
+TMP	C:\Windows\SERVIC~1\LOCALS~1\AppData\Local\Temp
+TMP	C:\Windows\SERVIC~1\NETWOR~1\AppData\Local\Temp
+TMP	C:\Windows\TEMP
+```
+
+### project directory
+- Confidential:
+``` data
+$ xxd -l 4096 Confidential
+00000000: 8223 7839 5228 e77f 4707 a629 0755 b314  .#x9R(..G..).U..
+00000010: d807 5d35 5b5a 98a1 9ce0 86ec c738 79ef  ..]5[Z.......8y.
+00000020: 05d8 a293 6c09 4f52 4bc6 7472 79ca b04f  ....l.ORK.try..O
+00000030: ceb7 090a 8707 0e68 4a4a f96d 32ab 4c64  .......hJJ.m2.Ld
+00000040: 545a 9d03 0427 b697 2a87 73ca 060b c582  TZ...'..*.s.....
+[REMOVED]
+```
+
+
+### *base_library.zip*
+``` data
+$ cat strings.txt | grep -F -i -e "base_library.zip"
+152974986 xbase_library.zipx
+753301277 base_library.zip
+152975003 xbase_library.zipxbitcoin.bmpxlock.bmpxlock.ico
+$ cat strings.txt | grep -F -C 50 -i -e "base_library.zip"
+[REMOVED]
+152972492 TrojanDownloader:PowerShell/Bynoco.PSX!MTB
+152972571 SCPT:TrojanDownloader:PowerShell/Bynoco.PSX1!MTB
+152972620 SCPT:TrojanDownloader:PowerShell/Bynoco.PSX2!MTB
+152972669 #ATTR_00002e12
+152972684 SCPT:TrojanDownloader:PowerShell/Bynoco.PSX3!MTB
+152972733 #ATTR_00002e13
+152972748 SCPT:TrojanDownloader:PowerShell/Bynoco.PSX4!MTB
+152972797 #ATTR_00002e14
+152972812 SCPT:TrojanDownloader:PowerShell/Bynoco.PSX5!MTB
+152972861 #ATTR_00002e15
+152972876 SCPT:TrojanDownloader:PowerShell/Bynoco.PSX6!MTB
+152972925 #ATTR_00002e16
+152972940 SCPT:TrojanDownloader:PowerShell/Bynoco.PSX7!MTB
+152972989 #ATTR_00002e17
+152973004 SCPT:TrojanDownloader:PowerShell/Bynoco.PSX8!MTB
+[REMOVED]
+152973774 !Gozi.PE!MTB
+152973789 AgentTesla.K!MTB
+152974068 TrojanDownloader:O97M/Emotet.DR!MTB
+152974112 Behavior:Win32/FileDiscovery.A
+152974240 !LokiBot.MB!MTB
+152974256 TrojanDownloader:O97M/Obfuse.YS!MTB
+152974301 !Emotet.GGG!MTB
+152974353 Trojan:Win64/Cridex.DAH!MTB
+152974382 !IcedId.DAY!MTB
+152974399 !CobaltStrikeBeacon
+152974420 !IcedId.DAZ!MTB
+152974508 !IcedId.DBA!MTB
+152974602 !Emotet.DGN!MTB
+[REMOVED]
+152974920 Ransom:Win32/FileCrypt.MK!MTB
+152974970 c]w}
+152974986 xbase_library.zipx
+[REMOVED]
+152975279 TrojanDownloader:O97M/Obfuse.RAA!MTB
+152975316 TrojanDownloader:O97M/Donoff.YG!MTB
+152975388 payload = "xxx$69=vno?szp~{xmra{z|u}wxo!%@%=.,m%7/exe.reppord_lanrete/moc.xewrebyc.cnc//:sptthStrReverse("2vmic\toor\.\:stmgmniw")StrReverse("putratSssecorP_23niW
+[REMOVED]
+152976543 Trojan:HTML/Phish.SD!MSR
+152976640 <formaction="https://htrzogrzers.com/wed/opo.php"method="post
+152976739 window.location.replace("http://bibliotecasgc.bage.es/cgi-bin/koha/tracklinks.pl?uri=https://huerm-brib-0b902c.netlify.app#kelly.archer@nokia.com|#
+152976889 !Qbot.DSF!MTB
+152976982 !Taidoor.DA!MTB
+152976998 Ransom:Win32/Saturn!MTB
+152977022 Backdoor:ASP/Chopper.ZX
+152977046 Trojan:ASP/Chopper!dha
+[REMOVED]
+753299329 !#HSTR:Trojan:MSIL/AgentTesla.AMMW251!MTB
+753299406  AXXVCSVF
+753299434 AHNUFHCNVG
+753299467 !#Trojan:Win32/RedFlare6.M!ibt
+753299558 unsuccessfulu
+753299594 successfuls
+753299624 runcommandr
+753299654 !#ALF:Ransom:Win64/WingoFileCoder.A!MTB
+753299730 /go-ransomware/encryption.go/
+753299814 crypto/cipher.NewGCMc
+753299888 !#HSTR:Trojan:Win32/NSISInject.SMOI2505!MTB
+753299950 ^Fc=l
+753299982 !#ALF:Trojan:Win32/Toolbar.Linkury.KA
+753300056 SmartbarMonetizationToolsD:\TFS\Smartbarcrdli
+753300104 .pdb
+753300110 !#HSTR:MSIL/Remcos.RR!MTB
+753300252 !#HSTR:Trojan:MSIL/AgentTesla.AMIF799!MTB
+753300394 !#ALFPER:Trojan:Win64/FaceLight.A!dha
+753300532 !#HSTR:Trojan:MSIL/AgentTesla.AMDD406!MTB
+753300670 !#ALFPER:HackTool:Win64/MailPocket.A!dha
+753300747 DownloadEmailsRecursivelywellKnownFolder_2
+753300804 !#HSTR:Trojan:Win32/Kolik.A
+753300886 \skype\skype.lnk!#ALFPER:Trojan:Win64/TwoDash.B!dha
+753300960 gvWLt
+753301044 !#ALF:Trojan:MSIL/Nanocore.SIB!MTB
+753301187 !#ALF:Trojan:Win64/BManager.D
+[REMOVED]
+753301277 base_library.zip
+753301303 lib-dynload
+753301319 Py_DecRef
+753301330 !#ALF:Trojan:Win64/Meterpreter.C
+753301399 !#ALF:Win32/Gracewire.SD!MTB
+[REMOVED]
+753302856 8gxY
+753302882 ForceRemove '{c3cbfe5d-53c1-44f9-8442-6faaf005aaa9}' = s 'See Results Hub' {!#Lowfi:HSTR:Win32/InstallIQ.B
+753303025 Search Protector offer is disabled or not present. Skipping Search Protector!#Lowfi:HSTR:Win32/JustPlugIt.C
+753303169 !#SLF:Ransom:Win32/Avaddon.AK
+753303312 !#SLF:Trojan:Win32/SideLoading.AA!MTB
+753303360 /FxR
+753303371 ]u'O
+753303376 }%'&
+753303455 !#Todo_exhaustivehstr_rescan
+753303519  OPENSSL_Applink
+753303536 no host applicat
+753307654 unimplemented function
+[REMOVED]
+152964418 decrypt files, you need to pay
+152964511 Your personal fIles are encrypted
+152964582 .Lock
+152964604 CryptoLocker
+152964645 /c del C:\* /s /q
+152964714 Payment is accepted only in bitcoin
+152971786 sumakokl.beget.tech/config
+152971848 PurpleWave
+152971916 :[epmapper,Security=Impersonation Dynamic False]
+152972031 \History.IE5\MSHist
+152972119 \BaseNamedObjects\Global\SvcctrlStartEvent_A3752DX
+152973878 blendcore.resourcesratrunpctratpctratrunratrun5backrat
+152974203 dir 
+152974730 MxNO#C6et#{EHG5a4Oj%zkf@2mU@CWWE
+152974828 N9bkV|lJ?5zNZRe4aPbh}G}tq?g4Re@ntV
+152974904 cE0WfWly
+152975003 xbase_library.zipxbitcoin.bmpxlock.bmpxlock.ico
+[REMOVED]
+152976527 made.dll
+152986304 CoronaCrypt0r
+152986371 I have encrypted all your important files
+152986496 There is no way to recover your files sorry
+152986606 Cobra_Locker_Is_The_Best
+152986698 all your important files have been encrypted
+152987960 FGMQVDF9SurFjPJFhNTFYcmPqV7wbH6W03tKziDDcEWBV
+152995096 meKernelProcess.ProcessS
+[REMOVED]
+```
+
+- strings around *base_library.zip*:
+``` data
+152731128 _Your account has time restrictions that prevent you from signing in right now. Try again later.BYour account has been disabled. Contact your system administrator.
+152731458 You need to temporarily connect to your organization
+152731564 s network to use Windows Hello. You can str
+152732221 \local\temp\dmr\dmr_72.exe
+152732336 -n 1 -w 1000 wwwwww.piriform.com
+152732467 do (if not %p%u==01 net use %c %p /user:%u)
+[REMOVED]
+152749380 defenderswitch.pdb
+152749447 couldn't stop windefend service
+152749540 trying to stop windows defender
+152749640 usage: .\defenderswitch.exe [-on|-off]
+[REMOVED]
+152762224 Spyware not founded on this systemRemoving spywareCan't find encryption_key entryFailed to remove spyware! Try again or restart computerRemove spyware from this system
+[REMOVED]
+152813484 http://tlu.dl.delivery.mp.microsoft.com/fi
+152817664 NVGET ( "TEMP" ) &
+152817748 EXECUTE ( "FileRead(FileOpen(EnvGet(""TEMP"")  &
+152817892 EXECUTE ( "D" & "l" & "l" & "C" & "a" & "l" & "l
+152818021 &= CHR ( BITXOR ( ASC ( STRINGMID
+152819200 v5.mrmpzjjhn3sgtq5w.pro
+152819266 isapi/isapiv5.dll/v5
+[REMOVED]
+152948678 UDIO
+152964418 decrypt files, you need to pay
+152964511 Your personal fIles are encrypted
+152964582 .Lock
+152964604 CryptoLocker
+[REMOVED]
+153223311 fine is not paid within three days, a warrant will be issued for your arrestsystem has been compromised by extremists
+153224317 stnemhcdrocsid.ndclld.rotarepOyreuQyraniBBinaryQueryOperator.DecimalSumAggregationOperatorF2 D6 F6 36 E2 67 27 37 16 47 C6 57 E2 43 23 33 13 93 23 73 83 67 27 37 F2 F2 A3 07 47 47 86
+[REMOVED]
+153267328 DumpProcessByName finished with no error.
+153267416 Successfully dumped by PID
+153267472 ) while dumping by PID
+153267520 ) while dumping
+153267568 ). No further dumps will be captured as part of this escalation.
+153267704 Unable to dump
+153267736 ). Non-fatal.
+153267776 DumpProcessByPid finished with no error.
+153267864 GetProcessDumpAction:
+153267912 processDumpInfoString=
+153267960 processDumpType=
+153268000 . No further dumps will be captured as part of this escalation.
+153268136 Unable to dump PID
+153268176 . Non-fatal.
+153268208 Skippingex
+153268229 c:\windows\winhelp.inic:\windows\help\.hlpshutdown /s /f /t 0runinjectcmd
+153269434 unlock me after payment
+153269780  /C timeout /T 15 /NOBREAK && del itaskkill /F /T /IM alldrivesinfowmic.exe SHADOWCOPY DELETE /nointeractivewbadmin DELETE SYSTEMSTATEBACKUPwbadmin DELETE SYSTEMSTATEBACKUP -deleteOldestC:\Windows\system32\vssvc.exe-decrypt.htapowershell [System.Net.Dns]::GetHostByAddress('\bootmgrpublicsessionkeyprivatesessionkey
+153271970 Hqy1zDJFz24DSooDgbMZLYfXEhqx3R2XId3hDKC
+153280629 NAOT8bxj7hc7oAuAQqlL~WVH
+153281908 wldlog.dll
+153284051 :\Windows\JRansomBootScreen.exe
+153284238 taskmgr.exe,cmd.exe,chrome.exe,firefox.exe,opera.exe,microsoftedge.exe,microsoftedgecp.exe,notepad++,notepad.exe,iexplore.exe
+153284508 jaemin1508@naver.com
+153288307 http://mrbftp.xyz
+153288388 vihansoft.ir
+153288448 http://mrbfile.xyzUHJvY2Vzc0hhY2tlcgMRB_ADMINdGFza21ncg
+[REMOVED]
+154134101 cmd.exe /c "ping -n 30 127.0.0.1 >nul && sc config %s binpath= "%s localservice" && ping -n 10 127.0.0.1 >nul && sc start %sthe maintenace host service is hosted in the lsa process. the service provides key process isolation to private keysaverfix2h826d_noaverirmaintenacesrv64.exemaintenacesrv32.exe\inf\mdmnis5tq1.pnf\inf\averbh_noav.pnf
+154135432 ODBC (3.0) driver for DBase
+[REMOVED]
+154136383 Done. Deleted {0} files and {1} folders in {2}
+154160362 USB spreader runningSelect * from AntiVirusProductVariant of PoisonIvyVariant of SpyNet RATVariant of Zeus BOT
+154160629 insert into cookies(creation_utc,host_key,name,value,path,expires_utc,secure,httponly,last_access_utc)'.sdo.com','sdo_beacon_id','%s','/',%I64d,0,0,%I64d).xiaochencc.com/begin_report_system_task&mainboardname=start_collect
+[REMOVED]
+154375605 files on this computer or device have just been encryptedSend bitcoins to this bitcoin address
+154376796 microsoft.updatemeltdownkb7234.comcodewizard.ml/productivity/fag02wuCurrentPrxSetform-data; name="{0}"; filename="{1}"!upl whoami & systeminfo & ipconfig /all & arp /a
+154377376 doctorpol.resourcestvqq
+[REMOVED]
+154422383 playnew();tgbnhy
+154422966 %RGEsftr23$%23%EWFWQ@!#$@!$@#%ERFGSAD@#$15346rggweqer13234
+154423094 Rj8jZVwFVA==
+154423194 UjspKBQLAAEISE1IQlZXNjgoNiUpTk1oJVdBLB5MKCIjNSAuKiF
+154451864 3078343035343635364437303434363937323230323632303433
+154452521 16rtu.lal+oc
+154453080 w234{678o012u4
+154453756 ftp password
+154453790 u09gvfdbukvctwljcm9zb2z0xfdpbmrvd3mgtlrcq3vycmvudfzlcnnpb25cv2lubg9nb24=qxrlbnrpb24uli4=qwxsihlvdxigzmlszxmgd2vyzsblbmnyexb0zwqsiglmihlvdsb3yw50ihrvigdldcb0agvtigfsbcbiywnrlcbwbgvhc2ugy2fyzwz1bgx5ihjlywqgdghlihrlehqgbm90zsbsb2nhdgvkigluihlvdxigzgvza3rvcc4ulg==
+154454489 qw5hcmnoeudyywjizxil
+154455281 \Decryption-Info.HTA
+154455459 \HELP_ME_RECOVER_MY_FILES.txt\DEAL_FOR_ACCESS_TO_YOUR_FILES.txthttp://www.my_wallpaper_location.com/wallpaper.bmpRansomBuilder_LogRGF0ZSBvZiBlbmNyeXB0aW9uOiA=TnVtYmVyIG9mIGZpbGVzIGVuY3J5cHRlZDogU09GVFdBUkVcTWljcm9zb2Z0XFdpbmRvd3MgTlRcQ3VycmVudFZlcnNpb25cV2lubG9nb24=qxrlbnrpb24U2V0LU1wUHJlZmVyZW5jZSAtR
+154462406 mcdm1aw|2sag2rdgzyi3u7$k%vetuiv
+154462650 ykatbbgdwu6xylhqmvhfpesy6dlozlvdv
+154462808 gabupaev9zawahoreo5222vf31a6n7ipae
+154463046 xhmztfbtpqvi7tycazlhb22spogiln06z5xoowf
+154463242 4tvfpad6txmyx6zgxakbmqtqulystgmhqy4q
+154463415 zswknf4gnd10otjkfsu5rcjljfvrrltcwxqwucy
+154463596 3uvozp1mhvjpxtwhxvbob5hrw2mun0iwh
+154463772 lllrnm?ppvezd{drwlws?9g~xbpcbb1~ok9
+154463911 sleeptempl.dll
+154463949 freebuffer
+154463976 release
+154464090 %appdata%\
+154464228 \microsoft\win
+154468351 $bin
+154468363 acid blobchain mail
+154470086 Bad Rabbit RansonwareThe price you have to pay to decryption is:RansonMailThis is your recovery key:
+[REMOVED]
+154475750 execute ( binarytostring ( "0x52756e50452840486f6d654472697665202620275c57696e646f77735c4d6963726f736f66742e4e45545c
+154476048 4672616d65776f726b5c76342e302e33303331395c52656741736d2e657865272c
+154477691 software\bubble breakercryptstringtobinarya
+154478520 gmsuxevt=#+%drb&p>/q
+154478589 theoff.asksPBP8whichextensions
+154485319 rc2decrypt
+154485346 xor_dec
+154485371 rijndecrypt 
+154486152 bazar
+154486169 r.bazar
+154487127 ave_maria stealer
+[REMOVED]
+155607070 READ_ME.txt
+155607152 cmd.exe /C ping 1.1.1.1 -n 10 -w 3000 > Nul & Del /f /q "%s"
+155607294 c:\111\hermes\cryptopp
+155607425 encrypted_key.bin
+155607509 HOW_TO_DECRYPTthe
+155607548  is locked
+155607589 @protonmail.com
+155607649 For decryption KEY write HERE:
+155609392 !!!Readme!!!Help!!!.txt
+155609461 data1992@protonmail.com
+155609786 If you wanna support me, you can send me a beer money via cryptocurrency. Thanks a lot.
+155609977 There is no file!
+155610035 File has been encrypted!
+155610118 Please enter 1 byte lengt password!
+155610208 Dont blank the path!
+155610260 JonCrypt.pdb
+155610427 !!_FILES_ENCRYPTED_.txt
+155611109 locked-padloc
+155615232 },{"name":"Language.TextToSpeech~en-in~1.0"},{"name":"Language.Speech~en-in~1.0"},{"name":"Language.Basic~en-gb~1.0"},{"name":"Language.OCR~en-gb~1.0"}]}
+155616544 {"ModuleID":"FOD","Features":[{"name":"Language.Basic~en-in~1.0"},{"name":"Language.TextToSpeech~en-in~1.0"},{"name":"Language.Speech~en-in~1.0"},{"name":"Language.Basic~en-gb~1.0"},{"name":"Language.OCR~en-gb~1.0"}]}
+[REMOVED]
+156162675 inflation_calculator
+156163160 allocexnuma
+156163195 akernel32.dll
+156163674 All your files have been encrypted with a random key and no decryption tool can save them
+156163875 iaminfected.sac@elude.i
+156163980 We are not scammers, your files will be unlocked if you pa
+156164206 %temp%\temp
+156164231 .zip\
+[REMOVED]
+157028802 WNHBNMKL.exe
+157031187 SELECT * FROM Win32_Service WHERE Name = 'WinDefend'DarkSide.exe -killdefAttempt to kill Windows Defender
+157031559 QtWebEngineProcess.exe
+157032242 //d.minutepin.website/x.php?
+157033012 8asdHnjsaeO1w1Mo
+157034030 //downloadfilekee.lol/
+157034551 http://restfork.website/bo.php?p
+157044743 Dlp Loper19.7.4674.1
+157047148 fuuuuuccccckkkkkkmmmeeee
+157047212 dsssssaaaaaiiiii
+157049008 restore-my-files.txt
+157049594 Select Name from Win32_Process Where NameSET someOtherProgram=SomeOtherProgram.exeTASKKILL /IM
+157069339 moz_disable_content_sandbox
+157069435 windows.immersiveshell.serviceprovider.dll
+157069696 opc_package_write
+157069901 [+] starting shell process[x] failed to read process memory![x] shellcode buffer is too long!
+[REMOVED]
+157394343 destip=5.149.250.251
+157394524 destip=77.246.156.190
+157394711 destip=82.202.167.212
+157394825 destip=82.202.165.206
+157394939 destip=92.63.111.19
+157395047 destip=92.63.110.69
+157395157 destip=77.246.157.86
+157395271 destip=188.120.239.239
+157395456 destip=185.60.135.74
+157395572 destip=185.63.189.186
+157395686 destip=185.63.189.227
+157395804 destip=185.81.113.84
+157395914 destip=188.120.228.246
+157396030 destip=213.183.41.151
+157396144 destip=77.246.157.20
+157396258 destip=95.46.8.230
+157396443 destip=109.94.110.234
+157396557 destip=185.197.75.23
+157396671 destip=185.63.111.19
+157396783 destip=213.183.59.98
+157396895 destip=68.187.58.130
+[REMOVED]
+```
+
+- windows.strings:
+``` data
+$ cat strings.txt | grep -F -C 50 -i -e "base_library.zip" > strings_baselibrary.txt
+$ vol -f chall.raw windows.strings --pid 4528 --strings-file strings_baselibrary.txt > strings_baselibrary_PID4528.txt
+```
+
+- strings:
+``` data
+$ csvtool col 5,6,8,10 vadinfo_4528.csv | csvtool readable - | grep -e "EXECUTE" | awk '{print "pid.4528.vad." $1 "-" $2 ".dmp" }' | xargs -I {} strings -a {} >> executable_strings.txt
+$ csvtool col 5,6,8,10 vadinfo_4528.csv | csvtool readable - | grep -e "EXECUTE" | awk '{print "pid.4528.vad." $1 "-" $2 ".dmp" }' | xargs -I {} strings -a -el {} >> wide_executable_strings.txt
+$ csvtool col 5,6,8,10 vadinfo_4528.csv | csvtool readable - | grep -e "NOACCESS" | awk '{print "pid.4528.vad." $1 "-" $2 ".dmp" }' | xargs -I {} strings -a {} >> noaccess_strings.txt
+$ csvtool col 5,6,8,10 vadinfo_4528.csv | csvtool readable - | grep -e "NOACCESS" | awk '{print "pid.4528.vad." $1 "-" $2 ".dmp" }' | xargs -I {} strings -a -el {} >> wide_noaccess_strings.txt
+```
+
+- search executable strings for network related strings:
+``` data
+$ cat executable_strings.txt | grep -i -F -e "http" -e "www"
+[REMOVED]
+'%S' is not a valid http date string
+Upgrade request returned with HTTP status code: %d.
+Failed to read Http status code from response
+Failed to obtain WinHttp websocket handle from handshake response
+Bing::Speech::WinHttpWebSocket::Initialize
+[REMOVED]
+www.%s.org
+www.%s.net
+www.%s.edu
+www.%s.com
+[REMOVED]
+$ cat wide_executable_strings.txt | grep -i -F -e "http" -e "www"
+[REMOVED]
+www.youtube-nocookie.com
+www.youtube.com
+http_403.htm
+http_400.htm
+http_501.htm
+http_500.htm
+http_410.htm
+http_404.htm
+http_gen.htm
+HTTP/1.1 405 Method not allowed
+HTTP/1.1 500 Error
+[REMOVED]
+$ cat wide_executable_strings.txt | grep -i -F -A 20 -e "http/1."
+HTTP/1.1 200 OK
+Content-Type: %s
+Content-Length: %d
+[REMOVED]
+
+```
+
+### *SearchApp.exe*
+- dump:
+``` data
+$ vol -f chall.raw -o PID_4528 -r csv windows.vadinfo --pid 4528 --dump > PID_4528/vadinfo_4528.csv
+```
+
+- finding heap:
+``` data
+$ vol -f chall.raw windows.pslist --pid 4528
+[REMOVED]
+4528	772	SearchApp.exe	0x9c84e0992080	38	-	1	False	2024-10-26 17:33:59.000000 UTC	N/A	Disabled
+$ volshell -w -f chall.raw --pid 4528
+[REMOVED]
+(layer_name_Process4528_1) >>> dt("_EPROCESS", 0x9c84e0992080)
+[REMOVED]
+  0x550 :   Peb                                    *symbol_table_name1!_PEB                                   0xbcae72e000
+[REMOVED]
+(layer_name_Process4528_1) >>> dt("_PEB", 0xbcae72e000)
+[REMOVED]
+   0xe8 :   NumberOfHeaps                            symbol_table_name1!unsigned long                     8
+   0xec :   MaximumNumberOfHeaps                     symbol_table_name1!unsigned long                     16
+   0xf0 :   ProcessHeaps                             **symbol_table_name1!void                            0x7ffea9a3ad40
+[REMOVED]
+(layer_name_Process4528_1) >>> dd(0x7ffea9a3ad40, count=64)
+0x7ffea9a3ad40    b6120000 00000232 b60b0000 00000232    .... ...2 .... ...2
+0x7ffea9a3ad50    b6110000 00000232 b7bd0000 00000232    .... ...2 .... ...2
+0x7ffea9a3ad60    bd6c0000 00000232 bd710000 00000232    .l.. ...2 .q.. ...2
+0x7ffea9a3ad70    bd770000 00000232 bd7d0000 00000232    .w.. ...2 .}.. ...2
+```
+
+- malfind:
+``` data
+$ vol -f chall.raw -r csv windows.malware.malfind --pid 4528 > PID_4528/malfind_4528.csv
+$ csvtool col 4-11 malfind_4528.csv | csvtool readable -
+Start VPN     End VPN       Tag  Protection             CommitCharge PrivateMemory File output Notes
+0x23abfd50000 0x23abfd6ffff VadS PAGE_EXECUTE_READWRITE 10           1             Disabled    N/A
+0x23ac0120000 0x23ac0183fff VadS PAGE_EXECUTE_READWRITE 2            1             Disabled    N/A
+
+```
+
+### *enc.exe*
+- enc.exe:
+``` data
+$ sha256sum enc.exe 
+59b78a48ab67ea428ed3f9bc927defe7046e9cf6569debf6fc041a8cfa44aa5e  enc.exe
+$ cat mft.csv | grep -i -F -e ".PF" | grep -i "enc"
+1,0x108f71120,FILE,91956,2,File,Archive,FILE_NAME,2024-10-26 00:57:58.000000 UTC,2024-10-26 00:57:58.000000 UTC,2024-10-26 00:57:58.000000 UTC,2024-10-26 00:57:58.000000 UTC,SCREENCLIPPINGHOST.EXE-4371A050.pf
+1,0x118583120,FILE,100632,2,File,Archive,FILE_NAME,2024-10-26 01:10:56.000000 UTC,2024-10-26 01:10:56.000000 UTC,2024-10-26 01:10:56.000000 UTC,2024-10-26 01:10:56.000000 UTC,SHELLEXPERIENCEHOST.EXE-706053DD.pf
+1,0x15b645520,FILE,108961,2,File,Archive,FILE_NAME,2024-10-26 01:10:55.000000 UTC,2024-10-26 01:10:55.000000 UTC,2024-10-26 01:10:55.000000 UTC,2024-10-26 01:10:55.000000 UTC,STARTMENUEXPERIENCEHOST.EXE-D550CB30.pf
+1,0x15b646120,FILE,110856,2,File,Archive,FILE_NAME,2024-10-26 01:13:49.000000 UTC,2024-10-26 01:13:49.000000 UTC,2024-10-26 01:13:49.000000 UTC,2024-10-26 01:13:49.000000 UTC,SHELLEXPERIENCEHOST.EXE-A0A2DEC2.pf
+1,0x15f74bd20,FILE,101095,2,File,Archive,FILE_NAME,2024-10-26 17:15:10.000000 UTC,2024-10-26 17:15:10.000000 UTC,2024-10-26 17:15:10.000000 UTC,2024-10-26 17:15:10.000000 UTC,PHONEEXPERIENCEHOST.EXE-D8B241AE.pf
+1,0x15f956520,FILE,110453,2,File,Archive,FILE_NAME,2024-10-25 15:22:05.000000 UTC,2024-10-25 15:22:05.000000 UTC,2024-10-25 15:22:05.000000 UTC,2024-10-25 15:22:05.000000 UTC,STARTMENUEXPERIENCEHOST.EXE-1A6157D8.pf
+```
+- VT says it is malicious
+- no trace of running
+
+- running enc.exe:
+``` data
+C:\Users\Hugo\Downloads>enc.exe
+Traceback (most recent call last):
+  File "enc.py", line 22, in <module>
+  File "enc.py", line 8, in encrypt_file
+ValueError: Invalid key or IV length
+[PYI-7532:ERROR] Failed to execute script 'enc' due to unhandled exception!
+```
+
+- enc.exe strings:
+``` data
+$ strings -n 10 enc.exe > long_strings.enc
+$ strings -n 10 -el enc.exe >> long_strings.enc
+$ vim long_strings.enc
+[REMOVED]
+Failed to extract %s: inflateInit() failed with return code %d!
+Failed to extract %s: failed to allocate temporary input buffer!
+Failed to extract %s: failed to allocate temporary output buffer!
+Failed to extract %s: decompression resulted in return code %d!
+Failed to extract %s: failed to allocate temporary buffer!
+Failed to extract %s: failed to read data chunk!
+Failed to extract %s: failed to write data chunk!
+Failed to extract %s: failed to open archive file!
+Failed to extract %s: failed to seek to the entry's data!
+Failed to extract %s: failed to allocate data buffer (%u bytes)!
+Failed to create symbolic link %s!
+Failed to extract %s: failed to open target file!
+Failed to seek to cookie position!
+Failed to read cookie!
+Could not allocate memory for archive structure!
+Could not allocate buffer for TOC!
+Could not read full TOC!
+[REMOVED]
+Extraction path length exceeds maximum path length!
+File already exists but should not: %s
+Failed to create parent directory structure.
+Failed to extract entry: %s.
+Could not get __main__ module.
+Could not get __main__ module's dict.
+Failed to extract script from archive!
+Absolute path to script exceeds PYI_PATH_MAX
+Failed to unmarshal code object for %s
+_pyi_main_co
+Failed to execute script '%s' due to unhandled exception!
+PYINSTALLER_RESET_ENVIRONMENT
+_PYI_ARCHIVE_FILE
+_PYI_APPLICATION_HOME_DIR
+_PYI_PARENT_PROCESS_LEVEL
+_PYI_SPLASH_IPC
+Invalid value in _PYI_PARENT_PROCESS_LEVEL: %s
+PYINSTALLER_STRICT_UNPACK_MODE
+Failed to initialize security descriptor for temporary directory!
+Could not create temporary directory!
+_PYI_APPLICATION_HOME_DIR not set for onefile child process!
+Path exceeds PYI_PATH_MAX limit.
+Failed to convert DLL search path!
+[REMOVED]
+pyi-hide-console
+[REMOVED]
+Failed to load splash screen resources!
+Failed to unpack splash screen dependencies from PKG archive!
+Failed to load Tcl/Tk shared libraries for splash screen!
+Failed to start splash screen!
+Failed to remove temporary directory: %s
+Could not load PyInstaller's embedded PKG archive from the executable (%s)
+Could not side-load PyInstaller's PKG archive from external file (%s)
+Maximum archive pool size reached!
+Failed to open archive %s!
+%s%c%s%c%s%c%s
+%s%c%s%c%s
+Failed to copy file %s from %s!
+%s%c%s.pkg
+%s%c%s.exe
+Referenced dependency archive %s not found.
+Failed to open referenced dependency archive %s.
+Dependency %s not found in the referenced dependency archive.
+Failed to extract %s from referenced dependency archive %s.
+unbuffered
+base_library.zip
+[REMOVED]
+Path of ucrtbase.dll (%s) and its name exceed buffer size (%d)
+Path of Python shared library (%s) and its name (%s) exceed buffer size (%d)
+Failed to parse run-time options!
+Failed to pre-initialize embedded python interpreter!
+Failed to allocate PyConfig structure! Unsupported python version?
+Failed to set program name!
+Failed to set python home path!
+Failed to set module search paths!
+Failed to set sys.argv!
+Failed to set run-time options!
+Failed to start embedded python interpreter!
+Failed to get _MEIPASS as PyObject.
+Failed to unmarshal code object for module %s!
+Module object for %s is NULL!
+_pyinstaller_pyz
+PYZ archive entry not found in the TOC!
+Failed to format PYZ archive path and offset
+Failed to store path to PYZ archive into sys.%s!
+import sys; sys.stdout.flush();         (sys.__stdout__.flush if sys.__stdout__         is not sys.stdout else (lambda: None))()
+import sys; sys.stderr.flush();         (sys.__stderr__.flush if sys.__stderr__         is not sys.stderr else (lambda: None))()
+SPLASH: length of Tcl shared library path exceeds maximum path length!
+SPLASH: length of Tk shared library path exceeds maximum path length!
+Could not allocate memory for splash screen resources.
+SPLASH: Tcl is not threaded. Only threaded Tcl is supported.
+SPLASH: could not find requirement %s in archive.
+SPLASH: extraction path length exceeds maximum path length!
+SPLASH: file already exists but should not: %s
+SPLASH: failed to create parent directory structure.
+SPLASH: could not extract requirement %s.
+SPLASH: failed to load Tcl/Tk shared libraries!
+Could not allocate memory for SPLASH_CONTEXT.
+[REMOVED]
+connection aborted
+connection refused
+connection reset
+destination address required
+host unreachable
+identifier removed
+operation in progress
+already connected
+too many symbolic link levels
+message size
+network down
+network reset
+network unreachable
+[REMOVED]
+Failed to resolve full path to executable %ls.
+Failed to convert executable path to UTF-8.
+Failed to get address for %hs
+GetProcAddress
+Failed to load Python DLL '%ls'.
+LoadLibrary
+LOADER: failed to convert runtime-tmpdir to a wide string.
+LOADER: failed to expand environment variables in the runtime-tmpdir.
+LOADER: runtime-tmpdir points to non-existent drive %ls (type: %d)!
+LOADER: failed to obtain the absolute path of the runtime-tmpdir.
+LOADER: failed to create runtime-tmpdir path %ls!
+CreateDirectory
+LOADER: failed to set the TMP environment variable.
+LOADER: length of teporary directory path exceeds maximum path length!
+[REMOVED]
+```
+- created with pyinstaller
+
+- extracting python code:
+``` data
+$ python3 pyinstxtractor.py project/enc.exe
+[REMOVED]
+[!] Warning: This script is running in a different Python version than the one used to build the executable.
+[!] Please run this script in Python 3.8 to prevent extraction errors during unmarshalling
+[!] Skipping pyz extraction
+[+] Successfully extracted pyinstaller archive: project/enc.exe
+$ uncompyle6 enc.exe_extracted/enc.pyc 
+# uncompyle6 version 3.9.3
+# Python bytecode version base 3.8.0 (3413)
+# Decompiled from: Python 3.12.3 (main, Mar  3 2026, 12:15:18) [GCC 13.3.0]
+# Embedded file name: enc.py
+import os
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import padding
+
+def encrypt_file(file_path, key, iv):
+    if len(key) != 32 or len(iv) != 16:
+        raise ValueError("Invalid key or IV length")
+    cipher = Cipher((algorithms.AES(key)), (modes.CBC(iv)), backend=(default_backend()))
+    encryptor = cipher.encryptor()
+    padder = padding.PKCS7(128).padder()
+    with open(file_path, "rb") as file:
+        plaintext = file.read()
+    padded_data = padder.update(plaintext) + padder.finalize()
+    ciphertext = encryptor.update(padded_data) + encryptor.finalize()
+    with open(file_path, "wb") as file:
+        file.write(ciphertext)
+
+
+key = b'{REDACTED}'
+iv = bytes.fromhex("3038375330a3546850283a2d695b7e23")
+original_file = "Confidential"
+encrypt_file(original_file, key, iv)
+
+# okay decompiling enc.exe_extracted/enc.pyc
+$ openssl enc -aes-256-cbc -d -in Confidential -out Confidential.dec -K 6246464e35737330327e6037362f3848326a487123287e7157494238643f7025 -iv 3038375330a3546850283a2d695b7e23
+$ file Confidential.dec
+Confidential.dec: PDF document, version 1.5, 1 page(s)
+```
+- opening *Confidential.dec* I found:
+![[Confidential_text.png]]
+``` data
+CONFIDENTIAL
+Gotham's fate rests in your hands.
+Hidden within your system is a code that holds the city's future.
+Your objective: retrieve it before the shadows consume everything.
+The code is: icc{15_17_d4rkkn1gh7_0r_4zr34lkn1gh7}
+Trust nothing. The clues are buried deeper than you think. Time is running out.
 ```
