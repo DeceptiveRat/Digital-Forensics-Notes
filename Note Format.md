@@ -20,5 +20,7 @@
 	- `var1`
 - timestamp:
 	- `2026-04-08 06:06:16.000000 UTC`
+- CLI options:
+	- `-f input.txt`
 
 ### 3. **Bold**

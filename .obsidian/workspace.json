@@ -27,7 +27,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/Notes.md",
+                "file": "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3/Notes.md",
                 "mode": "preview",
                 "source": true
               },
@@ -41,16 +41,16 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 10. Registry in Memory.md",
+                "file": "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3/Solution.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 10. Registry in Memory"
+              "title": "Solution"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -209,13 +209,15 @@
       "bases:Create new base": false
     }
   },
-  "active": "ba510334bed01151",
+  "active": "1bf19fb8e457e453",
   "lastOpenFiles": [
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 10. Registry in Memory.md",
-    "Note Format.md",
-    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/Notes.md",
-    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/Notes.md~",
+    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/Solution.md~",
+    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3/Notes.md",
+    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3/Solution.md",
     "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/4913",
+    "Note Format.md",
+    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 10. Registry in Memory.md",
+    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/Notes.md~",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 9. Event Logs.md",
@@ -238,16 +240,13 @@
     "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
     "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
     "Blog/Writeups/DFIR-LABS/1. Gotham Hustle/Solution.md",
-    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)",
+    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3",
     "Blog/Writeups/DFIR-LABS/1. Gotham Hustle (WIP)/Notes.md~",
     "Blog/Writeups/DFIR-LABS/1. Gotham Hustle (WIP)/4913",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 15. Windows GUI Subsystem, Part II.md",
-    "Blog/자료 2 - 디지털 증거 수집.md",
-    "Blog/자료 1 - 디지털 포렌식이란?.md",
     "Blog/자료 Images/자료 2 - Vbox_pause.png",
     "Blog/자료 Images",
     "Blog/1. 디지털 포렌식이란?.md~",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 18. Timelining.md~",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 18 images/Gh0st_pcap.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 17 images/cmd_console_settings.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 17 images/registry_console_settings.png",
