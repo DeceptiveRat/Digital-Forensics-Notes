@@ -380,6 +380,10 @@ $ vol -q -f Notepad_forensics.raw vadinfo --pid 7152 | grep -e 0x125a40e0000 -e 
 
 Subtracting 1 from the starting address of our content pointer VAD, we can find the VAD directly before it. The VAD contains a file, `\Windows\Fonts\StaticCache.dat`, which should make identifying the VAD very easy. 
 
+Below is a very simple diagram depicting a generic *Notepad.exe* process, summarizing what we've found out. The addresses were chosen at random and may be different for each process.
+
+![[Memory Forensics Scenario 2 - Generic Notepad.png]]
+
 We now have a way to find the contents of short notes, but what about long notes? 
 
 ``` sh
@@ -413,6 +417,9 @@ Also note the VAD attributes. "VadS" tag, read/write permissions, and private me
 This should be enough to build our plugin for extracting the note content. 
 
 ## 3. plugin creation
+
+Using our knowledge of where the pointers are within the VAD and what those pointers point to, we can create a function to perform a sanity check on the VAD. 
+
 ``` python
 def verify_address(content_pointer_VAD, layer):
     try:
@@ -454,7 +461,7 @@ def verify_address(content_pointer_VAD, layer):
     return content_virtual_address
 ```
 
-Using our knowledge of where the pointers are within the VAD and what those pointers point to, we can create a function to perform a sanity check on the VAD. 
+Also, we can leverage our knowledge of content pointer VAD attributes. 
 
 ``` python
     def find_content_pointer_vad(self, vad_node):
@@ -482,7 +489,7 @@ Using our knowledge of where the pointers are within the VAD and what those poin
         return False
 ```
 
-Also, we can leverage our knowledge of content pointer VAD attributes. 
+The link to the complete version of the plugin can be found below.
 
 Using the plugin, we can extract the notes from all *notepad.exe* processes with just their PIDs.
 ``` sh
@@ -492,9 +499,9 @@ $ vol -f Notepad_forensics.raw windows.note_extractor --pid 3136
 
 modifying test.txt...is text is ap      4f 00 72 00 69 00 67 00 69 00 6e 00 61 00 6c 00 20 00 22 00 74 00 65 00 73 00 74 00 2e 00 74 00 78 00 74 00 22 00 20 00 73 00 61 00 76 00 65 00 64 00 20 00 74 00 6f 00 20 00 64 00 69 00 73 00 6b 00 21 00 0d 00 0a 00 0d 00 0a 00 6d 00 6f 00 64 00 69 00 66 00 79 00 69 00 6e 00 67 00 20 00 74 00 65 00 73 00 74 00 2e 00 74 00 78 00 74 00 2e 00 2e 00 2e 00 69 00 73 00 20 00 74 00 65 00 78 00 74 00 20 00 69 00 73 00 20 00 61 00 70 00
 $ vol -f Notepad_forensics.raw windows.note_extractor --pid 996
+0x1f85fc0e7d0   Window 2: new note, but not saved to disk...    57 00 69 00 6e 00 64 00 6f 00 77 00 20 00 32 00 3a 00 20 00 6e 00 65 00 77 00 20 00 6e 00 6f 00 74 00 65 00 2c 00 20 00 62 00 75 00 74 00 20 00 6e 00 6f 00 74 00 20 00 73 00 61 00 76 00 65 00 64 00 20 00 74 00 6f 00 20 00 64 00 69 00 73 00 6b 00 2e 00 2e 00 2e 00
 [REMOVED]
 $ vol -f Notepad_forensics.raw windows.note_extractor --pid 2632
-0x1f85fc0e7d0   Window 2: new note, but not saved to disk...    57 00 69 00 6e 00 64 00 6f 00 77 00 20 00 32 00 3a 00 20 00 6e 00 65 00 77 00 20 00 6e 00 6f 00 74 00 65 00 2c 00 20 00 62 00 75 00 74 00 20 00 6e 00 6f 00 74 00 20 00 73 00 61 00 76 00 65 00 64 00 20 00 74 00 6f 00 20 00 64 00 69 00 73 00 6b 00 2e 00 2e 00 2e 00
 0x1a47e6500a0   Window 5: Very long text being repeated over and over. Very long text being repeated over and over. Very long text being repeated over and over. Very long text being repeated over and over. Very long text being repeated over and over. Very long text being repeated over and over. Very long text being repeated over and over. Very long text being repeated over and over. [REMOVED]
 ```
 

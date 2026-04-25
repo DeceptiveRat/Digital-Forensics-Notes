@@ -197,12 +197,13 @@
   },
   "active": "62af7ad4cb9562c5",
   "lastOpenFiles": [
-    "Blog/Memory Forensics Scenarios/Scenario 2 - Notepad contents.md~",
-    "Blog/Memory Forensics Scenarios/[HIDE]Scenario 2 notes.md~",
     "Blog/Memory Forensics Scenarios/[HIDE]Scenario 2 notes.md",
     "Blog/Memory Forensics Scenarios/Scenario 2 - Notepad contents.md",
-    "Blog/Memory Forensics Scenarios/4913",
+    "Blog/Memory Forensics Scenarios/Scenario 2 images/Memory Forensics Scenario 2 - Generic Notepad.png",
     "Blog/Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md",
+    "Blog/Memory Forensics Scenarios/Scenario 2 - Notepad contents.md~",
+    "Blog/Memory Forensics Scenarios/[HIDE]Scenario 2 notes.md~",
+    "Blog/Memory Forensics Scenarios/4913",
     "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3/Notes.md",
     "Blog/Memory Forensics Scenarios/Scenario 2 notes.md~",
     "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3/Solution.md",
@@ -240,7 +241,6 @@
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 17 images/registry_console_settings.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 16 images/TrueCrypt_mount.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 16 images/SharedCacheMap_diagram.png",
-    "Reference Notes/The Art of Memory Forensics/Images/Chapter 16 images/cache_manager_DS.png",
-    "Reference Notes/The Art of Memory Forensics/Images/Chapter 15 images/ACCDFISA_disassembled.png"
+    "Reference Notes/The Art of Memory Forensics/Images/Chapter 16 images/cache_manager_DS.png"
   ]
 }
