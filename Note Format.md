@@ -5,6 +5,8 @@
 - tool names:
 	- *Volatility*
 	- *Autopsy*
+- processes:
+	- *bash*
 
 ### 2. `Codebox`
 - code

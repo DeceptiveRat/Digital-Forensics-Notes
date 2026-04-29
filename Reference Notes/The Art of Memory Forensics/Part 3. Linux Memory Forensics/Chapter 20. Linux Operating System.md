@@ -457,3 +457,16 @@ Key to Flags:
 			yield self.obj_vm.profile.get_symbol("swapper_pg_dir") - shift
 	```
 	- works the same on 64-bit systems, except symbol used is `init_level4_pgt` and shift value is `0xffffffff80000000`
+
+## 17. procfs and sysfs
+- virtual FS that allow userland to communicate with kernel mode components
+- common tasks with procfs:
+	- *lsmod* parses `/proc/modules`
+	- *mount* comes from `/proc/mounts`
+	- *netstat* uses files under `/proc/net`
+	- *ps* uses per-process subdirectories under `/proc`
+- system integrity can be compromised by manipulating files within procfs and sysfs
+
+## 18. compressed swap
+- instead of swapping to disk, pages are compressed and stored in memory; immense performance improvement
+- complicates things for investigator

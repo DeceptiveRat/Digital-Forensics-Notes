@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 20. Linux Operating System.md",
+                "file": "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 22. Networking Artifacts.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 20. Linux Operating System"
+              "title": "Chapter 22. Networking Artifacts"
             }
           },
           {
@@ -210,12 +210,16 @@
   },
   "active": "62af7ad4cb9562c5",
   "lastOpenFiles": [
-    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 20. Linux Operating System.md~",
-    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/4913",
-    "Blog/Memory Forensics Scenarios/Scenario 2 - Notepad contents.md",
-    "Blog/Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 22. Networking Artifacts.md~",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 21. Processes and Process Memory.md",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 22. Networking Artifacts.md",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 21. Processes and Process Memory.md~",
     "Note Format.md",
+    "Blog/Memory Forensics Scenarios/Scenario 2 - Notepad contents.md",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/4913",
     "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 20. Linux Operating System.md",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 20. Linux Operating System.md~",
+    "Blog/Memory Forensics Scenarios/Scenario 1 - downloader and keylogger.md",
     "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 19. Linux Memory Acquisition.md",
     "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 19. Linux Memory Acquisition.md~",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 18. Timelining.md",
@@ -233,8 +237,6 @@
     "Blog/Memory Forensics Scenarios/Scenario 2 images/All_windows_1.png",
     "Blog/Memory Forensics Scenarios/Scenario 2 images/All_windows_2.png",
     "Blog/Memory Forensics Scenarios/Scenario 2 images",
-    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/Solution.md~",
-    "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3 (WIP)/4913",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 10. Registry in Memory.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 8. Hunting Malware in Process Memory.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 11. Networking.md",
@@ -248,8 +250,6 @@
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 12. Windows Services.md",
     "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 5. Windows Objects and Pool Allocations.md",
     "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 1. Systems Overview.md",
-    "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 4. Memory Acquisition.md",
-    "Reference Notes/The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics/Chapter 2. Data Structures.md",
     "Blog/자료 Images/자료 2 - Vbox_pause.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 18 images/Gh0st_pcap.png",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 17 images/cmd_console_settings.png",
