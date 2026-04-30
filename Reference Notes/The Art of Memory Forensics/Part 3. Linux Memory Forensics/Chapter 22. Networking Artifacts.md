@@ -139,3 +139,186 @@
 	```
 - output lists size of each packet recovered along with filename where data is written
 - filename is created as `<receive/send>.<PID>.<FD number>`
+
+## 11. network interface analysis objectives
+- detect promiscuous mode interfaces
+- identify sniffing applications
+
+## 12. network interface DS
+- `net_device`:
+	``` python
+	'net_device' (1856 bytes)
+	0x0 : name ['String', {'length': 16}]
+	0x10 : pm_qos_req ['pm_qos_request']
+	0x40 : name_hlist ['hlist_node']
+	0x50 : ifalias ['pointer', ['char']]
+	0x58 : mem_end ['unsigned long']
+	0x60 : mem_start ['unsigned long']
+	0x68 : base_addr ['unsigned long']
+	0x70 : irq ['unsigned int']
+	0x78 : state ['unsigned long']
+	0x80 : dev_list ['list_head']
+	0x1b0 : flags ['unsigned int']
+	0x1cc : perm_addr ['array', 32, ['unsigned char']]
+	[snip]
+	```
+	- `dev_list`: pointer to list of network devices
+	- `perm_addr`: MAC address of interface
+	- `flags`: 
+		- status information of device
+		- promiscuous mode devices will have `IFF_PROMISC`(`0x100`) flag set
+
+## 13. *linux_ifconfig* plugin
+- enumerates all active network interfaces
+- walks each network namespace and walks list of devices
+- to determine all interface names and aliases of a device, `ip_ptr` member in `in_device` type is used
+- list of devices is stored in `ifa_list` member
+- name of each device or alias can be found in `ifa_lable` member
+- IP address can be found in `ifa_address`
+- example output:
+	``` data
+	$ python vol.py --profile=LinuxDebian-3_2x64 -f debian.lime linux_ifconfig
+	Volatility Foundation Volatility Framework 2.4
+	Interface IP Address MAC Address promiscuous Mode
+	---------------- -------------------- ------------------ ---------------
+	lo 127.0.0.1 00:00:00:00:00:00 False
+	eth0 192.168.174.169 00:0c:29:e5:11:2e False
+	```
+
+## 14. network interface naming conventions
+- common prefixes for network device names:
+	- `lo`: local loopback
+	- `eth`: ethernet
+	- `wlan`: wireless
+	- `usb`: USB network devices
+
+## 15. interface aliases
+- aliases can be used to assign multiple IP addresses to a device
+- named with base name folowed by colon and index
+- *linux_ifconfig* output:
+	``` data
+	$ python vol.py --profile=LinuxDebian-3_2x64 -f tcpdump.lime linux_ifconfig
+	Volatility Foundation Volatility Framework 2.4
+	Interface IP Address MAC Address Promiscuous Mode
+	---------------- -------------------- ------------------ ---------------
+	lo 127.0.0.1 00:00:00:00:00:00 False
+	eth0 192.168.174.169 00:0c:29:e5:11:2e True
+	eth0:0 192.168.174.200 00:0c:29:e5:11:2e True
+	```
+
+## 16. *linux_list_raw* plugin
+- shows which programs are using raw sockets
+- example output:
+	``` data
+	$ python vol.py --profile=LinuxDebian-3_2x64 -f tcpdump.lime linux_list_raw
+	Volatility Foundation Volatility Framework 2.4
+	Process PID File Descriptor Inode
+	---------------- ------ --------------- ------------------
+	tcpdump 3796 3 9209
+	dhclient 1788 4 6532
+	```
+
+## 17. route cache
+- removed after 3.6.x series kernel
+- stored in `rt_hash_table` global variable:
+	- element is `rt_hash_bucket` 
+	- `rt_hash_mask` global variable determines size 
+
+## 18. route cache analysis objectives
+- map IP addresses to domain names
+
+## 19. route cache DS
+- `rtable`:
+	``` python
+	>>> dt("rtable")
+	'rtable' (224 bytes)
+	0x0 : dst ['dst_entry']
+	0x98 : rt_key_dst ['unsigned int']
+	0x9c : rt_key_src ['unsigned int']
+	0xa0 : rt_genid ['int']
+	0xa4 : rt_flags ['unsigned int']
+	0xa8 : rt_type ['unsigned short']
+	0xaa : rt_key_tos ['unsigned char']
+	0xac : rt_dst ['unsigned int']
+	0xb0 : rt_src ['unsigned int']
+	0xb4 : rt_route_iif ['int']
+	0xb8 : rt_iif ['int']
+	0xbc : rt_oif ['int']
+	0xc0 : rt_mark ['unsigned int']
+	0xc4 : rt_gateway ['unsigned int']
+	0xc8 : rt_spec_dst ['unsigned int']
+	0xcc : rt_peer_genid ['unsigned int']
+	0xd0 : peer ['pointer', ['inet_peer']]
+	0xd8 : fi ['pointer', ['fib_info']]
+	```
+	- `dst`: used to determine which interface the route was active
+	- `rt_gateway`: network gateway IP 
+	- `rt_dst`: remote destination
+
+## 20. *linux_route_cache* plugin
+- finds routing cache entries by enumerating every element of array and attempting to walk collision chain in `chain` member
+- example output:
+	``` data
+	$ python vol.py --profile=LinuxDebian-3_2x64 -f debian.lime linux_route_cache
+	Volatility Foundation Volatility Framework 2.4
+	Interface Destination Gateway
+	---------------- -------------------- -------
+	eth0 192.168.174.1 192.168.174.1
+	lo 192.168.174.169 192.168.174.169
+	eth0 192.168.174.254 192.168.174.254
+	eth0 192.168.174.1 192.168.174.1
+	eth0 192.168.174.1 192.168.174.1
+	lo 192.168.174.255 192.168.174.255
+	<snip>
+	```
+
+## 21. ARP cache analysis objectives
+- detect lateral movement
+
+## 22. ARP cache DS
+- `neighbour`: 
+	``` data
+	'neighbour' (392 bytes)
+	0x0 : next ['pointer', ['neighbour']]
+	0x8 : tbl ['pointer', ['neigh_table']]
+	0x10 : parms ['pointer', ['neigh_parms']]
+	0x18 : confirmed ['unsigned long']
+	0x20 : updated ['unsigned long']
+	0x28 : lock ['__unnamed_0x2ff3']
+	0x2c : refcnt ['__unnamed_0x38e']
+	0x30 : arp_queue ['sk_buff_head']
+	0x48 : timer ['timer_list']
+	0x98 : used ['unsigned long']
+	0xa0 : probes ['__unnamed_0x38e']
+	0xa4 : flags ['unsigned char']
+	0xa5 : nud_state ['unsigned char']
+	0xa6 : type ['unsigned char']
+	0xa7 : dead ['unsigned char']
+	0xa8 : ha_lock ['__unnamed_0x3015']
+	0xb0 : ha ['array', 32, ['unsigned char']]
+	0xd0 : hh ['hh_cache']
+	0x160 : output ['pointer', ['void']]
+	0x168 : ops ['pointer', ['neigh_ops']]
+	0x170 : rcu ['rcu_head']
+	0x180 : dev ['pointer', ['net_device']]
+	0x188 : primary_key ['array', 0, ['unsigned char']]
+	```
+	- `next`: next ARP entry in list
+	- `tbl`: back-pointer to owning ARP table
+	- `primary_key`: IP of machine contacted
+	- `ha`: MAC of machine contacted
+	- `dev`: `net_device` of interface assiociated with cache entry
+
+## 23. *linux_arp* plugin
+- `neigh_tables` global variable stores list of neighbor table:
+	- array index stores pointer to `neighbour` structure
+- enumerate all neighbors by walking `next` member
+- example output:
+	``` data
+	$ python vol.py --profile=LinuxDebian-3_2x64 -f debian.lime linux_arp
+	Volatility Foundation Volatility Framework 2.4
+	[:: ] at 00:00:00:00:00:00 on lo
+	[192.168.174.1 ] at 00:50:56:c0:00:08 on eth0
+	[192.168.174.2 ] at 00:50:56:fa:ad:55 on eth0
+	[192.168.174.254 ] at 00:50:56:e3:2e:81 on eth0
+	```
