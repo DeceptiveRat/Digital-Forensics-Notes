@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
+                "file": "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 24. File Systems in Memory.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 14. Ext2 and Ext3 Concepts and Analysis"
+              "title": "Chapter 24. File Systems in Memory"
             }
           }
         ]
@@ -211,14 +211,14 @@
   "active": "62af7ad4cb9562c5",
   "lastOpenFiles": [
     "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 26. Kernel Mode Rootkits.md~",
-    "Note Format.md",
-    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 26. Kernel Mode Rootkits.md",
-    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/4913",
-    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 25. Userland Rootkits.md",
-    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 25. Userland Rootkits.md~",
     "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 24. File Systems in Memory.md",
-    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 24. File Systems in Memory.md~",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 25. Userland Rootkits.md",
     "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 26. Kernel Mode Rootkits.md",
+    "Note Format.md",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/4913",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 25. Userland Rootkits.md~",
+    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 24. File Systems in Memory.md~",
     "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 20. Linux Operating System.md",
     "Reference Notes/The Art of Memory Forensics/Images/Chapter 23 images/live_CD_interactions.png",
     "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 23. Kernel Memory Artifacts.md",
