@@ -13,12 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Registry.md",
+                "file": "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/SRUM.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Registry"
+              "title": "SRUM"
+            }
+          },
+          {
+            "id": "a82d1b0e45812053",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/LNK files.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "LNK files"
             }
           },
           {
@@ -196,6 +210,32 @@
   },
   "active": "62af7ad4cb9562c5",
   "lastOpenFiles": [
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/LNK files.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/SRUM.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Prefetch.md",
+    "Digital Forensics Concepts/Windows/SSDT.md",
+    "Digital Forensics Concepts/Partition System.md",
+    "Digital Forensics Concepts/File System.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/Windows Artifact Types.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
+    "Digital Forensics Concepts/Linux/LVM/LVM.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Browser history.md",
+    "README.md",
+    "Note Format.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs.md",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
+    "Digital Forensics Concepts/Linux/LVM/LVM.md~",
+    "Digital Forensics Concepts/Linux/LVM/4913",
+    "Digital Forensics Concepts/Linux/LVM/images",
+    "Digital Forensics Concepts/Linux/LVM/images/LVM_storage.png",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/UserAssist.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Shimcache.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Registry.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Amcache.md",
+    "Digital Forensics Concepts/Linux/LVM/images/traditional_storage.png",
+    "Digital Forensics Concepts/Linux/LVM/Pasted image.png",
+    "Digital Forensics Concepts/Linux/LVM",
+    "Digital Forensics Concepts/Linux/LVM.md~",
     "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Shimcache.md",
     "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Amcache.md",
     "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
@@ -203,44 +243,18 @@
     "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3/Notes.md",
     "Blog/Writeups/DFIR-LABS/2. kn1ghtfl4r3/Confidential_text.png",
     "Blog/Memory Forensics/Scenario 4 - Kakaotalk.md",
-    "Note Format.md",
     "Reference Notes/File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
     "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/UserAssist.md",
-    "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Registry.md",
-    "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs.md",
-    "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Prefetch.md",
-    "Reference Notes/Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/LNK files.md",
-    "Blog/Incident Response Scenarios/Scenario 1.md",
     "Blog/Incident Response Scenarios/Scenario 1.md~",
-    "Blog/Memory Forensics/[HIDE]Scenario 5 notes.md",
     "Blog/Incident Response Scenarios",
     "Blog/Memory Forensics/[HIDE]Scenario 5 notes.md~",
     "Blog/Memory Forensics/[HIDE]Scenario 5 images/state3.png",
     "Blog/Memory Forensics/[HIDE]Scenario 5 images/state2.png",
     "Blog/Memory Forensics/[HIDE]Scenario 5 images",
-    "Blog/Memory Forensics/Scenario 1 - downloader and keylogger.md",
     "Blog/Memory Forensics/Scenario 5 images/Untitled",
     "Blog/Memory Forensics/Scenario 5 images/state3.png",
     "Blog/Memory Forensics/Scenario 5 images/state2.png",
-    "Blog/Memory Forensics/Scenario 5 images",
-    "Blog/Memory Forensics/Scenario 2 - Notepad contents.md",
-    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 19. Linux Memory Acquisition.md",
     "Blog/Memory Forensics/Scenario 4 images/Image Creation.png",
-    "Blog/Memory Forensics/Scenario 4 images/image1_login.png",
-    "Blog/Memory Forensics/Scenario 4 images/Kakaotalk Workflow.png",
-    "Blog/Memory Forensics/Scenario 4 images/state1.png",
-    "Blog/Memory Forensics/Scenario 4 images/state4.png",
-    "Blog/Memory Forensics/Scenario 4 - Kakaotalk.md~",
-    "Blog/Memory Forensics/Scenario 3 - Notepad contents 2.md",
-    "Blog/Memory Forensics/4913",
-    "Blog/Memory Forensics/[HIDE]Scenario 4 notes.md",
-    "Blog/Memory Forensics/[HIDE]Scenario 4 notes.md~",
-    "Blog/Memory Forensics/[HIDE]Scenario 3 notes.md",
-    "Blog/Memory Forensics/[HIDE]Scenario 2 notes.md",
-    "Blog/Memory Forensics/Scenario 4 images",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 17. Event Reconstruction.md",
-    "Reference Notes/The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 6. Processes, Handles, and Tokens.md",
-    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 24. File Systems in Memory.md",
-    "Reference Notes/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 26. Kernel Mode Rootkits.md"
+    "Blog/Memory Forensics/Scenario 4 images/image1_login.png"
   ]
 }
