@@ -1,6 +1,6 @@
 *.swp
 *.dat
 *.txt
-Reference\ Notes/The Art of Memory Forensics/**/*.png
-Reference\ Notes/File System Forensic Analysis/**/*.png
+The Art of Memory Forensics/**/*.png
+File System Forensic Analysis/**/*.png
 \[HIDE\]*
