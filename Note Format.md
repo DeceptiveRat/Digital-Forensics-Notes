@@ -26,3 +26,8 @@
 	- `-f input.txt`
 
 ### 3. **Bold**
+
+### 4. references
+- [number] (Author, written date) article name, referenced date, link
+- e.g. 
+[1] (Cristian Souza, 2025/10/01) Forensic journey: hunting evil within AmCache, 2026/03/12, https://securelist.com/amcache-forensic-artifact/117622/

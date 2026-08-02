@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
+                "file": "Digital Forensics Concepts/XFS/Inodes.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 14. Ext2 and Ext3 Concepts and Analysis"
+              "title": "Inodes"
             }
           },
           {
@@ -27,30 +27,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Digital Forensics Concepts/XFS/Data hiding in the XFS file system.md",
+                "file": "Note Format.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Data hiding in the XFS file system"
+              "title": "Note Format"
             }
           },
           {
-            "id": "7a8c5ccd5f59cf29",
+            "id": "d3925d53d6d90791",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md",
-                "mode": "preview",
+                "file": "Digital Forensics Concepts/XFS/Inodes.md",
+                "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 15. Ext2 and Ext3 Data Structures"
+              "title": "Inodes"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -70,7 +70,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -209,13 +211,33 @@
       "bases:Create new base": false
     }
   },
-  "active": "3cb9e7d24fc2dd79",
+  "active": "d3925d53d6d90791",
   "lastOpenFiles": [
+    "Digital Forensics Concepts/XFS/File System Forensics Images/example extended attribute.png",
+    "Digital Forensics Concepts/XFS/File System Forensics Images/extended attribute header.png",
+    "Note Format.md",
+    "Digital Forensics Concepts/XFS/Inodes.md",
+    "Digital Forensics Concepts/XFS/Data hiding in the XFS file system.md",
+    "Digital Forensics Concepts/XFS/Directory.md",
+    "Digital Forensics Concepts/XFS/Extents.md",
+    "Digital Forensics Concepts/XFS/File System Forensics Images/directory entry structure.png",
+    "Digital Forensics Concepts/XFS/File System Forensics Images/directory header structure.png",
+    "Digital Forensics Concepts/XFS/File System Forensics Images/XFS extent structure.png",
+    "Digital Forensics Concepts/XFS/File System Forensics Images/2026-08-01_13-45.png",
+    "Digital Forensics Concepts/XFS/File System Forensics Images",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Amcache.md",
+    "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
+    "Digital Forensics Concepts/File System.md",
+    "File System Forensics/Chapter 10 - The XFS File System",
+    "File System Forensics/XFS Inodes.md~",
+    "Digital Forensics Concepts/XFS/File System Forensics/Untitled",
+    "File System Forensics",
+    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
     "Digital Forensics Concepts/XFS/Data hiding in the XFS file system.md~",
     "Digital Forensics Concepts/XFS/Data hiding in the XFS file system Images/evaluation summary 2.png",
     "Digital Forensics Concepts/XFS/4913",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md",
-    "Digital Forensics Concepts/XFS/Data hiding in the XFS file system.md",
     "Digital Forensics Concepts/XFS/Data hiding in the XFS file system Images/evaluation summary.png",
     "Digital Forensics Concepts/XFS/Data hiding in the XFS file system Images/data hiding methods.png",
     "Digital Forensics Concepts/XFS/Data hiding in the XFS file system Images/XFS allocation group.png",
@@ -224,13 +246,10 @@
     "Digital Forensics Concepts/XFS",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
-    "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
     "File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
-    "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
     "File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
     "File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
     "Digital Forensics Concepts/NTFS/References.md",
@@ -238,23 +257,7 @@
     "The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 26. Kernel Mode Rootkits.md",
     "The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 25. Userland Rootkits.md",
     "The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 24. File Systems in Memory.md",
-    "The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 23. Kernel Memory Artifacts.md",
-    "The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 22. Networking Artifacts.md",
-    "The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 21. Processes and Process Memory.md",
-    "The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 19. Linux Memory Acquisition.md",
-    "The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 20. Linux Operating System.md",
     "The Art of Memory Forensics/Part 3. Linux Memory Forensics",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics/Chapter 9. Event Logs.md",
-    "The Art of Memory Forensics/Part 2. Windows Memory Forensics",
-    "The Art of Memory Forensics/Part 1. An Introduction to Memory Forensics",
-    "File System Forensic Analysis/etc",
-    "File System Forensic Analysis/Part 3. File System Analysis",
-    "File System Forensic Analysis/Part 2. Volume Analysis",
-    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs - images/run_injector.png",
-    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs - images/installing_sysmon.png",
-    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs - images/injector_result.png",
-    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs - images/injector_creation_event.png",
-    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs - images/RemoteThread_event.png",
-    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs - images/ImageLoad_event.png"
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs - images/run_injector.png"
   ]
 }
