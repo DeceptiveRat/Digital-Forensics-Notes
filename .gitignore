@@ -1,7 +1,6 @@
 *.swp
 *.dat
 *.txt
-The Art of Memory Forensics/**/*.png
-File System Forensic Analysis/**/*.png
+Books/**/*.png
 \[HIDE\]*
 File System Forensics/**/*.png
