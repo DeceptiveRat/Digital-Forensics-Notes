@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
+                "file": "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/UserAssist.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 14. Ext2 and Ext3 Concepts and Analysis"
+              "title": "UserAssist"
             }
           },
           {
@@ -27,30 +27,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
+                "file": "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Chapter 13. NTFS Data Structures"
+              "title": "Chapter 11. NTFS Concepts"
             }
           },
           {
-            "id": "7a8c5ccd5f59cf29",
+            "id": "b41ccde6a97addb4",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CS concepts/Mobile/Android.md",
-                "mode": "source",
+                "file": "Note Format.md",
+                "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "Android"
+              "title": "Note Format"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -109,7 +109,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 235.5
+    "width": 283.5
   },
   "right": {
     "id": "1b490e33aebbb892",
@@ -211,11 +211,24 @@
       "bases:Create new base": false
     }
   },
-  "active": "1bf19fb8e457e453",
+  "active": "3cb9e7d24fc2dd79",
   "lastOpenFiles": [
+    "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
+    "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
+    "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
+    "CS concepts/Mobile/Android - 4 main components.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Browser history.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Browser history - hands-on exp.md",
+    "Note Format.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/LNK files - hands-on exp.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/LNK files.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/SRUM.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Shimcache.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Amcache.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/UserAssist.md",
+    "Digital Forensics Concepts/Windows/Windows Artifacts/Registry Artifacts/Registry.md",
     "CS concepts/Mobile",
     "Malware Analysis/Android.md",
-    "CS concepts/Mobile/Android.md",
     "CS concepts/Android",
     "CS concepts",
     "Books",
@@ -225,8 +238,6 @@
     "Digital Forensics Concepts/XFS/Extents.md",
     "Digital Forensics Concepts/XFS/Data hiding in the XFS file system.md",
     "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 15. Ext2 and Ext3 Data Structures.md",
-    "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 13. NTFS Data Structures.md",
-    "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 12. NTFS Analysis.md",
     "Digital Forensics Concepts/XFS/File System Forensics Images/extended attribute header.png",
     "Digital Forensics Concepts/XFS/File System Forensics Images/example extended attribute.png",
     "Digital Forensics Concepts/XFS/File System Forensics Images/directory header structure.png",
@@ -244,20 +255,9 @@
     "Digital Forensics Concepts/XFS",
     "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 9. FAT Concepts and Analysis.md",
     "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 8. File System Analysis.md",
-    "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 11. NTFS Concepts.md",
     "Books/File System Forensic Analysis/Part 3. File System Analysis/Chapter 14. Ext2 and Ext3 Concepts and Analysis.md",
     "Books/File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
     "Books/File System Forensic Analysis/Part 2. Volume Analysis/Chapter 6. Server-based Partitions.md",
-    "Digital Forensics Concepts/NTFS/Partition Boot Sector.md",
-    "Books/File System Forensic Analysis/Part 1. Foundations/Chapter 3. Hard Disk Data Acquisition.md",
-    "Books/File System Forensic Analysis/Part 2. Volume Analysis/Chapter 4. Volume Analysis.md",
-    "Digital Forensics Concepts/NTFS/References.md",
-    "Reference Notes/File System Forensic Analysis/Part 2. Volume Analysis/Chapter 5. PC-based Partitions.md",
-    "Books/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 26. Kernel Mode Rootkits.md",
-    "Books/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 25. Userland Rootkits.md",
-    "Books/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 24. File Systems in Memory.md",
-    "Books/The Art of Memory Forensics/Part 3. Linux Memory Forensics/Chapter 23. Kernel Memory Artifacts.md",
-    "Books/The Art of Memory Forensics/Part 3. Linux Memory Forensics",
     "Digital Forensics Concepts/Windows/Windows Artifacts/FS artifacts/Windows event logs - images/run_injector.png"
   ]
 }
